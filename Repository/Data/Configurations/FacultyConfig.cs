@@ -13,7 +13,9 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Faculty> builder)
         {
-            throw new NotImplementedException();
+            builder.Property(P => P.Fac_Code)
+                 .IsRequired()
+                 .HasMaxLength(30);
         }
     }
 }

@@ -11,8 +11,7 @@ namespace Core.Entities
     { 
         public string Fac_Code { get; set; }
         public string Fac_Name { get; set; }
-        public int Manger_ID { get; set; }
-        [InverseProperty("Faculty")] 
-        public ICollection<FacultyYear> FacultyYear { get; set; } = new HashSet<FacultyYear>();
+
+        public virtual ICollection<FacultyYear> FacultyYears { get; set; }
     }
 }

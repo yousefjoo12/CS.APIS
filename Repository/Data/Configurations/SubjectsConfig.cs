@@ -13,7 +13,9 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Subjects> builder)
         {
-            throw new NotImplementedException();
+            builder.Property(P => P.Sub_Name)
+                 .IsRequired()
+                 .HasMaxLength(100);
         }
     }
 }

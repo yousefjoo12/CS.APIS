@@ -13,7 +13,9 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Doctors> builder)
         {
-            throw new NotImplementedException();
+            builder.Property(P => P.Dr_Code)
+                 .IsRequired()
+                 .HasMaxLength(30);
         }
     }
 }

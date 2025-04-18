@@ -13,7 +13,9 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<FacultyYearSemister> builder)
         {
-            throw new NotImplementedException();
+            builder.Property(P => P.Sem_Code)
+                 .IsRequired()
+                 .HasMaxLength(30);
         }
     }
 }

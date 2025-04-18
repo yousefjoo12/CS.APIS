@@ -13,7 +13,8 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Rooms> builder)
         {
-            throw new NotImplementedException();
+            builder.Property(P => P.Room_Num)
+                 .IsRequired();
         }
     }
 }

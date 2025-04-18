@@ -11,11 +11,7 @@ namespace Core.Entities
     public class FacultyYearSemister : BaseEntity
     {  
         public string Sem_Code { get; set; }
-        public string Sem_Name { get; set; }
-        [ForeignKey("FacYear_ID")]
-        public int FacYear_ID { get; set; }
+        public string Sem_Name { get; set; }  
 
-        [InverseProperty("FacultyYear")]
-        public FacultyYear FacultyYear { get; set; }
     }
 }
