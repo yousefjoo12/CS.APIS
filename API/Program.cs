@@ -1,6 +1,10 @@
 
+using Core.Repositories.Contract;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Repository;
 using Repository.Data;
+using Talabat.APIS.MiddleWare;
 
 namespace API
 {
@@ -21,36 +25,52 @@ namespace API
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 
             });
+            builder.Services.AddScoped(typeof(IGenericRepositories<>), typeof(GenericRepositories<>));
 
+            builder.Services.Configure<ApiBehaviorOptions>(Options =>
+            {
+                Options.InvalidModelStateResponseFactory = (ActionContext) =>
+                {
+                    var errors = ActionContext.ModelState.Where(P => P.Value.Errors.Count() > 0)
+                                                          .SelectMany(p => p.Value.Errors)
+                                                          .Select(E => E.ErrorMessage)
+                                                          .ToList();
+                    var response = new ApiValidationErrorResponse()
+                    {
+                        Errors = errors
+                    };
+                    return new BadRequestObjectResult(response);
+                };
+            });
             var app = builder.Build();
 
             // update database
-                using var scop = app.Services.CreateScope();
-                var Services = scop.ServiceProvider;
-                var _dbcontext = Services.GetRequiredService<StoreContext>(); // Ask CLR Explicitly StoreContext
-                var LoggerFactory = Services.GetRequiredService<ILoggerFactory>();
+            using var scop = app.Services.CreateScope();
+            var Services = scop.ServiceProvider;
+            var _dbcontext = Services.GetRequiredService<StoreContext>(); // Ask CLR Explicitly StoreContext
+            var LoggerFactory = Services.GetRequiredService<ILoggerFactory>();
             try
             {
                 await _dbcontext.Database.MigrateAsync();
             }
             catch (Exception ex)
-            { 
+            {
                 var logger = LoggerFactory.CreateLogger<Program>();
                 logger.LogError(ex, "an error occurred during migration");
             }
-     
 
+            app.UseMiddleware<ExcptionMiddleWare>();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseStatusCodePagesWithReExecute("/Errors/{0}");
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
-
+            app.UseAuthorization(); 
 
             app.MapControllers();
 

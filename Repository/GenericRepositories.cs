@@ -1,11 +1,14 @@
 ﻿using Core.Entities;
 using Core.Repositories.Contract;
+using Microsoft.EntityFrameworkCore;
 using Repository.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Talabat.Core.Specifications;
+using Talabat.Repository;
 
 namespace Repository
 {
@@ -17,14 +20,22 @@ namespace Repository
         {
           _dbcontext = dbcontext;
         }
-        public Task<IReadOnlyList<T>> GetAll()
+        public async Task<IReadOnlyList<T>> GetAll()
         {
-            throw new NotImplementedException();
+         return await _dbcontext.Set<T>().ToListAsync();
+        } 
+        public async Task<T?> GetById(int id)
+        {
+            return await _dbcontext.Set<T>().FindAsync(id);
         }
 
-        public Task<T?> GetById(int id)
+        public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec)
         {
-            throw new NotImplementedException();
-        }
+            return await SpecificationEvaluator<T>.GetQuery(_dbcontext.Set<T>(), spec).ToListAsync();
+        } 
+        public async Task<T?> GetWithspecAsync(ISpecifications<T> spec)
+        {
+            return await SpecificationEvaluator<T>.GetQuery(_dbcontext.Set<T>(), spec).FirstOrDefaultAsync();
+        } 
     }
 }
