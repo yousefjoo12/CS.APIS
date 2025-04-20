@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text.Json; 
 
-namespace Talabat.APIS.MiddleWare
+namespace Project.APIS.MiddleWare
 {
     public class ExcptionMiddleWare
     {

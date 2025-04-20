@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Project.APIS.Erorrs;
 
-namespace Talabat.APIS.Controllers
+namespace Project.APIS.Controllers
 {
     [Route("Errors/{code}")]
     [ApiController]

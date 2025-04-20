@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using Repository.Data;
-using Talabat.APIS.MiddleWare;
+using Project.APIS.Extensions;
+using Project.APIS.MiddleWare;
 
 namespace API
 {
@@ -25,23 +26,8 @@ namespace API
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 
             });
-            builder.Services.AddScoped(typeof(IGenericRepositories<>), typeof(GenericRepositories<>));
+            builder.Services.AddApplicationServices(); //Extensions Methods
 
-            builder.Services.Configure<ApiBehaviorOptions>(Options =>
-            {
-                Options.InvalidModelStateResponseFactory = (ActionContext) =>
-                {
-                    var errors = ActionContext.ModelState.Where(P => P.Value.Errors.Count() > 0)
-                                                          .SelectMany(p => p.Value.Errors)
-                                                          .Select(E => E.ErrorMessage)
-                                                          .ToList();
-                    var response = new ApiValidationErrorResponse()
-                    {
-                        Errors = errors
-                    };
-                    return new BadRequestObjectResult(response);
-                };
-            });
             var app = builder.Build();
 
             // update database

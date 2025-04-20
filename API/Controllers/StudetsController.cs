@@ -3,8 +3,7 @@ using Core.Repositories.Contract;
 using Core.Specifications.studetsSpecifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Project.APIS.Erorrs;
-using Talabat.Core.Specifications;
+using Project.APIS.Erorrs; 
 
 namespace API.Controllers
 {
@@ -18,7 +17,7 @@ namespace API.Controllers
         }
         [ProducesResponseType(typeof(Students), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [HttpGet]
+        [HttpGet]//  /Studets
         public async Task<ActionResult> GetAllStudets()
         {
             var Spec = new studetsWithSubjectSpecifications(); 
