@@ -1,4 +1,5 @@
-﻿using Core.Repositories.Contract;
+﻿using Core;
+using Core.Repositories.Contract;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
@@ -10,6 +11,7 @@ namespace Project.APIS.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         { 
 
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork)); 
             services.AddScoped(typeof(IGenericRepositories<>), typeof(GenericRepositories<>)); 
             
             services.Configure<ApiBehaviorOptions>(Options =>

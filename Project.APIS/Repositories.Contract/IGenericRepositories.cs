@@ -12,9 +12,7 @@ namespace Core.Repositories.Contract
     {
         Task<T?> GetById(int id);
         Task<IReadOnlyList<T>> GetAll(); 
-
         Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec); 
         Task<T?> GetWithspecAsync(ISpecifications<T> spec);
-
     }
 }
