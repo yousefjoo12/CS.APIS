@@ -19,9 +19,9 @@ namespace API.Controllers
         [ProducesResponseType(typeof(Students), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]//  /Studets
-        public async Task<ActionResult> GetAllStudets()
+        public async Task<ActionResult> GetAllStudets([FromQuery] studetsSpecParams studetsParams )
         {
-            var Spec = new studetsWithSubjectSpecifications();
+            var Spec = new studetsWithSubjectSpecifications(studetsParams);
             var Studets = await _unitOfWork.Repository<Students>().GetAllWithSpecAsync(Spec);
             return Ok(Studets); //200
         }

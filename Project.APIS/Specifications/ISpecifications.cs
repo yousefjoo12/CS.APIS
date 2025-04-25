@@ -11,10 +11,9 @@ namespace Talabat.Core.Specifications
     public interface ISpecifications<T> where T : BaseEntity
     {
         public Expression<Func<T, bool>> Critria { get; set; }// where
-        public List<Expression<Func<T, object>>> Includes { get; set; }
-
-        //public Expression<Func<T, object>> OrderBy { get; set; }//orderby
-        //public Expression<Func<T, object>> OrderByDecs { get; set; }//OrderByDecs  
+        public List<Expression<Func<T, object>>> Includes { get; set; } 
+        public Expression<Func<T, object>> OrderBy { get; set; }//orderby
+        public Expression<Func<T, object>> OrderByDecs { get; set; }//OrderByDecs  
 
 
     }
