@@ -25,6 +25,8 @@ namespace API.Controllers
             var Studets = await _unitOfWork.Repository<Students>().GetAllWithSpecAsync(Spec);
             return Ok(Studets); //200
         }
+
+
         [ProducesResponseType(typeof(Students), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]

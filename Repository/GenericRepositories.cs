@@ -7,8 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Talabat.Core.Specifications;
-using Talabat.Repository;
+using Project.Core.Specifications;
+using Project.Repository;
 
 namespace Repository
 {

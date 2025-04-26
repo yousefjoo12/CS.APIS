@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Talabat.Core.Specifications;
+using Project.Core.Specifications;
 
 namespace Core.Specifications.studetsSpecifications
 {
@@ -37,6 +37,7 @@ namespace Core.Specifications.studetsSpecifications
             {
                 AddOrderBy(P => P.ID);
             }
+            ApplyPagination((spec.PageIndex - 1) * spec.PageSize, spec.PageSize);
         }
         public studetsWithSubjectSpecifications(int id) : base(P => P.ID == id)
         {
