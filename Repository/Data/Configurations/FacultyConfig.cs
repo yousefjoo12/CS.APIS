@@ -13,9 +13,13 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Faculty> builder)
         {
-            builder.Property(P => P.Fac_Code)
+            builder.Property(F => F.Fac_Code)
                  .IsRequired()
                  .HasMaxLength(30);
+
+            builder.Property(F => F.Fac_Name)
+                .IsRequired();
+
         }
     }
 }

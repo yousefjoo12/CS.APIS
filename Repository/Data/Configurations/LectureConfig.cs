@@ -13,7 +13,18 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Lecture> builder)
         {
-             
+            builder.HasOne(L=> L.Students)
+                  .WithMany()
+                  .HasForeignKey(L => L.St_ID);
+
+            builder.HasOne(L => L.Rooms)
+                 .WithMany()
+                 .HasForeignKey(L => L.Room_ID);
+
+            builder.HasOne(L => L.Subjects)
+                .WithMany()
+                .HasForeignKey(L => L.Sub_ID);
+
 
         }
     }

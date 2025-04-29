@@ -13,9 +13,8 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<FacultyYear> builder)
         {
-            builder.Property(P => P.Year)
-                 .IsRequired()
-                 .HasMaxLength(20);
+            builder.Property(FY => FY.Year)
+                 .IsRequired();
         }
     }
 }

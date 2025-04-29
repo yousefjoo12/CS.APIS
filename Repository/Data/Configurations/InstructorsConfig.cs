@@ -14,8 +14,16 @@ namespace Repository.Data.Configurations
         public void Configure(EntityTypeBuilder<Instructors> builder)
         {
             builder.Property(P => P.Ins_Code)
-                  .IsRequired()
-                  .HasMaxLength(30);
+                  .IsRequired(); 
+
+            builder.Property(D => D.Ins_NameAr)
+               .IsRequired();
+
+            builder.Property(D => D.Ins_NameEn)
+              .IsRequired();
+
+            builder.Property(P => P.Phone)
+               .HasMaxLength(20);
         }
     }
 }

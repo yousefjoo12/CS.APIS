@@ -13,9 +13,18 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Doctors> builder)
         {
-            builder.Property(P => P.Dr_Code)
+            builder.Property(D => D.Dr_Code)
                  .IsRequired()
                  .HasMaxLength(30);
+
+            builder.Property(D => D.Dr_NameAr)
+               .IsRequired();
+
+            builder.Property(D => D.Dr_NameEn)
+              .IsRequired();
+
+            builder.Property(P => P.Phone)
+               .HasMaxLength(20);
         }
     }
 }

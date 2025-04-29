@@ -13,9 +13,16 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<FacultyYearSemister> builder)
         {
-            builder.Property(P => P.Sem_Code)
-                 .IsRequired()
-                 .HasMaxLength(30);
+            builder.Property(FYS => FYS.Sem_Code)
+                 .IsRequired();
+
+            builder.Property(FYS => FYS.Sem_Name)
+                .IsRequired();
+
+            builder.HasOne(S => S.FacultyYear)
+              .WithMany()
+              .HasForeignKey(S => S.FacultyYearId);
+
         }
     }
 }

@@ -13,7 +13,21 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Attendance> builder)
         {
-             
+
+            builder.Property(A => A.Sub_Name)
+                 .IsRequired();
+
+            builder.HasOne(A => A.Lecture)
+                .WithMany()
+                .HasForeignKey(A => A.LectureID);
+
+            builder.HasOne(A => A.Students)
+                .WithMany()
+                .HasForeignKey(A => A.St_ID);
+
+            builder.HasOne(A => A.Subjects)
+                .WithMany()
+                .HasForeignKey(A => A.Sub_ID);  
         }
     }
 }

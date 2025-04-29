@@ -13,9 +13,22 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Subjects> builder)
         {
-            builder.Property(P => P.Sub_Name)
-                 .IsRequired()
-                 .HasMaxLength(100);
+            builder.Property(S => S.Sub_Name)
+                   .IsRequired()
+                   .HasMaxLength(100);
+
+            builder.HasOne(S => S.Doctors)
+                   .WithMany()
+                   .HasForeignKey(S => S.Dr_ID);
+
+            builder.HasOne(S => S.Instructors)
+                   .WithMany()
+                   .HasForeignKey(S => S.Ins_ID);
+            
+            builder.HasOne(S => S.FacultyYearSemister)
+                   .WithMany()
+                   .HasForeignKey(S => S.FacYearSem_ID);
+
         }
     }
 }

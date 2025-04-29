@@ -15,6 +15,7 @@ namespace Repository.Data.Configurations
         {
             builder.Property(P => P.Room_Num)
                  .IsRequired();
+
         }
     }
 }
