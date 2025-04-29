@@ -15,6 +15,8 @@ namespace Core.Entities
         public string St_Image { get; set; }
         public string Phone { get; set; }  
         public int Fac_ID { get; set; } 
+        public Faculty Faculty { get; set; } 
         public int FacYearSem_ID { get; set; } 
+        public FacultyYearSemister FacultyYearSemister { get; set; } 
     }
 }
