@@ -77,8 +77,9 @@ namespace API
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization(); 
+            app.UseAuthorization();
 
+            app.UseStaticFiles(); // import
             app.MapControllers();
 
             app.Run();

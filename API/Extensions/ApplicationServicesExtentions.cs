@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using API.Helpers;
+using Core;
 using Core.Repositories.Contract;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +13,9 @@ namespace Project.APIS.Extensions
         { 
 
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork)); 
-            services.AddScoped(typeof(IGenericRepositories<>), typeof(GenericRepositories<>)); 
-            
+            services.AddScoped(typeof(IGenericRepositories<>), typeof(GenericRepositories<>));
+            services.AddAutoMapper(typeof(MappingProfiles));
+
             services.Configure<ApiBehaviorOptions>(Options =>
             {
                 Options.InvalidModelStateResponseFactory = (ActionContext) =>

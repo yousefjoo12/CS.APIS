@@ -10,10 +10,10 @@ namespace Core.Specifications.studetsSpecifications
 {
     public class studetsWithSubjectSpecifications : BaseSpecifications<Students>
     {
-        public studetsWithSubjectSpecifications(studetsSpecParams spec) : base(P=>
-             (string.IsNullOrEmpty(spec.Search) || P.St_NameAr.ToLower().Contains(spec.Search.ToLower()))
-        // && (!spec.BrandId.HasValue || P.BrandId == spec.BrandId.Value) &&
-        //(!spec.CategoryId.HasValue || P.CategoryId == spec.CategoryId.Value)
+        public studetsWithSubjectSpecifications(studetsSpecParams spec) : base(P =>
+             (string.IsNullOrEmpty(spec.Search) || P.St_NameAr.ToLower().Contains(spec.Search.ToLower())) &&
+             (!spec.Fac_ID.HasValue || P.Fac_ID == spec.Fac_ID.Value) &&
+             (!spec.FacYearSem_ID.HasValue || P.FacYearSem_ID == spec.FacYearSem_ID.Value)
             )
         {
             if (!string.IsNullOrEmpty(spec.sort))
