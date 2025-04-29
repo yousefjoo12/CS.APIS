@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace Core.Entities
 {
     public class FacultyYear : BaseEntity
-    { 
-        
+    {
+        public string Year { get; set; }
+
     }
 }

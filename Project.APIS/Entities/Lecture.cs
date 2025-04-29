@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-    public class Subjects : BaseEntity
+    public class Lecture : BaseEntity
     {
         public string Sub_Name { get; set; } 
-        public int Dr_ID { get; set; } 
-        public int Ins_ID { get; set; } 
-        public int FacYearSem_ID { get; set; } 
+        public int Degree { get; set; } 
+        public int St_ID { get; set; } 
+        public int Room_ID { get; set; } 
+        public int Sub_ID { get; set; } 
     }
 }

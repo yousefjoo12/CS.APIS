@@ -10,6 +10,7 @@ namespace Core.Entities
     public class Studets_Rooms : BaseEntity
     {
         public int St_ID { get; set; }
+
         public int Room_ID { get; set; }
     }
 }

@@ -11,7 +11,6 @@ namespace Core.Entities
     { 
         public string Fac_Code { get; set; }
         public string Fac_Name { get; set; }
-
-        public virtual ICollection<FacultyYear> FacultyYears { get; set; }
+         
     }
 }
