@@ -10,8 +10,8 @@ namespace API.Helpers
         public MappingProfiles()
         {
             CreateMap<Students, StudentsDTO>()
-                .ForMember(d => d.Faculty, o => o.MapFrom(s => s.Faculty.Fac_Name))
-                .ForMember(d => d.FacultyYearSemister, o => o.MapFrom(s => s.FacultyYearSemister.Sem_Name))
+                //.ForMember(d => d.Faculty, o => o.MapFrom(s => s.Faculty.Fac_Name))
+                //.ForMember(d => d.FacultyYearSemister, o => o.MapFrom(s => s.FacultyYearSemister.Sem_Name))
                 .ForMember(d => d.St_Image, o => o.MapFrom<StudentsPictureUrlResolver>());
 
 

@@ -11,10 +11,10 @@ namespace Core.Entities
     {
         public string Sub_Name { get; set; } 
         public int Dr_ID { get; set; } 
-        public Doctors Doctors { get; set; }  
+      //  public Doctors Doctors { get; set; }  
         public int Ins_ID { get; set; } 
-        public Instructors Instructors { get; set; } 
+      //  public Instructors Instructors { get; set; } 
         public int FacYearSem_ID { get; set; } 
-        public FacultyYearSemister FacultyYearSemister { get; set; } 
+      //  public FacultyYearSemister FacultyYearSemister { get; set; } 
     }
 }

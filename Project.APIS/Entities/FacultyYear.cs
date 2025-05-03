@@ -11,6 +11,7 @@ namespace Core.Entities
     public class FacultyYear : BaseEntity
     {
         public string Year { get; set; }
+        public int Fac_ID { get; set; }
 
     }
 }

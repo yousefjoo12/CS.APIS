@@ -10,9 +10,9 @@ namespace Core.Entities
     public class Attendance_T : BaseEntity
     {
         public int LectureID { get; set; }
-        public Lecture_S Lecture { get; set; }
+        //public Lecture_S Lecture { get; set; }
         public int St_ID { get; set; }
-        public Students Students { get; set; }
+       // public Students Students { get; set; }
         public bool Atten { get; set; }
     }
 }

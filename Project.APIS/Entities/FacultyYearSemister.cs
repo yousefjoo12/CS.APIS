@@ -13,7 +13,7 @@ namespace Core.Entities
         public string Sem_Code { get; set; }
         public string Sem_Name { get; set; }  
         public int FacultyYearId { get; set; }  
-        public FacultyYear FacultyYear { get; set; }  
+      //  public FacultyYear FacultyYear { get; set; }  
 
     }
 }
