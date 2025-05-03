@@ -13,34 +13,23 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Students> builder)
         {
-            builder.Property(S => S.St_Code)
-                  .IsRequired()
-                  .HasMaxLength(30); 
+            builder.HasKey(s => s.ID);
 
-            builder.Property(S => S.St_NameAr)
-                  .IsRequired();
+            builder.Property(s => s.St_Code).IsRequired().HasMaxLength(50);
+            builder.Property(s => s.St_NameAr).IsRequired().HasMaxLength(100);
+            builder.Property(s => s.St_NameEn).IsRequired().HasMaxLength(100);
+            builder.Property(s => s.St_Image).HasMaxLength(250);
+            builder.Property(s => s.Phone).HasMaxLength(15);
 
-            builder.Property(S => S.St_NameEn)
-                 .IsRequired();
+            //builder.HasOne(s => s.Faculty)
+            //       .WithMany()
+            //       .HasForeignKey(s => s.Fac_ID)
+            //       .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Property(S => S.St_Image)
-                 .IsRequired();
-
-            builder.Property(P => P.Phone) 
-                 .HasMaxLength(20);
-
-            builder.HasOne(S => S.Faculty)
-                .WithMany()
-                .HasForeignKey(S=>S.Fac_ID)
-             .OnDelete(DeleteBehavior.NoAction);
-
-
-            builder.HasOne(S => S.FacultyYearSemister)
-               .WithMany()
-               .HasForeignKey(S => S.FacYearSem_ID)
-             .OnDelete(DeleteBehavior.NoAction);
-
-
+            //builder.HasOne(s => s.FacultyYearSemister)
+            //       .WithMany()
+            //       .HasForeignKey(s => s.FacYearSem_ID)
+            //       .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

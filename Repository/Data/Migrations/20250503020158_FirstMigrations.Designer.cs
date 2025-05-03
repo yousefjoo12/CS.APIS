@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
@@ -11,9 +12,11 @@ using Repository.Data;
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20250503020158_FirstMigrations")]
+    partial class FirstMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,7 +48,7 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Attendance", (string)null);
+                    b.ToTable("Attendance");
                 });
 
             modelBuilder.Entity("Core.Entities.Doctors", b =>
@@ -78,7 +81,7 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Doctors", (string)null);
+                    b.ToTable("Doctors");
                 });
 
             modelBuilder.Entity("Core.Entities.Faculty", b =>
@@ -101,7 +104,7 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Faculty", (string)null);
+                    b.ToTable("Faculty");
                 });
 
             modelBuilder.Entity("Core.Entities.FacultyYear", b =>
@@ -119,7 +122,7 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("FacultyYear", (string)null);
+                    b.ToTable("FacultyYear");
                 });
 
             modelBuilder.Entity("Core.Entities.FacultyYearSemister", b =>
@@ -145,7 +148,7 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("FacultyYearSemister", (string)null);
+                    b.ToTable("FacultyYearSemister");
                 });
 
             modelBuilder.Entity("Core.Entities.Instructors", b =>
@@ -178,7 +181,7 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Instructors", (string)null);
+                    b.ToTable("Instructors");
                 });
 
             modelBuilder.Entity("Core.Entities.Lecture_S", b =>
@@ -208,7 +211,7 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Lecture", (string)null);
+                    b.ToTable("Lecture");
                 });
 
             modelBuilder.Entity("Core.Entities.Rooms", b =>
@@ -226,7 +229,7 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Rooms", (string)null);
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("Core.Entities.Students", b =>
@@ -270,7 +273,7 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("Core.Entities.Studets_Rooms", b =>
@@ -289,7 +292,7 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Studets_Rooms", (string)null);
+                    b.ToTable("Studets_Rooms");
                 });
 
             modelBuilder.Entity("Core.Entities.Subjects", b =>
@@ -331,7 +334,7 @@ namespace Repository.Data.Migrations
 
                     b.HasIndex("InstructorsID");
 
-                    b.ToTable("Subjects", (string)null);
+                    b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("Core.Entities.Subjects", b =>

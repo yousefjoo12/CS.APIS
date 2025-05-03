@@ -13,8 +13,11 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<FacultyYear> builder)
         {
-            builder.Property(FY => FY.Year)
-                 .IsRequired();
+            builder.HasKey(fy => fy.ID);
+
+            builder.Property(fy => fy.Year)
+                .IsRequired()
+                .HasMaxLength(4);
         }
     }
 }

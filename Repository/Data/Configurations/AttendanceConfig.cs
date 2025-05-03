@@ -14,16 +14,24 @@ namespace Repository.Data.Configurations
         public void Configure(EntityTypeBuilder<Attendance_T> builder)
         {
 
-            builder.HasOne(A => A.Lecture)
-                .WithMany()
-                .HasForeignKey(A => A.LectureID)
-             .OnDelete(DeleteBehavior.NoAction);
+            builder.HasKey(a => a.ID);
 
+            builder.Property(a => a.Atten)
+                   .IsRequired();
 
-            builder.HasOne(A => A.Students)
-                .WithMany()
-                .HasForeignKey(A => A.St_ID)
-             .OnDelete(DeleteBehavior.NoAction);
+            //builder.HasOne(a => a.Lecture)
+            //       .WithMany()
+            //       .HasForeignKey(a => a.LectureID)
+            //       .OnDelete(DeleteBehavior.Cascade);
+
+            //builder.HasOne(a => a.Students)
+            //       .WithMany()
+            //       .HasForeignKey(a => a.St_ID)
+            //       .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Property<string>("Sub_Name")
+                   .HasMaxLength(200)
+                   .IsRequired(false);
 
 
         }

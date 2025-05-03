@@ -13,16 +13,15 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<FacultyYearSemister> builder)
         {
-            builder.Property(FYS => FYS.Sem_Code)
-                 .IsRequired();
+            builder.HasKey(f => f.ID);
 
-            builder.Property(FYS => FYS.Sem_Name)
-                .IsRequired();
+            builder.Property(f => f.Sem_Code).HasMaxLength(50);
+            builder.Property(f => f.Sem_Name).HasMaxLength(100);
 
-            builder.HasOne(S => S.FacultyYear)
-              .WithMany()
-              .HasForeignKey(S => S.FacultyYearId)
-              .OnDelete(DeleteBehavior.NoAction);
+            //builder.HasOne(f => f.FacultyYear)
+            //       .WithMany()
+            //       .HasForeignKey(f => f.FacultyYearId)
+            //       .OnDelete(DeleteBehavior.Cascade);
 
 
         }

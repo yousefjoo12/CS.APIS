@@ -13,18 +13,25 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Lecture_S> builder)
         {
+            builder.HasKey(l => l.ID);
 
-            builder.HasOne(L => L.Rooms)
-                 .WithMany()
-                 .HasForeignKey(L => L.Room_ID)
-             .OnDelete(DeleteBehavior.NoAction);
+            builder.Property(l => l.Lecture_Num).HasMaxLength(50);
 
+            //builder.HasOne(l => l.Rooms)
+            //       .WithMany()
+            //       .HasForeignKey(l => l.Room_ID)
+            //       .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(L => L.Subjects)
-                .WithMany()
-                .HasForeignKey(L => L.Sub_ID)
-             .OnDelete(DeleteBehavior.NoAction);
+            //builder.HasOne(l => l.Subjects)
+            //       .WithMany()
+            //       .HasForeignKey(l => l.Sub_ID)
+            //       .OnDelete(DeleteBehavior.Cascade);
 
+            //builder.Property(l => l.LectureDate)
+            //       .IsRequired();
+
+            //builder.Property(l => l.Degree)
+            //       .IsRequired();
 
 
         }

@@ -13,17 +13,19 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Instructors> builder)
         {
-            builder.Property(P => P.Ins_Code)
-                  .IsRequired(); 
+            
 
-            builder.Property(D => D.Ins_NameAr)
-               .IsRequired();
-
-            builder.Property(D => D.Ins_NameEn)
-              .IsRequired();
-
-            builder.Property(P => P.Phone)
-               .HasMaxLength(20);
+            builder.Property(i => i.Ins_Code)
+                .IsRequired()
+                .HasMaxLength(50);
+            builder.Property(i => i.Ins_NameAr)
+                .IsRequired()
+                .HasMaxLength(100);
+            builder.Property(i => i.Ins_NameEn)
+                .IsRequired()
+                .HasMaxLength(100);
+            builder.Property(i => i.Phone)
+                .HasMaxLength(15);
         }
     }
 }

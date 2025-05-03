@@ -13,26 +13,26 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Subjects> builder)
         {
-            builder.Property(S => S.Sub_Name)
-                   .IsRequired()
-                   .HasMaxLength(100);
+            builder.HasKey(s => s.ID);
 
-            builder.HasOne(S => S.Doctors)
-                   .WithMany()
-                   .HasForeignKey(S => S.Dr_ID)
-             .OnDelete(DeleteBehavior.NoAction);
+            builder.Property(s => s.Sub_Name)
+                .IsRequired()
+                .HasMaxLength(100);
 
+            //builder.HasOne(s => s.Doctors)
+            //       .WithMany()
+            //       .HasForeignKey(s => s.Dr_ID)
+            //       .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(S => S.Instructors)
-                   .WithMany()
-                   .HasForeignKey(S => S.Ins_ID)
-             .OnDelete(DeleteBehavior.NoAction);
+            //builder.HasOne(s => s.Instructors)
+            //       .WithMany()
+            //       .HasForeignKey(s => s.Ins_ID)
+            //       .OnDelete(DeleteBehavior.Cascade);
 
-
-            builder.HasOne(S => S.FacultyYearSemister)
-                   .WithMany()
-                   .HasForeignKey(S => S.FacYearSem_ID)
-             .OnDelete(DeleteBehavior.NoAction);
+            //builder.HasOne(s => s.FacultyYearSemister)
+            //       .WithMany()
+            //       .HasForeignKey(s => s.FacYearSem_ID)
+            //       .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

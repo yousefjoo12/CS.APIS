@@ -13,8 +13,11 @@ namespace Repository.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Rooms> builder)
         {
-            builder.Property(P => P.Room_Num)
-                 .IsRequired();
+            builder.HasKey(r => r.ID);
+
+            builder.Property(r => r.Room_Num)
+                .IsRequired()
+                .HasMaxLength(50);
 
         }
     }
