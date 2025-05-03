@@ -9,25 +9,23 @@ using System.Threading.Tasks;
 
 namespace Repository.Data.Configurations
 {
-    public class AttendanceConfig : IEntityTypeConfiguration<Attendance>
+    public class AttendanceConfig : IEntityTypeConfiguration<Attendance_T>
     {
-        public void Configure(EntityTypeBuilder<Attendance> builder)
+        public void Configure(EntityTypeBuilder<Attendance_T> builder)
         {
-
-            builder.Property(A => A.Sub_Name)
-                 .IsRequired();
 
             builder.HasOne(A => A.Lecture)
                 .WithMany()
-                .HasForeignKey(A => A.LectureID);
+                .HasForeignKey(A => A.LectureID)
+             .OnDelete(DeleteBehavior.NoAction);
+
 
             builder.HasOne(A => A.Students)
                 .WithMany()
-                .HasForeignKey(A => A.St_ID);
+                .HasForeignKey(A => A.St_ID)
+             .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne(A => A.Subjects)
-                .WithMany()
-                .HasForeignKey(A => A.Sub_ID);  
+
         }
     }
 }

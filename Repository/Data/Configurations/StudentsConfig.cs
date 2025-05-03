@@ -31,11 +31,15 @@ namespace Repository.Data.Configurations
 
             builder.HasOne(S => S.Faculty)
                 .WithMany()
-                .HasForeignKey(S=>S.Fac_ID);
+                .HasForeignKey(S=>S.Fac_ID)
+             .OnDelete(DeleteBehavior.NoAction);
+
 
             builder.HasOne(S => S.FacultyYearSemister)
                .WithMany()
-               .HasForeignKey(S => S.FacYearSem_ID);
+               .HasForeignKey(S => S.FacYearSem_ID)
+             .OnDelete(DeleteBehavior.NoAction);
+
 
         }
     }

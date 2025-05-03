@@ -21,7 +21,9 @@ namespace Repository.Data.Configurations
 
             builder.HasOne(S => S.FacultyYear)
               .WithMany()
-              .HasForeignKey(S => S.FacultyYearId);
+              .HasForeignKey(S => S.FacultyYearId)
+              .OnDelete(DeleteBehavior.NoAction);
+
 
         }
     }

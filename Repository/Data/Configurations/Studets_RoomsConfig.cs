@@ -15,11 +15,14 @@ namespace Repository.Data.Configurations
         {
             builder.HasOne(L => L.Students)
                  .WithMany()
-                 .HasForeignKey(L => L.St_ID);
+                 .HasForeignKey(L => L.St_ID)
+             .OnDelete(DeleteBehavior.NoAction);
+
 
             builder.HasOne(L => L.Rooms)
                  .WithMany()
-                 .HasForeignKey(L => L.Room_ID);
+                 .HasForeignKey(L => L.Room_ID)
+             .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -9,21 +9,22 @@ using System.Threading.Tasks;
 
 namespace Repository.Data.Configurations
 {
-    public class LectureConfig : IEntityTypeConfiguration<Lecture>
+    public class LectureConfig : IEntityTypeConfiguration<Lecture_S>
     {
-        public void Configure(EntityTypeBuilder<Lecture> builder)
+        public void Configure(EntityTypeBuilder<Lecture_S> builder)
         {
-            builder.HasOne(L=> L.Students)
-                  .WithMany()
-                  .HasForeignKey(L => L.St_ID);
 
             builder.HasOne(L => L.Rooms)
                  .WithMany()
-                 .HasForeignKey(L => L.Room_ID);
+                 .HasForeignKey(L => L.Room_ID)
+             .OnDelete(DeleteBehavior.NoAction);
+
 
             builder.HasOne(L => L.Subjects)
                 .WithMany()
-                .HasForeignKey(L => L.Sub_ID);
+                .HasForeignKey(L => L.Sub_ID)
+             .OnDelete(DeleteBehavior.NoAction);
+
 
 
         }

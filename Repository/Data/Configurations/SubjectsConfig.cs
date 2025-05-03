@@ -19,15 +19,20 @@ namespace Repository.Data.Configurations
 
             builder.HasOne(S => S.Doctors)
                    .WithMany()
-                   .HasForeignKey(S => S.Dr_ID);
+                   .HasForeignKey(S => S.Dr_ID)
+             .OnDelete(DeleteBehavior.NoAction);
+
 
             builder.HasOne(S => S.Instructors)
                    .WithMany()
-                   .HasForeignKey(S => S.Ins_ID);
-            
+                   .HasForeignKey(S => S.Ins_ID)
+             .OnDelete(DeleteBehavior.NoAction);
+
+
             builder.HasOne(S => S.FacultyYearSemister)
                    .WithMany()
-                   .HasForeignKey(S => S.FacYearSem_ID);
+                   .HasForeignKey(S => S.FacYearSem_ID)
+             .OnDelete(DeleteBehavior.NoAction);
 
         }
     }
