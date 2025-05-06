@@ -26,7 +26,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(FacultyYear), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]    //FacultyYear
-        public async Task<ActionResult<IReadOnlyList<FacultyYear>>> GetAllFacultyYear([FromQuery] FacultyYearSpecParams FacultyYearsarams)
+        public async Task<ActionResult<IReadOnlyList<FacultyYear>>> GetAllFacultyYears([FromQuery] FacultyYearSpecParams FacultyYearsarams)
         {
             var Spec = new FacultyYearWithSpecifications(FacultyYearsarams);
             var FacultyYear = await _unitOfWork.Repository<FacultyYear>().GetAllWithSpecAsync(Spec); 

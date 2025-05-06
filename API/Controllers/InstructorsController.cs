@@ -37,7 +37,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(Instructors), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Instructors>> GetInstructors(int id)
+        public async Task<ActionResult<Instructors>> GetInstructor(int id)
         {
             var Spec = new InstructorsWithSpecifications(id);
             var Instructors = await _unitOfWork.Repository<Instructors>().GetWithspecAsync(Spec);

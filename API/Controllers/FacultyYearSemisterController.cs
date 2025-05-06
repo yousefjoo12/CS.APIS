@@ -28,7 +28,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(FacultyYearSemister), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]    //FacultyYearSemister
-        public async Task<ActionResult<IReadOnlyList<FacultyYearSemister>>> GetAllFacultyYearSemister([FromQuery] FacultyYearSemisterSpecParams FacultyYearSemistersarams)
+        public async Task<ActionResult<IReadOnlyList<FacultyYearSemister>>> GetAllSemisters([FromQuery] FacultyYearSemisterSpecParams FacultyYearSemistersarams)
         {
             var Spec = new FacultyYearSemisterWithSpecifications(FacultyYearSemistersarams);
             var FacultyYearSemister = await _unitOfWork.Repository<FacultyYearSemister>().GetAllWithSpecAsync(Spec); 
@@ -39,7 +39,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(FacultyYearSemister), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<FacultyYearSemister>> GetFacultyYearSemister(int id)
+        public async Task<ActionResult<FacultyYearSemister>> GetSemister(int id)
         {
             var Spec = new FacultyYearSemisterWithSpecifications(id);
             var FacultyYearSemister = await _unitOfWork.Repository<FacultyYearSemister>().GetWithspecAsync(Spec);
