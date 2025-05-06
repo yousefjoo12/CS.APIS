@@ -63,7 +63,7 @@ namespace Repository.Data.Migrations
                 defaultValue: 0);
 
             migrationBuilder.AddColumn<int>(
-                name: "FacultyID",
+                name: "Fac_ID",
                 table: "FacultyYear",
                 type: "int",
                 nullable: false,
@@ -103,19 +103,6 @@ namespace Repository.Data.Migrations
                 name: "IX_Students_FacYearSem_ID",
                 table: "Students",
                 column: "FacYearSem_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FacultyYear_FacultyID",
-                table: "FacultyYear",
-                column: "FacultyID");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_FacultyYear_Faculty_FacultyID",
-                table: "FacultyYear",
-                column: "FacultyID",
-                principalTable: "Faculty",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Students_FacultyYearSemister_FacYearSem_ID",
@@ -178,10 +165,6 @@ namespace Repository.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_FacultyYear_Faculty_FacultyID",
-                table: "FacultyYear");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_Students_FacultyYearSemister_FacYearSem_ID",
                 table: "Students");
 
@@ -237,16 +220,12 @@ namespace Repository.Data.Migrations
                 name: "IX_Students_FacYearSem_ID",
                 table: "Students");
 
-            migrationBuilder.DropIndex(
-                name: "IX_FacultyYear_FacultyID",
-                table: "FacultyYear");
-
             migrationBuilder.DropColumn(
                 name: "St_ID",
                 table: "Lecture");
 
             migrationBuilder.DropColumn(
-                name: "FacultyID",
+                name: "Fac_ID",
                 table: "FacultyYear");
 
             migrationBuilder.RenameColumn(

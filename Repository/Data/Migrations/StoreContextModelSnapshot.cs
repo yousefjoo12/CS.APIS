@@ -108,7 +108,7 @@ namespace Repository.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("FacultyID")
+                    b.Property<int>("Fac_ID")
                         .HasColumnType("int");
 
                     b.Property<string>("Year")
@@ -117,8 +117,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("nvarchar(4)");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("FacultyID");
 
                     b.ToTable("FacultyYear");
                 });
@@ -335,17 +333,6 @@ namespace Repository.Data.Migrations
                     b.HasIndex("Ins_ID");
 
                     b.ToTable("Subjects");
-                });
-
-            modelBuilder.Entity("Core.Entities.FacultyYear", b =>
-                {
-                    b.HasOne("Core.Entities.Faculty", "Faculty")
-                        .WithMany()
-                        .HasForeignKey("FacultyID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Faculty");
                 });
 
             modelBuilder.Entity("Core.Entities.Students", b =>
