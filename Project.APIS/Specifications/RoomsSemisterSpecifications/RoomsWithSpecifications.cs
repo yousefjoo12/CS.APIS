@@ -5,28 +5,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Project.Core.Specifications;
+using Core.Specifications.RoomsSpecParamsSpecifications;
 
-namespace Core.Specifications.FacultyYearSpecifications
+namespace Core.Specifications.RoomsSpecifications
 {
-    public class FacultyYearWithSpecifications : BaseSpecifications<FacultyYear>
+    public class RoomsWithSpecifications : BaseSpecifications<Rooms>
     {
-        public FacultyYearWithSpecifications(FacultyYearSpecParams spec) : base(P =>
-             (string.IsNullOrEmpty(spec.Search) || P.Year.ToLower().Contains(spec.Search.ToLower())))
+        public RoomsWithSpecifications(RoomsSpecParams spec) : base(P =>
+             (string.IsNullOrEmpty(spec.Search) || P.Room_Num.ToLower().Contains(spec.Search.ToLower())))
         {
             if (!string.IsNullOrEmpty(spec.sort))
             {
                 switch (spec.sort)
                 {
-                    case "YearAsc":
+                    case "CodeAsc":
                         // orderby(P=>p.St_Code)
-                        AddOrderBy(P => P.Year);
+                        AddOrderBy(P => P.Room_Num);
                         break;
-                    case "YearDcse":
-                        AddOrderByDecs(P => P.Year);
+                    case "CodeDcse":
+                        AddOrderByDecs(P => P.Room_Num);
                         // orderbyDecs(P=>p.St_Code)
                         break;
                     default:
-                        AddOrderBy(P => P.Year);
+                        AddOrderBy(P => P.Room_Num);
                         break;
                 }
             }
@@ -36,7 +37,7 @@ namespace Core.Specifications.FacultyYearSpecifications
             }
             ApplyPagination((spec.PageIndex - 1) * spec.PageSize, spec.PageSize);
         }
-        public FacultyYearWithSpecifications(int id) : base(P => P.ID == id)
+        public RoomsWithSpecifications(int id) : base(P => P.ID == id)
         {
 
         }
