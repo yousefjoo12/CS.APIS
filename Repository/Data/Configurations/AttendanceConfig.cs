@@ -29,9 +29,6 @@ namespace Repository.Data.Configurations
             //       .HasForeignKey(a => a.St_ID)
             //       .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Property<string>("Sub_Name")
-                   .HasMaxLength(200)
-                   .IsRequired(false);
 
 
         }

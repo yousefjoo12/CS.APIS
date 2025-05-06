@@ -18,6 +18,12 @@ namespace Repository.Data.Configurations
             builder.Property(fy => fy.Year)
                 .IsRequired()
                 .HasMaxLength(4);
+
+            //builder.HasOne(a => a.Faculty)
+            //       .WithMany()
+            //       .HasForeignKey(a => a.Fac_ID)
+            //       .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

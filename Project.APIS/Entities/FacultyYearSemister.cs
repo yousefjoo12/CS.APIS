@@ -11,9 +11,10 @@ namespace Core.Entities
     public class FacultyYearSemister : BaseEntity
     {  
         public string Sem_Code { get; set; }
-        public string Sem_Name { get; set; }  
-        public int FacultyYearId { get; set; }  
-      //  public FacultyYear FacultyYear { get; set; }  
+        public string Sem_Name { get; set; }
+        [NotMapped]
+        public int FacYear_Id { get; set; }
+        //public FacultyYear FacultyYear { get; set; }
 
     }
 }

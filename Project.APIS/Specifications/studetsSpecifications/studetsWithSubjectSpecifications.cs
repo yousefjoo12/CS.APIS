@@ -16,6 +16,9 @@ namespace Core.Specifications.studetsSpecifications
              (!spec.FacYearSem_ID.HasValue || P.FacYearSem_ID == spec.FacYearSem_ID.Value)
             )
         {
+            //Includes.Add(P => P.Fac_ID);
+            //Includes.Add(P => P.FacYearSem_ID);
+
             if (!string.IsNullOrEmpty(spec.sort))
             {
                 switch (spec.sort)
@@ -41,7 +44,8 @@ namespace Core.Specifications.studetsSpecifications
         }
         public studetsWithSubjectSpecifications(int id) : base(P => P.ID == id)
         {
-
+            Includes.Add(P => P.Fac_ID);
+            Includes.Add(P => P.FacYearSem_ID);
         }
     }
 }

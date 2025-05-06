@@ -19,20 +19,20 @@ namespace Repository.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(100);
 
-            //builder.HasOne(s => s.Doctors)
-            //       .WithMany()
-            //       .HasForeignKey(s => s.Dr_ID)
-            //       .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(s => s.Doctors)
+                   .WithMany()
+                   .HasForeignKey(s => s.Dr_ID)
+                   .OnDelete(DeleteBehavior.Cascade);
 
-            //builder.HasOne(s => s.Instructors)
-            //       .WithMany()
-            //       .HasForeignKey(s => s.Ins_ID)
-            //       .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(s => s.Instructors)
+                   .WithMany()
+                   .HasForeignKey(s => s.Ins_ID)
+                   .OnDelete(DeleteBehavior.Cascade);
 
-            //builder.HasOne(s => s.FacultyYearSemister)
-            //       .WithMany()
-            //       .HasForeignKey(s => s.FacYearSem_ID)
-            //       .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(s => s.FacultyYearSemister)
+                   .WithMany()
+                   .HasForeignKey(s => s.FacYearSem_ID)
+                   .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

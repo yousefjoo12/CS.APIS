@@ -11,7 +11,9 @@ namespace Core.Entities
     public class FacultyYear : BaseEntity
     {
         public string Year { get; set; }
+        [NotMapped]
         public int Fac_ID { get; set; }
+        public Faculty Faculty { get; set; }
 
     }
 }

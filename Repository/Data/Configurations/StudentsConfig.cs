@@ -21,15 +21,15 @@ namespace Repository.Data.Configurations
             builder.Property(s => s.St_Image).HasMaxLength(250);
             builder.Property(s => s.Phone).HasMaxLength(15);
 
-            //builder.HasOne(s => s.Faculty)
-            //       .WithMany()
-            //       .HasForeignKey(s => s.Fac_ID)
-            //       .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(s => s.Faculty)
+                   .WithMany()
+                   .HasForeignKey(s => s.Fac_ID)
+                   .OnDelete(DeleteBehavior.Cascade);
 
-            //builder.HasOne(s => s.FacultyYearSemister)
-            //       .WithMany()
-            //       .HasForeignKey(s => s.FacYearSem_ID)
-            //       .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(s => s.FacultyYearSemister)
+                   .WithMany()
+                   .HasForeignKey(s => s.FacYearSem_ID)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

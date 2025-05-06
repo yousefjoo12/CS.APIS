@@ -39,10 +39,6 @@ namespace Repository.Data.Migrations
                     b.Property<int>("St_ID")
                         .HasColumnType("int");
 
-                    b.Property<string>("Sub_Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
                     b.HasKey("ID");
 
                     b.ToTable("Attendance");
@@ -112,7 +108,7 @@ namespace Repository.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("Fac_ID")
+                    b.Property<int>("FacultyID")
                         .HasColumnType("int");
 
                     b.Property<string>("Year")
@@ -121,6 +117,8 @@ namespace Repository.Data.Migrations
                         .HasColumnType("nvarchar(4)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("FacultyID");
 
                     b.ToTable("FacultyYear");
                 });
@@ -132,9 +130,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("FacultyYearId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Sem_Code")
                         .IsRequired()
@@ -206,6 +201,9 @@ namespace Repository.Data.Migrations
                     b.Property<int>("Room_ID")
                         .HasColumnType("int");
 
+                    b.Property<int>("St_ID")
+                        .HasColumnType("int");
+
                     b.Property<int>("Sub_ID")
                         .HasColumnType("int");
 
@@ -273,6 +271,10 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("FacYearSem_ID");
+
+                    b.HasIndex("Fac_ID");
+
                     b.ToTable("Students");
                 });
 
@@ -291,6 +293,10 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("Room_ID");
+
+                    b.HasIndex("St_ID");
 
                     b.ToTable("Studets_Rooms");
                 });
@@ -319,7 +325,89 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("Dr_ID");
+
+                    b.HasIndex("FacYearSem_ID");
+
+                    b.HasIndex("Ins_ID");
+
                     b.ToTable("Subjects");
+                });
+
+            modelBuilder.Entity("Core.Entities.FacultyYear", b =>
+                {
+                    b.HasOne("Core.Entities.Faculty", "Faculty")
+                        .WithMany()
+                        .HasForeignKey("FacultyID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
+                });
+
+            modelBuilder.Entity("Core.Entities.Students", b =>
+                {
+                    b.HasOne("Core.Entities.FacultyYearSemister", "FacultyYearSemister")
+                        .WithMany()
+                        .HasForeignKey("FacYearSem_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Faculty", "Faculty")
+                        .WithMany()
+                        .HasForeignKey("Fac_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
+
+                    b.Navigation("FacultyYearSemister");
+                });
+
+            modelBuilder.Entity("Core.Entities.Studets_Rooms", b =>
+                {
+                    b.HasOne("Core.Entities.Rooms", "Rooms")
+                        .WithMany()
+                        .HasForeignKey("Room_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Students", "Students")
+                        .WithMany()
+                        .HasForeignKey("St_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Rooms");
+
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("Core.Entities.Subjects", b =>
+                {
+                    b.HasOne("Core.Entities.Doctors", "Doctors")
+                        .WithMany()
+                        .HasForeignKey("Dr_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.FacultyYearSemister", "FacultyYearSemister")
+                        .WithMany()
+                        .HasForeignKey("FacYearSem_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Instructors", "Instructors")
+                        .WithMany()
+                        .HasForeignKey("Ins_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctors");
+
+                    b.Navigation("FacultyYearSemister");
+
+                    b.Navigation("Instructors");
                 });
 #pragma warning restore 612, 618
         }

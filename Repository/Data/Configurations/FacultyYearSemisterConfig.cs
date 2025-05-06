@@ -20,7 +20,7 @@ namespace Repository.Data.Configurations
 
             //builder.HasOne(f => f.FacultyYear)
             //       .WithMany()
-            //       .HasForeignKey(f => f.FacultyYearId)
+            //       .HasForeignKey(f => f.FacYear_Id)
             //       .OnDelete(DeleteBehavior.Cascade);
 
 

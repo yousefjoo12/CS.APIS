@@ -20,18 +20,23 @@ namespace Repository.Data.Configurations
             //builder.HasOne(l => l.Rooms)
             //       .WithMany()
             //       .HasForeignKey(l => l.Room_ID)
-            //       .OnDelete(DeleteBehavior.Restrict);
+            //       .OnDelete(DeleteBehavior.Cascade);
 
             //builder.HasOne(l => l.Subjects)
             //       .WithMany()
             //       .HasForeignKey(l => l.Sub_ID)
             //       .OnDelete(DeleteBehavior.Cascade);
+            
+            //builder.HasOne(l => l.Students)
+            //       .WithMany()
+            //       .HasForeignKey(l => l.St_ID)
+            //       .OnDelete(DeleteBehavior.Cascade);
 
-            //builder.Property(l => l.LectureDate)
-            //       .IsRequired();
+            builder.Property(l => l.LectureDate)
+                   .IsRequired();
 
-            //builder.Property(l => l.Degree)
-            //       .IsRequired();
+            builder.Property(l => l.Degree)
+                   .IsRequired();
 
 
         }
