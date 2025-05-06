@@ -47,12 +47,13 @@ namespace Repository.Data.Migrations
                 table: "Subjects");
 
             migrationBuilder.DropColumn(
-                name: "FacultyYearId",
-                table: "FacultyYearSemister");
-
-            migrationBuilder.DropColumn(
                 name: "Sub_Name",
                 table: "Attendance");
+
+            migrationBuilder.RenameColumn(
+                name: "FacultyYearId",
+                table: "FacultyYearSemister",
+                newName: "FacYear_Id");
 
             migrationBuilder.AddColumn<int>(
                 name: "St_ID",
@@ -248,6 +249,11 @@ namespace Repository.Data.Migrations
                 name: "FacultyID",
                 table: "FacultyYear");
 
+            migrationBuilder.RenameColumn(
+                name: "FacYear_Id",
+                table: "FacultyYearSemister",
+                newName: "FacultyYearId");
+
             migrationBuilder.AddColumn<int>(
                 name: "DoctorsID",
                 table: "Subjects",
@@ -265,13 +271,6 @@ namespace Repository.Data.Migrations
             migrationBuilder.AddColumn<int>(
                 name: "InstructorsID",
                 table: "Subjects",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.AddColumn<int>(
-                name: "FacultyYearId",
-                table: "FacultyYearSemister",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);

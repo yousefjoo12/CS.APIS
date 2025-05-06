@@ -131,6 +131,9 @@ namespace Repository.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<int>("FacYear_Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("Sem_Code")
                         .IsRequired()
                         .HasMaxLength(50)
