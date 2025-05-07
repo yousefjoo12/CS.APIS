@@ -36,6 +36,22 @@ namespace Repository
         public async Task<T?> GetWithspecAsync(ISpecifications<T> spec)
         {
             return await SpecificationEvaluator<T>.GetQuery(_dbcontext.Set<T>(), spec).FirstOrDefaultAsync();
-        } 
+        }
+
+        public async Task<T> AddAsync(T entity)
+        {
+            await _dbcontext.AddAsync(entity); 
+            return entity;
+        }
+
+        public void UpdateAsync(T entity)
+        {
+            _dbcontext.Update(entity);
+        }
+
+        public void DeleteAsync(T entity)
+        {
+            _dbcontext.Remove(entity);
+        }
     }
 }

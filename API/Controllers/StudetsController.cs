@@ -15,7 +15,7 @@ namespace API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public StudetsController(IUnitOfWork unitOfWork,IMapper mapper)
+        public StudetsController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -24,7 +24,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(Students), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]//  /Studets
-        public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> GetAllStudets([FromQuery] studetsSpecParams studetsParams )
+        public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> GetAllStudets([FromQuery] studetsSpecParams studetsParams)
         {
             var Spec = new studetsWithSubjectSpecifications(studetsParams);
             var Studets = await _unitOfWork.Repository<Students>().GetAllWithSpecAsync(Spec);
@@ -47,6 +47,27 @@ namespace API.Controllers
                 return NotFound(new ApiResponse(404));// 404
             }
             return Ok(data); // 200
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Students>> AddStudet(StudentsDTO students)
+        {
+            // mapping  => from Dto[StudentsDTO] to model[Students]
+            var mappedStudents = _mapper.Map<StudentsDTO, Students>(students);
+            var data = await _unitOfWork.Repository<Students>().AddAsync(mappedStudents);
+            if (data is null) return BadRequest(new ApiResponse(400));
+            await _unitOfWork.CompleteAsync();
+            return Ok(data);
+
+        }
+        [HttpDelete]
+        public async Task DeleteStudents(int id)
+        {
+            var Spec = new studetsWithSubjectSpecifications(id);
+            var Studet = await _unitOfWork.Repository<Students>().GetWithspecAsync(Spec);
+            _unitOfWork.Repository<Students>().DeleteAsync(Studet);
+            await _unitOfWork.CompleteAsync();
+
         }
 
     }

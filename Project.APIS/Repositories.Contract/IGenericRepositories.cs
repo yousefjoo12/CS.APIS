@@ -14,5 +14,9 @@ namespace Core.Repositories.Contract
         Task<IReadOnlyList<T>> GetAll(); 
         Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec); 
         Task<T?> GetWithspecAsync(ISpecifications<T> spec);
+        Task<T> AddAsync(T entity);
+        //Task AddAsync(T entity);
+        void UpdateAsync(T entity);
+        void DeleteAsync(T entity); 
     }
 }
