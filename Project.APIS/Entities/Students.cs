@@ -12,6 +12,7 @@ namespace Core.Entities
         public string St_Code { get; set; }
         public string St_NameAr { get; set; }
         public string St_NameEn { get; set; }
+        public string St_Email { get; set; }
         public string St_Image { get; set; }
         public string Phone { get; set; }  
         public int Fac_ID { get; set; }

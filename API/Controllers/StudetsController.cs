@@ -60,6 +60,30 @@ namespace API.Controllers
             return Ok(data);
 
         }
+        //[HttpPost]
+        //public async Task<ActionResult<Students>> AddOrUpdateStudet(StudentsDTO students)
+        //{
+        //    // mapping  => from Dto[StudentsDTO] to model[Students]
+        //    var Spec = new studetsWithSubjectSpecifications(students.ID);
+        //    var Studet = await _unitOfWork.Repository<Students>().GetWithspecAsync(Spec);
+        //    var mappedStudents = _mapper.Map<StudentsDTO, Students>(students);
+        //    var data = await _unitOfWork.Repository<Students>().AddAsync(mappedStudents);
+
+        //    if (Studet == null)
+        //    {
+
+        //        if (data is null) return BadRequest(new ApiResponse(400));
+        //        await _unitOfWork.CompleteAsync();
+        //        return Ok(data);
+        //    }
+        //    else
+        //    {
+        //        if (data is null) return BadRequest(new ApiResponse(400));
+        //        await _unitOfWork.CompleteAsync();
+        //        return Ok(data);
+        //    }
+
+        //}
         [HttpDelete]
         public async Task DeleteStudents(int id)
         {
