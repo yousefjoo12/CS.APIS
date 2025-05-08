@@ -12,8 +12,8 @@ using Repository.Data;
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250507164442_Third2Migrations")]
-    partial class Third2Migrations
+    [Migration("20250508041243_SecondMigrations")]
+    partial class SecondMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

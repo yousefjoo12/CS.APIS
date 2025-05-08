@@ -55,6 +55,13 @@ namespace Repository.Data.Migrations
                 table: "FacultyYearSemister",
                 newName: "FacYear_Id");
 
+            migrationBuilder.AddColumn<string>(
+                name: "St_Email",
+                table: "Students",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
             migrationBuilder.AddColumn<int>(
                 name: "St_ID",
                 table: "Lecture",
@@ -65,6 +72,27 @@ namespace Repository.Data.Migrations
             migrationBuilder.AddColumn<int>(
                 name: "Fac_ID",
                 table: "FacultyYear",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Dr_Email",
+                table: "Doctors",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "Dr_Image",
+                table: "Doctors",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<int>(
+                name: "Fac_Id",
+                table: "Doctors",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
@@ -221,12 +249,28 @@ namespace Repository.Data.Migrations
                 table: "Students");
 
             migrationBuilder.DropColumn(
+                name: "St_Email",
+                table: "Students");
+
+            migrationBuilder.DropColumn(
                 name: "St_ID",
                 table: "Lecture");
 
             migrationBuilder.DropColumn(
                 name: "Fac_ID",
                 table: "FacultyYear");
+
+            migrationBuilder.DropColumn(
+                name: "Dr_Email",
+                table: "Doctors");
+
+            migrationBuilder.DropColumn(
+                name: "Dr_Image",
+                table: "Doctors");
+
+            migrationBuilder.DropColumn(
+                name: "Fac_Id",
+                table: "Doctors");
 
             migrationBuilder.RenameColumn(
                 name: "FacYear_Id",
