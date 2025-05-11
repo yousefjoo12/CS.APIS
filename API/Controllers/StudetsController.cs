@@ -4,6 +4,8 @@ using Core;
 using Core.Entities;
 using Core.Repositories.Contract;
 using Core.Specifications.studetsSpecifications;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project.APIS.Erorrs;
@@ -20,7 +22,7 @@ namespace API.Controllers
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-
+       // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] 
         [ProducesResponseType(typeof(Students), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]//  /Studets

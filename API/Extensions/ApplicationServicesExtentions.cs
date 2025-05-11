@@ -1,9 +1,11 @@
 ﻿using API.Helpers;
 using Core;
 using Core.Repositories.Contract;
+using Core.Services.Contract;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
+using Service;
 
 namespace Project.APIS.Extensions
 {
@@ -13,7 +15,9 @@ namespace Project.APIS.Extensions
         { 
 
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork)); 
+            services.AddScoped(typeof(IAuthService), typeof(AuthService));
             services.AddScoped(typeof(IGenericRepositories<>), typeof(GenericRepositories<>));
+
             services.AddAutoMapper(typeof(MappingProfiles));
 
             services.Configure<ApiBehaviorOptions>(Options =>
@@ -31,6 +35,7 @@ namespace Project.APIS.Extensions
                     return new BadRequestObjectResult(response);
                 };
             });
+            services.AddScoped(typeof(IGenericRepositories<>), typeof(GenericRepositories<>));
 
 
             return services;

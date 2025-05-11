@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using Core.Entities.Identity;
+using Core.Services.Contract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +12,13 @@ namespace API.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IAuthService _authService;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IAuthService authService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _authService = authService;
         }
         [HttpPost("login")] // post  api/Account/login
         public async Task<ActionResult<UserDTO>> Login(LoginDTO model)
@@ -25,7 +28,7 @@ namespace API.Controllers
             {
                 return Unauthorized(new ApiResponse(401));
             }
-            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Passwoed, false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
             if (result.Succeeded is false)
             {
                 return Unauthorized(new ApiResponse(401));
@@ -34,8 +37,8 @@ namespace API.Controllers
             {
                 DisplayName = user.DisplayName,
                 Email = user.Email,
-                Token = "This Will be Token"
-                /*await _authService.CreateTokenAsync(user, _userManager)*/
+                Token = await _authService.CreateTokenAsync(user, _userManager)
+
             });
         }
         [HttpPost("register")] // post  api/Account/register
@@ -64,8 +67,7 @@ namespace API.Controllers
             {
                 DisplayName = user.DisplayName,
                 Email = user.Email,
-                Token = "This Will be Token"
-                /*await _authService.CreateTokenAsync(user, _userManager)*/
+                Token = await _authService.CreateTokenAsync(user, _userManager)
             });
         }
     }

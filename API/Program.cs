@@ -10,6 +10,9 @@ using Repository.Data.Identity;
 using Core.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Project.Repository.Data.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace API
 {
@@ -40,8 +43,22 @@ namespace API
             builder.Services.AddIdentity<AppUser, IdentityRole>(Options =>
             {
 
-            }).AddEntityFrameworkStores<AppIdentityDbContext>();
+            }).AddEntityFrameworkStores<AppIdentityDbContext>(); 
 
+            builder.Services.AddAuthentication().AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, Options =>
+            {
+                Options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = builder.Configuration["JWT:ValidIssure"],
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["JWT:ValidAudience"],
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Authkey"] ?? string.Empty))
+                };
+            });
             var app = builder.Build();
 
             // update database

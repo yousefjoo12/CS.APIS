@@ -9,7 +9,7 @@ namespace API.DTOs
         public string Email { set; get; }
 
         [Required]
-        public string Passwoed { set; get; }
+        public string Password { set; get; }
 
     }
 }
