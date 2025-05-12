@@ -16,7 +16,7 @@ namespace Core.Repositories.Contract
         Task<T?> GetWithspecAsync(ISpecifications<T> spec);
         Task<T> AddAsync(T entity);
         //Task AddAsync(T entity);
-        void UpdateAsync(T entity);
+        Task<T>UpdateAsync(T entity);
         void DeleteAsync(T entity); 
     }
 }

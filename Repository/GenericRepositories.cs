@@ -44,9 +44,10 @@ namespace Repository
             return entity;
         }
 
-        public void UpdateAsync(T entity)
+        public async Task<T> UpdateAsync(T entity)
         {
             _dbcontext.Update(entity);
+            return entity;
         }
 
         public void DeleteAsync(T entity)
