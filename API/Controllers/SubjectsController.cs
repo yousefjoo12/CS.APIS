@@ -49,6 +49,37 @@ namespace API.Controllers
             }
             return Ok(data); // 200
         }
+		[HttpPost]
+		public async Task<ActionResult<Subjects>> AddSubject(SubjectsDTO Subjects)
+		{
+			// mapping  => from Dto[SubjectsDTO] to model[Subjects]
+			var mappedSubjects = _mapper.Map<SubjectsDTO, Subjects>(Subjects);
+			var data = await _unitOfWork.Repository<Subjects>().AddAsync(mappedSubjects);
+			if (data is null) return BadRequest(new ApiResponse(400));
+			await _unitOfWork.CompleteAsync();
+			return Ok(data);
 
-    }
+		}
+
+		[HttpPut]
+		public async Task<ActionResult<Subjects>> UpdateSubject(SubjectsDTO Subjects)
+		{
+			// mapping  => from Dto[SubjectsDTO] to model[Subjects]
+			var mappedSubjects = _mapper.Map<SubjectsDTO, Subjects>(Subjects);
+			var data = _unitOfWork.Repository<Subjects>().UpdateAsync(mappedSubjects);
+			if (data is null) return BadRequest(new ApiResponse(400));
+			await _unitOfWork.CompleteAsync();
+			return Ok(mappedSubjects); 
+		}
+		[HttpDelete]
+		public async Task DeleteSubjects(int id)
+		{
+			var Spec = new SubjectsWithSpecifications(id);
+			var Subject = await _unitOfWork.Repository<Subjects>().GetWithspecAsync(Spec);
+			_unitOfWork.Repository<Subjects>().DeleteAsync(Subject);
+			await _unitOfWork.CompleteAsync();
+
+		}
+
+	}
 }
