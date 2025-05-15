@@ -44,8 +44,8 @@ namespace Core.Specifications.studetsSpecifications
         }
         public studetsWithSubjectSpecifications(int id) : base(P => P.ID == id)
         {
-            //Includes.Add(P => P.Fac_ID);
-            //Includes.Add(P => P.FacYearSem_ID);
+            Includes.Add(P => P.Fac_ID);
+            Includes.Add(P => P.FacYearSem_ID);
         }
     }
 }

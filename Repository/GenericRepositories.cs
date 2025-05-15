@@ -50,7 +50,7 @@ namespace Repository
             return entity;
         }
 
-        public void DeleteAsync(T entity)
+        public void Delete(T entity)
         {
             _dbcontext.Remove(entity);
         }

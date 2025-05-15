@@ -9,6 +9,7 @@ namespace Core.Entities
 {
     public class Rooms : BaseEntity
     {  
-        public string Room_Num { get; set; }  
+        public string Room_Num { get; set; }
+        public   ICollection<Studets_Rooms> StudentRooms { get; set; }
     }
 }

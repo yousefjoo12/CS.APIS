@@ -41,6 +41,8 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("LectureID");
+
                     b.ToTable("Attendance");
                 });
 
@@ -54,8 +56,7 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("Dr_Code")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Dr_Email")
                         .IsRequired()
@@ -67,21 +68,15 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("Dr_NameAr")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Dr_NameEn")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Fac_Id")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -98,13 +93,11 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("Fac_Code")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Fac_Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -124,8 +117,7 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("Year")
                         .IsRequired()
-                        .HasMaxLength(4)
-                        .HasColumnType("nvarchar(4)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -145,15 +137,15 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("Sem_Code")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sem_Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("FacYear_Id");
 
                     b.ToTable("FacultyYearSemister");
                 });
@@ -168,23 +160,19 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("Ins_Code")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Ins_NameAr")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Ins_NameEn")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -207,8 +195,7 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("Lecture_Num")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Room_ID")
                         .HasColumnType("int");
@@ -220,6 +207,12 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("Room_ID");
+
+                    b.HasIndex("St_ID");
+
+                    b.HasIndex("Sub_ID");
 
                     b.ToTable("Lecture");
                 });
@@ -234,8 +227,7 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("Room_Num")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -258,13 +250,11 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("St_Code")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("St_Email")
                         .IsRequired()
@@ -272,18 +262,15 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("St_Image")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("St_NameAr")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("St_NameEn")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -336,8 +323,7 @@ namespace Repository.Data.Migrations
 
                     b.Property<string>("Sub_Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -348,6 +334,55 @@ namespace Repository.Data.Migrations
                     b.HasIndex("Ins_ID");
 
                     b.ToTable("Subjects");
+                });
+
+            modelBuilder.Entity("Core.Entities.Attendance_T", b =>
+                {
+                    b.HasOne("Core.Entities.Lecture_S", "Lecture")
+                        .WithMany()
+                        .HasForeignKey("LectureID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lecture");
+                });
+
+            modelBuilder.Entity("Core.Entities.FacultyYearSemister", b =>
+                {
+                    b.HasOne("Core.Entities.FacultyYear", "FacultyYear")
+                        .WithMany()
+                        .HasForeignKey("FacYear_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FacultyYear");
+                });
+
+            modelBuilder.Entity("Core.Entities.Lecture_S", b =>
+                {
+                    b.HasOne("Core.Entities.Rooms", "Rooms")
+                        .WithMany()
+                        .HasForeignKey("Room_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Students", "Students")
+                        .WithMany()
+                        .HasForeignKey("St_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Subjects", "Subjects")
+                        .WithMany()
+                        .HasForeignKey("Sub_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Rooms");
+
+                    b.Navigation("Students");
+
+                    b.Navigation("Subjects");
                 });
 
             modelBuilder.Entity("Core.Entities.Students", b =>
@@ -372,13 +407,13 @@ namespace Repository.Data.Migrations
             modelBuilder.Entity("Core.Entities.Studets_Rooms", b =>
                 {
                     b.HasOne("Core.Entities.Rooms", "Rooms")
-                        .WithMany()
+                        .WithMany("StudentRooms")
                         .HasForeignKey("Room_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Students", "Students")
-                        .WithMany()
+                        .WithMany("StudentRooms")
                         .HasForeignKey("St_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -413,6 +448,16 @@ namespace Repository.Data.Migrations
                     b.Navigation("FacultyYearSemister");
 
                     b.Navigation("Instructors");
+                });
+
+            modelBuilder.Entity("Core.Entities.Rooms", b =>
+                {
+                    b.Navigation("StudentRooms");
+                });
+
+            modelBuilder.Entity("Core.Entities.Students", b =>
+                {
+                    b.Navigation("StudentRooms");
                 });
 #pragma warning restore 612, 618
         }

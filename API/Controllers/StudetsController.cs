@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Project.APIS.Erorrs;
+using Repository.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace API.Controllers
@@ -17,11 +19,13 @@ namespace API.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly StoreContext _context;
 
-        public StudetsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public StudetsController(IUnitOfWork unitOfWork, IMapper mapper , StoreContext context)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+           _context = context;
         }
        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] 
         [ProducesResponseType(typeof(Students), StatusCodes.Status200OK)]
@@ -30,9 +34,10 @@ namespace API.Controllers
         public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> GetAllStudets([FromQuery] studetsSpecParams studetsParams)
         {
             var Spec = new studetsWithSubjectSpecifications(studetsParams);
-            var Studets = await _unitOfWork.Repository<Students>().GetAllWithSpecAsync(Spec);
-            var data = _mapper.Map<IEnumerable<Students>, IEnumerable<StudentsDTO>>(Studets);
+            var Studets = await _unitOfWork.Repository<Students>().GetAll();
 
+
+            var data = _mapper.Map<IEnumerable<Students>, IEnumerable<StudentsDTO>>(Studets); 
             return Ok(data); //200
         }
 
@@ -42,14 +47,24 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Students>> GetStudet(int id)
         {
-            var Spec = new studetsWithSubjectSpecifications(id);
-            var Studet = await _unitOfWork.Repository<Students>().GetWithspecAsync(Spec);
-            var data = _mapper.Map<Students, StudentsDTO>(Studet);
-            if (data == null)
+            //var Spec = new studetsWithSubjectSpecifications(id);
+            //var Studet = await _unitOfWork.Repository<Students>().GetWithspecAsync(Spec);
+
+            try
             {
-                return NotFound(new ApiResponse(404));// 404
+                var Studet = await _context.Students.Include(s => s.Faculty).Include(s => s.FacultyYearSemister).FirstOrDefaultAsync();
+                if (Studet == null)
+                {
+                    return NotFound(new ApiResponse(404));// 404
+                }
+                var data = _mapper.Map<Students, StudentsDTO>(Studet);
+                return Ok(data); // 200
             }
-            return Ok(data); // 200
+            catch (Exception ex)
+            { 
+                return BadRequest(ex.Message);// 400
+            }
+           
         }
 
         [HttpPost]
@@ -80,7 +95,7 @@ namespace API.Controllers
         {
             var Spec = new studetsWithSubjectSpecifications(id);
             var Studet = await _unitOfWork.Repository<Students>().GetWithspecAsync(Spec);
-            _unitOfWork.Repository<Students>().DeleteAsync(Studet);
+            _unitOfWork.Repository<Students>().Delete(Studet);
             await _unitOfWork.CompleteAsync();
 
         }
