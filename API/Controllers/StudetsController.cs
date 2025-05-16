@@ -62,8 +62,8 @@ namespace API.Controllers
             //var mappedStudents = _mapper.Map<StudentsDTO, Students>(students);  
 
             var mappedStudents = new Students
-            {
-                ID = students.ID,
+            { 
+                St_Code = students.St_Code,
                 St_NameAr = students.St_NameAr,
                 St_NameEn = students.St_NameEn,
                 St_Email = students.St_Email,
