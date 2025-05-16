@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Core.Entities;
+using Core.FingerId;
 
 namespace Repository.Data
 {
@@ -33,6 +34,7 @@ namespace Repository.Data
         public DbSet<Students> Students { get; set; }  
         public DbSet<Studets_Rooms> Studets_Rooms { get; set; }  
         public DbSet<Subjects> Subjects { get; set; }  
+        public DbSet<SensorData> SensorData { get; set; }  
 
     }
 }

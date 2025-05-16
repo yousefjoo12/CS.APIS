@@ -43,9 +43,7 @@ namespace Core.Specifications.studetsSpecifications
             ApplyPagination((spec.PageIndex - 1) * spec.PageSize, spec.PageSize);
         }
         public studetsWithSubjectSpecifications(int id) : base(P => P.ID == id)
-        {
-            Includes.Add(P => P.Fac_ID);
-            Includes.Add(P => P.FacYearSem_ID);
+        { 
         }
     }
 }

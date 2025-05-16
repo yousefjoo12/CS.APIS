@@ -55,15 +55,14 @@ namespace API.Controllers
 
         }
 
-        [HttpPost("add-student")]
-
+        [HttpPost("Add_OR_UpdateStudent")] 
         public async Task<ActionResult<Students>> AddStudet(StudentsDTO students)
         {
             //var mappedStudents = _mapper.Map<StudentsDTO, Students>(students);  
 
             var mappedStudents = new Students
-            { 
-                ID =0,
+            {
+                ID = students.ID,
                 St_Code = students.St_Code,
                 St_NameAr = students.St_NameAr,
                 St_NameEn = students.St_NameEn,
@@ -72,29 +71,25 @@ namespace API.Controllers
                 Phone = students.Phone,
                 Fac_ID = students.Fac_ID,
                 FacYearSem_ID = students.FacYearSem_ID,
-            }; 
-            var data = await _unitOfWork.Repository<Students>().AddAsync(mappedStudents);
-            if (data is null) return BadRequest(new ApiResponse(400));
-            await _unitOfWork.CompleteAsync();
-            return Ok(data);
+            };
+            if (mappedStudents.ID != 0)
+            {
+                var data = await _unitOfWork.Repository<Students>().UpdateAsync(mappedStudents);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
+            }
+            else
+            {
+                mappedStudents.ID = 0;
+                var data = await _unitOfWork.Repository<Students>().AddAsync(mappedStudents);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
+            }
 
-        }
 
-
-
-        [HttpPut]
-        public async Task<ActionResult<Students>> UpdateStudet(StudentsDTO students)
-        {
-            // mapping  => from Dto[StudentsDTO] to model[Students]
-            var mappedStudents = _mapper.Map<StudentsDTO, Students>(students);
-
-
-            var data = _unitOfWork.Repository<Students>().UpdateAsync(mappedStudents);
-            if (data is null) return BadRequest(new ApiResponse(400));
-            await _unitOfWork.CompleteAsync();
-            return Ok(mappedStudents);
-
-        }
+        } 
         [HttpDelete]
         public async Task DeleteStudents(int id)
         {

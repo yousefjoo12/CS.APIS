@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Project.Core.Specifications;
 using Project.Repository;
+using System.ComponentModel;
 
 namespace Repository
 {
@@ -104,6 +105,7 @@ namespace Repository
         } 
         public void Delete(T entity)
         {
+            //MultilineStringConverter changes
             _dbcontext.Remove(entity);
         }
     }
