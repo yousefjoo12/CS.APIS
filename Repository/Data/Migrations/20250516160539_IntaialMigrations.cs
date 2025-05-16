@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Repository.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class intaialMigrations : Migration
+    public partial class IntaialMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,20 +44,6 @@ namespace Repository.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FacultyYear",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Year = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Fac_ID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FacultyYear", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Instructors",
                 columns: table => new
                 {
@@ -84,6 +70,26 @@ namespace Repository.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rooms", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FacultyYear",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Year = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Fac_ID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FacultyYear", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_FacultyYear_Faculty_Fac_ID",
+                        column: x => x.Fac_ID,
+                        principalTable: "Faculty",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -262,6 +268,11 @@ namespace Repository.Data.Migrations
                 column: "LectureID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FacultyYear_Fac_ID",
+                table: "FacultyYear",
+                column: "Fac_ID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FacultyYearSemister_FacYear_Id",
                 table: "FacultyYearSemister",
                 column: "FacYear_Id");
@@ -339,9 +350,6 @@ namespace Repository.Data.Migrations
                 name: "Subjects");
 
             migrationBuilder.DropTable(
-                name: "Faculty");
-
-            migrationBuilder.DropTable(
                 name: "Doctors");
 
             migrationBuilder.DropTable(
@@ -352,6 +360,9 @@ namespace Repository.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "FacultyYear");
+
+            migrationBuilder.DropTable(
+                name: "Faculty");
         }
     }
 }

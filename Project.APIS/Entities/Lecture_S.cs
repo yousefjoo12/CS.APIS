@@ -18,7 +18,7 @@ namespace Core.Entities
         [ForeignKey(nameof(Rooms))] 
         public int Room_ID { get; set; }
         public Rooms Rooms { get; set; }
-        [ForeignKey(nameof(Subjects))] 
+        [ForeignKey(nameof(Subjects))]  
         public int Sub_ID { get; set; }
         public Subjects Subjects { get; set; }
         public DateTime LectureDate { get; set; } 

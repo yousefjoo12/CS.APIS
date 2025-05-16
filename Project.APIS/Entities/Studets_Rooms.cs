@@ -13,7 +13,7 @@ namespace Core.Entities
         [ForeignKey(nameof(Students))]
 
         public int St_ID { get; set; }
-        public Students Students { get; set; }
+        public Students Students { get; set; } 
         [ForeignKey(nameof(Rooms))]
 
         public int Room_ID { get; set; } 

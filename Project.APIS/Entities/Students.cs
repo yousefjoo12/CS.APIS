@@ -17,7 +17,7 @@ namespace Core.Entities
         public string St_Image { get; set; }
         public string Phone { get; set; }
 
-        //********************************************************** 
+        //**********************************************************  
         [ForeignKey(nameof(Faculty))]
         public int Fac_ID { get; set; }
         public Faculty Faculty { get; set; }

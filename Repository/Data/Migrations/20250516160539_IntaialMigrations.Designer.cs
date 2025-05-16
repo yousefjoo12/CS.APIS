@@ -12,8 +12,8 @@ using Repository.Data;
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250515205332_intaialMigrations")]
-    partial class intaialMigrations
+    [Migration("20250516160539_IntaialMigrations")]
+    partial class IntaialMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,6 +123,8 @@ namespace Repository.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("Fac_ID");
 
                     b.ToTable("FacultyYear");
                 });
@@ -348,6 +350,17 @@ namespace Repository.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Lecture");
+                });
+
+            modelBuilder.Entity("Core.Entities.FacultyYear", b =>
+                {
+                    b.HasOne("Core.Entities.Faculty", "Faculty")
+                        .WithMany()
+                        .HasForeignKey("Fac_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
                 });
 
             modelBuilder.Entity("Core.Entities.FacultyYearSemister", b =>

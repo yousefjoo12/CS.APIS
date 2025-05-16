@@ -14,6 +14,6 @@ namespace API.DTOs
         public int Fac_ID { get; set; }
         public string Faculty { get; set; }
         public int FacYearSem_ID { get; set; }
-        public string FacultyYearSemister { get; set; }
+        public string FacultyYearSemister { get; set; } 
     }
 }

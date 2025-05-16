@@ -7,7 +7,8 @@ namespace API.DTOs
     {
         public int ID { get; set; }
         public string Year { get; set; }
+
         public int FacultyId { get; set; }
-        //public string FacultyYear { get; set; }
+        public string Faculty { get; set; }
     }
 }

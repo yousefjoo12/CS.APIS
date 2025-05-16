@@ -121,6 +121,8 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("Fac_ID");
+
                     b.ToTable("FacultyYear");
                 });
 
@@ -345,6 +347,17 @@ namespace Repository.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Lecture");
+                });
+
+            modelBuilder.Entity("Core.Entities.FacultyYear", b =>
+                {
+                    b.HasOne("Core.Entities.Faculty", "Faculty")
+                        .WithMany()
+                        .HasForeignKey("Fac_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
                 });
 
             modelBuilder.Entity("Core.Entities.FacultyYearSemister", b =>

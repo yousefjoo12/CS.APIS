@@ -14,7 +14,7 @@ namespace Core.Entities
         [ForeignKey(nameof(Doctors))] 
         public int Dr_ID { get; set; }
         public Doctors Doctors { get; set; }
-        [ForeignKey(nameof(Instructors))] 
+        [ForeignKey(nameof(Instructors))]  
         public int Ins_ID { get; set; }
         public Instructors Instructors { get; set; }
         [ForeignKey(nameof(FacultyYearSemister))] 
