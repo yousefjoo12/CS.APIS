@@ -76,7 +76,7 @@ namespace API.Controllers
 		{
 			var Spec = new DoctorsWithSpecifications(id);
 			var Doctor = await _unitOfWork.Repository<Doctors>().GetWithspecAsync(Spec);
-			_unitOfWork.Repository<Doctors>().DeleteAsync(Doctor);
+			_unitOfWork.Repository<Doctors>().Delete(Doctor);
 			await _unitOfWork.CompleteAsync();
 
 		}

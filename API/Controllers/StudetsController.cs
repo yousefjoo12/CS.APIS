@@ -21,23 +21,20 @@ namespace API.Controllers
         private readonly IMapper _mapper;
         private readonly StoreContext _context;
 
-        public StudetsController(IUnitOfWork unitOfWork, IMapper mapper , StoreContext context)
+        public StudetsController(IUnitOfWork unitOfWork, IMapper mapper, StoreContext context)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-           _context = context;
+            _context = context;
         }
-       // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] 
-        [ProducesResponseType(typeof(Students), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [HttpGet]//  /Studets
-        public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> GetAllStudets([FromQuery] studetsSpecParams studetsParams)
-        {
-            var Spec = new studetsWithSubjectSpecifications(studetsParams);
-            var Studets = await _unitOfWork.Repository<Students>().GetAll();
 
 
-            var data = _mapper.Map<IEnumerable<Students>, IEnumerable<StudentsDTO>>(Studets); 
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  
+        [HttpGet]   //Studets
+        public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> GetAllStudets()
+        { 
+            var Studets1 = _context.Students.Include(s => s.Faculty).Include(s => s.FacultyYearSemister).ToList(); 
+            var data = _mapper.Map<IReadOnlyList<Students>, IReadOnlyList<StudentsDTO>>(Studets1);
             return Ok(data); //200
         }
 
@@ -46,13 +43,10 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Students>> GetStudet(int id)
-        {
-            //var Spec = new studetsWithSubjectSpecifications(id);
-            //var Studet = await _unitOfWork.Repository<Students>().GetWithspecAsync(Spec);
-
+        { 
             try
             {
-                var Studet = await _context.Students.Include(s => s.Faculty).Include(s => s.FacultyYearSemister).FirstOrDefaultAsync();
+                var Studet = await _context.Students.Where(p => p.ID == id).Include(s => s.Faculty).Include(s => s.FacultyYearSemister).FirstOrDefaultAsync();
                 if (Studet == null)
                 {
                     return NotFound(new ApiResponse(404));// 404
@@ -61,16 +55,15 @@ namespace API.Controllers
                 return Ok(data); // 200
             }
             catch (Exception ex)
-            { 
+            {
                 return BadRequest(ex.Message);// 400
             }
-           
+
         }
 
         [HttpPost]
         public async Task<ActionResult<Students>> AddStudet(StudentsDTO students)
-        {
-            // mapping  => from Dto[StudentsDTO] to model[Students]
+        { 
             var mappedStudents = _mapper.Map<StudentsDTO, Students>(students);
             var data = await _unitOfWork.Repository<Students>().AddAsync(mappedStudents);
             if (data is null) return BadRequest(new ApiResponse(400));
@@ -89,7 +82,7 @@ namespace API.Controllers
             await _unitOfWork.CompleteAsync();
             return Ok(mappedStudents);
 
-        } 
+        }
         [HttpDelete]
         public async Task DeleteStudents(int id)
         {

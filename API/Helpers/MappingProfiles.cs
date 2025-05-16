@@ -14,8 +14,14 @@ namespace API.Helpers
                 .ForMember(d => d.FacultyYearSemister, o => o.MapFrom(s => s.FacultyYearSemister.Sem_Name))
                 .ForMember(d => d.St_Image, o => o.MapFrom<StudentsPictureUrlResolver>()).ReverseMap(); 
 
-              CreateMap<Doctors, DoctorsDTO>()
+            CreateMap<Doctors, DoctorsDTO>()
                 .ForMember(d => d.Dr_Image, o => o.MapFrom<DoctorsPictureUrlResolver>()).ReverseMap();
+        
+
+
+
+
+
 
             CreateMap<Studets_Rooms, Studets_RoomsDTO>()
              .ForMember(d => d.Rooms, o => o.MapFrom(s => s.Rooms.Room_Num))
