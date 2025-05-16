@@ -63,6 +63,7 @@ namespace API.Controllers
 
             var mappedStudents = new Students
             { 
+                ID =0,
                 St_Code = students.St_Code,
                 St_NameAr = students.St_NameAr,
                 St_NameEn = students.St_NameEn,
@@ -86,6 +87,8 @@ namespace API.Controllers
         {
             // mapping  => from Dto[StudentsDTO] to model[Students]
             var mappedStudents = _mapper.Map<StudentsDTO, Students>(students);
+
+
             var data = _unitOfWork.Repository<Students>().UpdateAsync(mappedStudents);
             if (data is null) return BadRequest(new ApiResponse(400));
             await _unitOfWork.CompleteAsync();
