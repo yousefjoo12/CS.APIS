@@ -28,7 +28,7 @@ namespace API.Controllers
 
 
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  
-        [HttpGet]   //Studets
+        [HttpGet("GetAllStudets")]   //Studets
         public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> GetAllStudets()
         {
             var Studets = await _unitOfWork.Repository<Students>().GetAll();
@@ -90,13 +90,20 @@ namespace API.Controllers
 
 
         } 
-        [HttpDelete]
+        [HttpDelete("DeleteStudent")]
         public async Task DeleteStudents(int id)
-        {
-            var Spec = new studetsWithSubjectSpecifications(id);
-            var Studet = await _unitOfWork.Repository<Students>().GetWithspecAsync(Spec);
+        { 
+            var Studet = await _unitOfWork.Repository<Students>().GetById(id);
+            if (Studet is not null)
+            {
             _unitOfWork.Repository<Students>().Delete(Studet);
             await _unitOfWork.CompleteAsync();
+                 
+            }
+            else
+            {
+              NotFound(new ApiResponse(404));// 404
+            }
 
         }
 
