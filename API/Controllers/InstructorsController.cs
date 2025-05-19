@@ -23,29 +23,68 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        [ProducesResponseType(typeof(Instructors), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [HttpGet]    //Instructors
-        public async Task<ActionResult<IReadOnlyList<Instructors>>> GetAllInstructors([FromQuery] InstructorsSpecParams Instructorssarams)
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  
+        [HttpGet("GetAllInstructors")]   //Instructors
+        public async Task<ActionResult<IReadOnlyList<Instructors>>> GetAllInstructors()
         {
-            var Spec = new InstructorsWithSpecifications(Instructorssarams);
-            var Instructors = await _unitOfWork.Repository<Instructors>().GetAllWithSpecAsync(Spec); 
+            var Instructors = await _unitOfWork.Repository<Instructors>().GetAll(); 
             return Ok(Instructors); //200
         }
-
-
-        [ProducesResponseType(typeof(Instructors), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Instructors>> GetInstructor(int id)
         {
-            var Spec = new InstructorsWithSpecifications(id);
-            var Instructors = await _unitOfWork.Repository<Instructors>().GetWithspecAsync(Spec);
-            if (Instructors == null)
+            try
             {
-                return NotFound(new ApiResponse(404));// 404
+                var Instructor = await _unitOfWork.Repository<Instructors>().GetById(id);
+                if (Instructor == null)
+                {
+                    return NotFound(new ApiResponse(404));// 404
+                } 
+                return Ok(Instructor); // 200
             }
-            return Ok(Instructors); // 200
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);// 400
+            }
+
+        }
+
+        [HttpPost("Add_OR_UpdateInstructor")]
+        public async Task<ActionResult<Instructors>> AddInstructor(Instructors Instructors)
+        { 
+            if (Instructors.ID != 0)
+            {
+                var data = await _unitOfWork.Repository<Instructors>().UpdateAsync(Instructors);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
+            }
+            else
+            {
+                Instructors.ID = 0;
+                var data = await _unitOfWork.Repository<Instructors>().AddAsync(Instructors);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
+            }
+
+
+        }
+        [HttpDelete("DeleteInstructor")]
+        public async Task DeleteInstructors(int id)
+        {
+            var Instructor = await _unitOfWork.Repository<Instructors>().GetById(id);
+            if (Instructor is not null)
+            {
+                _unitOfWork.Repository<Instructors>().Delete(Instructor);
+                await _unitOfWork.CompleteAsync();
+
+            }
+            else
+            {
+                NotFound(new ApiResponse(404));// 404
+            }
+
         }
 
     }

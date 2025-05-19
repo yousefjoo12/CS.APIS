@@ -23,29 +23,78 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        [ProducesResponseType(typeof(FacultyYear), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [HttpGet]    //FacultyYear
-        public async Task<ActionResult<IReadOnlyList<FacultyYear>>> GetAllFacultyYears([FromQuery] FacultyYearSpecParams FacultyYearsarams)
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  
+        [HttpGet("GetAllFacultyYear")]   //FacultyYear
+        public async Task<ActionResult<IReadOnlyList<FacultyYearDTO>>> GetAllFacultyYear()
         {
-            var Spec = new FacultyYearWithSpecifications(FacultyYearsarams);
-            var FacultyYear = await _unitOfWork.Repository<FacultyYear>().GetAllWithSpecAsync(Spec); 
-            return Ok(FacultyYear); //200
+            var FacultyYear = await _unitOfWork.Repository<FacultyYear>().GetAll();
+            var data = _mapper.Map<IReadOnlyList<FacultyYear>, IReadOnlyList<FacultyYearDTO>>(FacultyYear);
+            return Ok(data); //200
         }
-
-
-        [ProducesResponseType(typeof(FacultyYear), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public async Task<ActionResult<FacultyYear>> GetFacultyYear(int id)
         {
-            var Spec = new FacultyYearWithSpecifications(id);
-            var FacultyYear = await _unitOfWork.Repository<FacultyYear>().GetWithspecAsync(Spec);
-            if (FacultyYear == null)
+            try
             {
-                return NotFound(new ApiResponse(404));// 404
+                var FacultyYear = await _unitOfWork.Repository<FacultyYear>().GetById(id);
+                if (FacultyYear == null)
+                {
+                    return NotFound(new ApiResponse(404));// 404
+                }
+                var data = _mapper.Map<FacultyYear, FacultyYearDTO>(FacultyYear);
+                return Ok(data); // 200
             }
-            return Ok(FacultyYear); // 200
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);// 400
+            }
+
+        }
+
+        [HttpPost("Add_OR_UpdateFacultyYear")]
+        public async Task<ActionResult<FacultyYear>> AddFacultyYear(FacultyYearDTO FacultyYears)
+        {
+            //var mappedFacultyYears = _mapper.Map<FacultyYearDTO, FacultyYear>(FacultyYear);  
+
+            var mappedFacultyYears = new FacultyYear
+            {
+                ID = FacultyYears.ID,
+                Year = FacultyYears.Year,
+                Fac_ID = FacultyYears.FacultyId
+            };
+            if (mappedFacultyYears.ID != 0)
+            {
+                var data = await _unitOfWork.Repository<FacultyYear>().UpdateAsync(mappedFacultyYears);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
+            }
+            else
+            {
+                mappedFacultyYears.ID = 0;
+                var data = await _unitOfWork.Repository<FacultyYear>().AddAsync(mappedFacultyYears);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
+            }
+
+
+        }
+        [HttpDelete("DeleteFacultyYear")]
+        public async Task DeleteFacultyYears(int id)
+        {
+            var FacultyYear = await _unitOfWork.Repository<FacultyYear>().GetById(id);
+            if (FacultyYear is not null)
+            {
+                _unitOfWork.Repository<FacultyYear>().Delete(FacultyYear);
+                await _unitOfWork.CompleteAsync();
+
+            }
+            else
+            {
+                NotFound(new ApiResponse(404));// 404
+            }
+
         }
 
     }

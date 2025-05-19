@@ -3,8 +3,7 @@ using AutoMapper;
 using Core;
 using Core.Entities;
 using Core.Repositories.Contract;
-using Core.Specifications.DoctorsSpecifications;
-using Core.Specifications.studetsSpecifications;
+using Core.Specifications.DoctorsSpecifications; 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project.APIS.Erorrs;
@@ -24,61 +23,82 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        [ProducesResponseType(typeof(Doctors), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [HttpGet]    //Doctors
-        public async Task<ActionResult<IReadOnlyList<Doctors>>> GetAllDoctors([FromQuery] DoctorsSpecParams Doctorsarams)
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  
+        [HttpGet("GetAllDoctors")]   //Doctors
+        public async Task<ActionResult<IReadOnlyList<DoctorsDTO>>> GetAllDoctors()
         {
-            var Spec = new DoctorsWithSpecifications(Doctorsarams);
-            var Doctors = await _unitOfWork.Repository<Doctors>().GetAllWithSpecAsync(Spec); 
-            return Ok(Doctors); //200
+            var Doctors = await _unitOfWork.Repository<Doctors>().GetAll();
+            var data = _mapper.Map<IReadOnlyList<Doctors>, IReadOnlyList<DoctorsDTO>>(Doctors);
+            return Ok(data); //200
         }
-
-
-        [ProducesResponseType(typeof(Doctors), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Doctors>> GetDoctors(int id)
+        public async Task<ActionResult<Doctors>> GetDoctor(int id)
         {
-            var Spec = new DoctorsWithSpecifications(id);
-            var Doctor = await _unitOfWork.Repository<Doctors>().GetWithspecAsync(Spec);
-            if (Doctor == null)
+            try
             {
-                return NotFound(new ApiResponse(404));// 404
+                var Doctor = await _unitOfWork.Repository<Doctors>().GetById(id);
+                if (Doctor == null)
+                {
+                    return NotFound(new ApiResponse(404));// 404
+                }
+                var data = _mapper.Map<Doctors, DoctorsDTO>(Doctor);
+                return Ok(data); // 200
             }
-            return Ok(Doctor); // 200
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);// 400
+            }
+
         }
-		[HttpPost]
-		public async Task<ActionResult<Doctors>> AddDoctor(DoctorsDTO doctors)
-		{
-			// mapping  => from Dto[DoctorsDTO] to model[Doctors]
-			var mappedDoctors = _mapper.Map<DoctorsDTO, Doctors>(doctors);
-			var data = await _unitOfWork.Repository<Doctors>().AddAsync(mappedDoctors);
-			if (data is null) return BadRequest(new ApiResponse(400));
-			await _unitOfWork.CompleteAsync();
-			return Ok(data);
 
-		}
+        [HttpPost("Add_OR_UpdateDoctor")]
+        public async Task<ActionResult<Doctors>> AddDoctor(DoctorsDTO Doctors)
+        {
+            //var mappedDoctors = _mapper.Map<DoctorsDTO, Doctors>(Doctors);  
 
-		[HttpPut]
-		public async Task<ActionResult<Doctors>> UpdateDoctor(DoctorsDTO doctors)
-		{
-			// mapping  => from Dto[DoctorsDTO] to model[Doctors]
-			var mappedDoctors = _mapper.Map<DoctorsDTO, Doctors>(doctors);
-			var data = _unitOfWork.Repository<Doctors>().UpdateAsync(mappedDoctors);
-			if (data is null) return BadRequest(new ApiResponse(400));
-			await _unitOfWork.CompleteAsync();
-			return Ok(mappedDoctors);
+            var mappedDoctors = new Doctors
+            {
+                ID = Doctors.ID,
+                Dr_Code = Doctors.Dr_Code,
+                Dr_NameAr = Doctors.Dr_NameAr,
+                Dr_NameEn = Doctors.Dr_NameEn,
+                Dr_Email = Doctors.Dr_Email,
+                Dr_Image = Doctors.Dr_Image,
+                Phone = Doctors.Phone,
+            };
+            if (mappedDoctors.ID != 0)
+            {
+                var data = await _unitOfWork.Repository<Doctors>().UpdateAsync(mappedDoctors);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
+            }
+            else
+            {
+                mappedDoctors.ID = 0;
+                var data = await _unitOfWork.Repository<Doctors>().AddAsync(mappedDoctors);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
+            }
 
-		}
-		[HttpDelete]
-		public async Task DeleteDoctor(int id)
-		{
-			var Spec = new DoctorsWithSpecifications(id);
-			var Doctor = await _unitOfWork.Repository<Doctors>().GetWithspecAsync(Spec);
-			_unitOfWork.Repository<Doctors>().Delete(Doctor);
-			await _unitOfWork.CompleteAsync();
 
-		}
-	}
+        }
+        [HttpDelete("DeleteDoctor")]
+        public async Task DeleteDoctors(int id)
+        {
+            var Doctor = await _unitOfWork.Repository<Doctors>().GetById(id);
+            if (Doctor is not null)
+            {
+                _unitOfWork.Repository<Doctors>().Delete(Doctor);
+                await _unitOfWork.CompleteAsync();
+
+            }
+            else
+            {
+                NotFound(new ApiResponse(404));// 404
+            }
+
+        }
+    }
 }

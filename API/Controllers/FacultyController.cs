@@ -3,9 +3,7 @@ using AutoMapper;
 using Core;
 using Core.Entities;
 using Core.Repositories.Contract;
-using Core.Specifications.FacultySpecifications;
-using Core.Specifications.FacultySpecifications;
-using Core.Specifications.studetsSpecifications;
+using Core.Specifications.FacultySpecifications; 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project.APIS.Erorrs;
@@ -25,30 +23,72 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        [ProducesResponseType(typeof(Faculty), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [HttpGet]    //Faculty
-        public async Task<ActionResult<IReadOnlyList<Faculty>>> GetAllFaculty([FromQuery] FacultySpecParams Facultysarams)
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  
+        [HttpGet("GetAllFaculty")]   //Faculty
+        public async Task<ActionResult<IReadOnlyList<Faculty>>> GetAllFaculty()
         {
-            var Spec = new FacultyWithSpecifications(Facultysarams);
-            var Faculty = await _unitOfWork.Repository<Faculty>().GetAllWithSpecAsync(Spec); 
-            return Ok(Faculty); //200
+            var Faculty = await _unitOfWork.Repository<Faculty>().GetAll();
+            var data = _mapper.Map<IReadOnlyList<Faculty>, IReadOnlyList<Faculty>>(Faculty);
+            return Ok(data); //200
         }
-
-
-        [ProducesResponseType(typeof(Faculty), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Faculty>> GetFaculty(int id)
         {
-            var Spec = new FacultyWithSpecifications(id);
-            var Faculty = await _unitOfWork.Repository<Faculty>().GetWithspecAsync(Spec);
-            if (Faculty == null)
+            try
             {
-                return NotFound(new ApiResponse(404));// 404
+                var Faculty = await _unitOfWork.Repository<Faculty>().GetById(id);
+                if (Faculty == null)
+                {
+                    return NotFound(new ApiResponse(404));// 404
+                } 
+                return Ok(Faculty); // 200
             }
-            return Ok(Faculty); // 200
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);// 400
+            }
+
         }
 
+        [HttpPost("Add_OR_UpdateFaculty")]
+        public async Task<ActionResult<Faculty>> AddFaculty(Faculty Faculty)
+        {
+            //var mappedFaculty = _mapper.Map<FacultyDTO, Faculty>(Faculty);  
+
+            
+            if (Faculty.ID != 0)
+            {
+                var data = await _unitOfWork.Repository<Faculty>().UpdateAsync(Faculty);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
+            }
+            else
+            {
+                Faculty.ID = 0;
+                var data = await _unitOfWork.Repository<Faculty>().AddAsync(Faculty);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
+            }
+
+
+        }
+        [HttpDelete("DeleteFaculty")]
+        public async Task DeleteFaculty(int id)
+        {
+            var Faculty = await _unitOfWork.Repository<Faculty>().GetById(id);
+            if (Faculty is not null)
+            {
+                _unitOfWork.Repository<Faculty>().Delete(Faculty);
+                await _unitOfWork.CompleteAsync();
+
+            }
+            else
+            {
+                NotFound(new ApiResponse(404));// 404
+            }
+
+        }  
     }
 }

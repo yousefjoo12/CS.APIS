@@ -16,7 +16,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SensorData>> PostData([FromBody] SensorData data)
+        public async Task<ActionResult<SensorData>> PostData(SensorData data)
         {
             _storeContext.SensorData.Add(data);
             await _storeContext.SaveChangesAsync();

@@ -11,9 +11,5 @@ namespace API.DTOs
         public string Dr_Email { get; set; }
         public string Dr_Image { get; set; }
         public string Phone { get; set; }
-        public int Fac_Id { get; set; }
-        public string Faculty { get; set; }
-
-
     }
 }

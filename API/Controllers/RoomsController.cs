@@ -23,30 +23,69 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        [ProducesResponseType(typeof(Rooms), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [HttpGet]//  /Rooms
-        public async Task<ActionResult<IReadOnlyList<Rooms>>> GetAllRooms([FromQuery] RoomsSpecParams RoomsParams )
+
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  
+        [HttpGet("GetAllRooms")]   //Rooms
+        public async Task<ActionResult<IReadOnlyList<Rooms>>> GetAllRooms()
         {
-            var Spec = new RoomsWithSpecifications(RoomsParams);
-            var Rooms = await _unitOfWork.Repository<Rooms>().GetAllWithSpecAsync(Spec);
-             
+            var Rooms = await _unitOfWork.Repository<Rooms>().GetAll();
             return Ok(Rooms); //200
         }
-
-
-        [ProducesResponseType(typeof(Rooms), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Rooms>> GetStudet(int id)
+        public async Task<ActionResult<Rooms>> GetRoom(int id)
         {
-            var Spec = new RoomsWithSpecifications(id);
-            var Room = await _unitOfWork.Repository<Rooms>().GetWithspecAsync(Spec); 
-            if (Room == null)
+            try
             {
-                return NotFound(new ApiResponse(404));// 404
+                var Room = await _unitOfWork.Repository<Rooms>().GetById(id);
+                if (Room == null)
+                {
+                    return NotFound(new ApiResponse(404));// 404
+                }
+                return Ok(Room); // 200
             }
-            return Ok(Room); // 200
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);// 400
+            }
+
+        }
+
+        [HttpPost("Add_OR_UpdateRoom")]
+        public async Task<ActionResult<Rooms>> AddRoom(Rooms Rooms)
+        {
+            if (Rooms.ID != 0)
+            {
+                var data = await _unitOfWork.Repository<Rooms>().UpdateAsync(Rooms);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
+            }
+            else
+            {
+                Rooms.ID = 0;
+                var data = await _unitOfWork.Repository<Rooms>().AddAsync(Rooms);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
+            }
+
+
+        }
+        [HttpDelete("DeleteRoom")]
+        public async Task DeleteRooms(int id)
+        {
+            var Room = await _unitOfWork.Repository<Rooms>().GetById(id);
+            if (Room is not null)
+            {
+                _unitOfWork.Repository<Rooms>().Delete(Room);
+                await _unitOfWork.CompleteAsync();
+
+            }
+            else
+            {
+                NotFound(new ApiResponse(404));// 404
+            }
+
         }
 
     }
