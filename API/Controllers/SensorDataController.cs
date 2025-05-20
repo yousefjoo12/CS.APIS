@@ -32,5 +32,13 @@ namespace API.Controllers
             return Ok(Data);
 
         }
+        [HttpGet]
+        public async Task<ActionResult<SensorDataDTO>> GetData(int id)
+        {  
+            var Data = _storeContext.SensorData.Where(x => x.ID == id);
+            return Ok(Data);
+
+        }
+
     }
 }
