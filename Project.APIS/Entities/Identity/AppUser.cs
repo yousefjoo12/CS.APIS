@@ -14,6 +14,6 @@ namespace Core.Entities.Identity
         public string DisplayName { get; set; }
         public Address Address { get; set; }
 
-        public UserType UserType { get; set; }  // النوع المضاف
+        public UserType UserType { get; set; }   
     }
 }
