@@ -26,9 +26,9 @@ namespace Repository
             {
                 return (IReadOnlyList<T>)await _dbcontext.Set<Students>().Include(p => p.Faculty).Include(p => p.FacultyYearSemister).ToListAsync();
             }
-            if (typeof(T) == typeof(Studets_Rooms))
+            if (typeof(T) == typeof(Studets_Rooms_Subject))
             {
-                return (IReadOnlyList<T>)await _dbcontext.Set<Studets_Rooms>().Include(p => p.Rooms).Include(p => p.Students).ToListAsync();
+                return (IReadOnlyList<T>)await _dbcontext.Set<Studets_Rooms_Subject>().Include(p => p.Rooms).Include(p => p.Students).ToListAsync();
             }
             if (typeof(T) == typeof(Subjects))
             {
@@ -36,7 +36,7 @@ namespace Repository
             }
             if (typeof(T) == typeof(Lecture_S))
             {
-                return (IReadOnlyList<T>)await _dbcontext.Set<Lecture_S>().Include(p => p.Subjects).Include(p => p.Rooms).Include(p => p.Students).ToListAsync();
+                return (IReadOnlyList<T>)await _dbcontext.Set<Lecture_S>().Include(p => p.Subjects).ToListAsync();
             }
             if (typeof(T) == typeof(FacultyYear))
             {
@@ -59,9 +59,9 @@ namespace Repository
             {
                 return await _dbcontext.Set<Students>().Where(p => p.ID == id).Include(p => p.Faculty).Include(p => p.FacultyYearSemister).FirstOrDefaultAsync() as T;
             } 
-            if (typeof(T) == typeof(Studets_Rooms))
+            if (typeof(T) == typeof(Studets_Rooms_Subject))
             {
-                return await _dbcontext.Set<Studets_Rooms>().Where(p => p.ID == id).Include(p => p.Rooms).Include(p => p.Students).FirstOrDefaultAsync() as T;
+                return await _dbcontext.Set<Studets_Rooms_Subject>().Where(p => p.ID == id).Include(p => p.Rooms).Include(p => p.Students).FirstOrDefaultAsync() as T;
             }
             if (typeof(T) == typeof(Subjects))
             {
@@ -69,7 +69,7 @@ namespace Repository
             }
             if (typeof(T) == typeof(Lecture_S))
             {
-                return await _dbcontext.Set<Lecture_S>().Where(p => p.ID == id).Include(p => p.Subjects).Include(p => p.Rooms).Include(p => p.Students).FirstOrDefaultAsync() as T;
+                return await _dbcontext.Set<Lecture_S>().Where(p => p.ID == id).Include(p => p.Subjects).FirstOrDefaultAsync() as T;
             }
             if (typeof(T) == typeof(FacultyYear))
             {

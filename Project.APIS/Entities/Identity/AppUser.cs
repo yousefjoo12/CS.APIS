@@ -1,15 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Entities.Identity
 {
+    public enum UserType
+    {
+        Student = 0,
+        Doctor = 1,
+        Admin = 2
+    }
+
     public class AppUser : IdentityUser
     {
-        public string DisplayName { set; get; }
-        public Address Address { set; get; }
+        public string DisplayName { get; set; }
+        public Address Address { get; set; }
+
+        public UserType UserType { get; set; }  // النوع المضاف
     }
 }

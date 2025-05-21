@@ -18,10 +18,7 @@ namespace API.Helpers
             CreateMap<Doctors, DoctorsDTO>()
                 .ForMember(d => d.Dr_Image, o => o.MapFrom<DoctorsPictureUrlResolver>()).ReverseMap();
 
-            CreateMap<Lecture_S, LectureDTO>()
-                  .ForMember(d => d.Subjects, o => o.MapFrom(s => s.Subjects.Sub_Name))
-                  .ForMember(d => d.Rooms, o => o.MapFrom(s => s.Rooms.Room_Num))
-                  .ForMember(d => d.Students, o => o.MapFrom(s => s.Students.St_NameAr)).ReverseMap();
+         
 
             CreateMap<Attendance_T, AttendanceDTO>()
                  .ForMember(d => d.Lecture, o => o.MapFrom(s => s.Lecture.Lecture_Name)).ReverseMap();
@@ -32,7 +29,7 @@ namespace API.Helpers
             CreateMap<FacultyYearSemister, FacultyYearSemisterDTO>()
                  .ForMember(d => d.FacultyYear, o => o.MapFrom(s => s.FacultyYear.Year)).ReverseMap();
 
-            CreateMap<Studets_Rooms, Studets_RoomsDTO>()
+            CreateMap<Studets_Rooms_Subject, Studets_RoomsDTO>()
              .ForMember(d => d.Rooms, o => o.MapFrom(s => s.Rooms.Room_Num))
              .ForMember(d => d.Students, o => o.MapFrom(s => s.Students.St_NameAr)).ReverseMap();
 

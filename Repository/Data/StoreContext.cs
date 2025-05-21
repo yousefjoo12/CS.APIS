@@ -32,7 +32,7 @@ namespace Repository.Data
         public DbSet<Lecture_S> Lecture { get; set; }   
         public DbSet<Rooms> Rooms { get; set; }  
         public DbSet<Students> Students { get; set; }  
-        public DbSet<Studets_Rooms> Studets_Rooms { get; set; }  
+        public DbSet<Studets_Rooms_Subject> Studets_Rooms_Subject { get; set; }  
         public DbSet<Subjects> Subjects { get; set; }  
         public DbSet<SensorData> SensorData { get; set; }  
 

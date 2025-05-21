@@ -195,40 +195,12 @@ namespace Repository.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Studets_Rooms",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    St_ID = table.Column<int>(type: "int", nullable: false),
-                    Room_ID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Studets_Rooms", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Studets_Rooms_Rooms_Room_ID",
-                        column: x => x.Room_ID,
-                        principalTable: "Rooms",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Studets_Rooms_Students_St_ID",
-                        column: x => x.St_ID,
-                        principalTable: "Students",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Lecture",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Lecture_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    St_ID = table.Column<int>(type: "int", nullable: false),
-                    Room_ID = table.Column<int>(type: "int", nullable: false),
                     Sub_ID = table.Column<int>(type: "int", nullable: false),
                     LectureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Degree = table.Column<int>(type: "int", nullable: false)
@@ -237,19 +209,40 @@ namespace Repository.Data.Migrations
                 {
                     table.PrimaryKey("PK_Lecture", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Lecture_Rooms_Room_ID",
+                        name: "FK_Lecture_Subjects_Sub_ID",
+                        column: x => x.Sub_ID,
+                        principalTable: "Subjects",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Studets_Rooms_Subject",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    St_ID = table.Column<int>(type: "int", nullable: false),
+                    Sub_ID = table.Column<int>(type: "int", nullable: false),
+                    Room_ID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Studets_Rooms_Subject", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Studets_Rooms_Subject_Rooms_Room_ID",
                         column: x => x.Room_ID,
                         principalTable: "Rooms",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Lecture_Students_St_ID",
+                        name: "FK_Studets_Rooms_Subject_Students_St_ID",
                         column: x => x.St_ID,
                         principalTable: "Students",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Lecture_Subjects_Sub_ID",
+                        name: "FK_Studets_Rooms_Subject_Subjects_Sub_ID",
                         column: x => x.Sub_ID,
                         principalTable: "Subjects",
                         principalColumn: "ID",
@@ -293,16 +286,6 @@ namespace Repository.Data.Migrations
                 column: "FacYear_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lecture_Room_ID",
-                table: "Lecture",
-                column: "Room_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Lecture_St_ID",
-                table: "Lecture",
-                column: "St_ID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Lecture_Sub_ID",
                 table: "Lecture",
                 column: "Sub_ID");
@@ -318,14 +301,19 @@ namespace Repository.Data.Migrations
                 column: "FacYearSem_ID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Studets_Rooms_Room_ID",
-                table: "Studets_Rooms",
+                name: "IX_Studets_Rooms_Subject_Room_ID",
+                table: "Studets_Rooms_Subject",
                 column: "Room_ID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Studets_Rooms_St_ID",
-                table: "Studets_Rooms",
+                name: "IX_Studets_Rooms_Subject_St_ID",
+                table: "Studets_Rooms_Subject",
                 column: "St_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Studets_Rooms_Subject_Sub_ID",
+                table: "Studets_Rooms_Subject",
+                column: "Sub_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subjects_Dr_ID",
@@ -353,7 +341,7 @@ namespace Repository.Data.Migrations
                 name: "SensorData");
 
             migrationBuilder.DropTable(
-                name: "Studets_Rooms");
+                name: "Studets_Rooms_Subject");
 
             migrationBuilder.DropTable(
                 name: "Lecture");

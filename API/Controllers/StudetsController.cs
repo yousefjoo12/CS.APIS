@@ -40,30 +40,26 @@ namespace API.Controllers
         }
         [HttpGet("DashBordStudets")]   //Studets
         public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> DashBordStudets(int id)
-        {
-            var query = (from l in context.Lecture
-                         join su in context.Subjects on l.Sub_ID equals su.ID into lectureGroup
-                         from su in lectureGroup.DefaultIfEmpty()
-                         join r in context.Rooms on l.Room_ID equals r.ID into roomGroup
-                         from r in roomGroup.DefaultIfEmpty()
-                         join d in context.Doctors on su.Dr_ID equals d.ID
-                         where l.St_ID == id
-                         select new
-                         {
-                             su.Sub_Name,
-                             d.Dr_NameAr,
-                             LectureDate = l.LectureDate,
-                             RoomNo = r.Room_Num
-                         }).ToList()  // نزل الداتا من SQL إلى الذاكرة
-                 .Select(x => new
-                 {
-                     x.Sub_Name,
-                     x.Dr_NameAr,
-                     Day = x.LectureDate.DayOfWeek.ToString(),
-                     x.RoomNo
-                 }).ToList();
+        { 
 
-            return Ok(query); //200
+            var result = (from srs in context.Studets_Rooms_Subject
+                          join room in context.Rooms on srs.Room_ID equals room.ID
+                          join student in context.Students on srs.St_ID equals student.ID
+                          join subject in context.Subjects on srs.Sub_ID equals subject.ID
+                          join doctor in context.Doctors on subject.Dr_ID equals doctor.ID
+                          join lecture in context.Lecture on subject.ID equals lecture.Sub_ID
+                          where student.ID == id
+                          select new
+                          {
+                              student.St_Code,
+                              student.St_NameAr,
+                              subject.Sub_Name,
+                              room.Room_Num,
+                              doctor.Dr_NameAr,
+                              lecture.Lecture_Name,
+                              Day = lecture.LectureDate.DayOfWeek.ToString()
+                          }).ToList();
+            return Ok(result); //200
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Students>> GetStudet(int id)

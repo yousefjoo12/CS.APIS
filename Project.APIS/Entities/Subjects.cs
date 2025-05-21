@@ -20,5 +20,7 @@ namespace Core.Entities
         [ForeignKey(nameof(FacultyYearSemister))] 
         public int FacYearSem_ID { get; set; }
         public FacultyYearSemister FacultyYearSemister { get; set; }
+        public ICollection<Studets_Rooms_Subject> StudentRooms { get; set; }
+
     }
 }

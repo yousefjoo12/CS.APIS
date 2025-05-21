@@ -3,12 +3,14 @@ using AutoMapper;
 using Core;
 using Core.Entities;
 using Core.Repositories.Contract;
-using Core.Specifications.DoctorsSpecifications; 
+using Core.Specifications.DoctorsSpecifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Project.APIS.Erorrs;
 using Project.Core.Specifications;
-
+using Repository.Data;
+using System.Linq;
 
 namespace API.Controllers
 {
@@ -16,11 +18,13 @@ namespace API.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly StoreContext context;
 
-        public DoctorsController(IUnitOfWork unitOfWork,IMapper mapper)
+        public DoctorsController(IUnitOfWork unitOfWork, IMapper mapper, StoreContext context)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            this.context = context;
         }
 
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  
@@ -30,6 +34,52 @@ namespace API.Controllers
             var Doctors = await _unitOfWork.Repository<Doctors>().GetAll();
             var data = _mapper.Map<IReadOnlyList<Doctors>, IReadOnlyList<DoctorsDTO>>(Doctors);
             return Ok(data); //200
+        }
+
+        [HttpGet("DashBordDoctors")]   //Doctors
+        public async Task<ActionResult<IReadOnlyList<DoctorsDTO>>> DashBordDoctors(int id)
+        {
+
+            var doctorId = id;
+
+            var baseQuery = from d in context.Doctors
+                            where d.ID == doctorId
+                            join s in context.Subjects on d.ID equals s.Dr_ID
+                            join l in context.Lecture on s.ID equals l.Sub_ID
+                            select new
+                            {
+                                d.Dr_NameAr,
+                                s.Sub_Name,
+                                l.LectureDate,
+                                SubjectID = s.ID
+                            };
+
+            var studetsRoomsSubjects = context.Studets_Rooms_Subject.AsNoTracking().ToList();
+            var rooms = context.Rooms.AsNoTracking().ToList();
+
+            var result = (from bq in baseQuery.ToList() // force client evaluation here
+                          join srs in studetsRoomsSubjects on bq.SubjectID equals srs.Sub_ID into srsGroup
+                          from srsLeft in srsGroup.DefaultIfEmpty()
+                          join room in rooms on srsLeft?.Room_ID equals room.ID into roomGroup
+                          from roomLeft in roomGroup.DefaultIfEmpty()
+                          group new { bq, srsLeft, roomLeft } by new
+                          {
+                              bq.Dr_NameAr,
+                              bq.Sub_Name,
+                              Day = bq.LectureDate.DayOfWeek,
+                              RoomNum = roomLeft?.Room_Num
+                          } into g
+                          select new
+                          {
+                              g.Key.Dr_NameAr,
+                              g.Key.Sub_Name,
+                              Day = g.Key.Day.ToString(),
+                              g.Key.RoomNum,
+                              TotalStudents = g.Count(x => x.srsLeft != null && x.srsLeft.St_ID != null)
+                          }).ToList();
+
+            return Ok(result);
+
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Doctors>> GetDoctor(int id)

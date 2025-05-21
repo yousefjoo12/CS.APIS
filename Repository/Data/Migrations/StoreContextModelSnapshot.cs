@@ -199,20 +199,10 @@ namespace Repository.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Room_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("St_ID")
-                        .HasColumnType("int");
-
                     b.Property<int>("Sub_ID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("Room_ID");
-
-                    b.HasIndex("St_ID");
 
                     b.HasIndex("Sub_ID");
 
@@ -286,7 +276,7 @@ namespace Repository.Data.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("Core.Entities.Studets_Rooms", b =>
+            modelBuilder.Entity("Core.Entities.Studets_Rooms_Subject", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -300,13 +290,18 @@ namespace Repository.Data.Migrations
                     b.Property<int>("St_ID")
                         .HasColumnType("int");
 
+                    b.Property<int>("Sub_ID")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
 
                     b.HasIndex("Room_ID");
 
                     b.HasIndex("St_ID");
 
-                    b.ToTable("Studets_Rooms");
+                    b.HasIndex("Sub_ID");
+
+                    b.ToTable("Studets_Rooms_Subject");
                 });
 
             modelBuilder.Entity("Core.Entities.Subjects", b =>
@@ -396,27 +391,11 @@ namespace Repository.Data.Migrations
 
             modelBuilder.Entity("Core.Entities.Lecture_S", b =>
                 {
-                    b.HasOne("Core.Entities.Rooms", "Rooms")
-                        .WithMany()
-                        .HasForeignKey("Room_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Entities.Students", "Students")
-                        .WithMany()
-                        .HasForeignKey("St_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Core.Entities.Subjects", "Subjects")
                         .WithMany()
                         .HasForeignKey("Sub_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Rooms");
-
-                    b.Navigation("Students");
 
                     b.Navigation("Subjects");
                 });
@@ -440,7 +419,7 @@ namespace Repository.Data.Migrations
                     b.Navigation("FacultyYearSemister");
                 });
 
-            modelBuilder.Entity("Core.Entities.Studets_Rooms", b =>
+            modelBuilder.Entity("Core.Entities.Studets_Rooms_Subject", b =>
                 {
                     b.HasOne("Core.Entities.Rooms", "Rooms")
                         .WithMany("StudentRooms")
@@ -454,9 +433,17 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Core.Entities.Subjects", "Subjects")
+                        .WithMany("StudentRooms")
+                        .HasForeignKey("Sub_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Rooms");
 
                     b.Navigation("Students");
+
+                    b.Navigation("Subjects");
                 });
 
             modelBuilder.Entity("Core.Entities.Subjects", b =>
@@ -492,6 +479,11 @@ namespace Repository.Data.Migrations
                 });
 
             modelBuilder.Entity("Core.Entities.Students", b =>
+                {
+                    b.Navigation("StudentRooms");
+                });
+
+            modelBuilder.Entity("Core.Entities.Subjects", b =>
                 {
                     b.Navigation("StudentRooms");
                 });
