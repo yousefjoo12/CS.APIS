@@ -83,8 +83,24 @@ namespace Repository
             {
                 return await _dbcontext.Set<Attendance_T>().Where(p => p.ID == id).Include(p => p.Lecture).FirstOrDefaultAsync() as T;
             }
+            if (typeof(T) == typeof(Doctors))
+            {
+                return await _dbcontext.Set<Doctors>().Where(p => p.ID == id).FirstOrDefaultAsync() as T;
+            }
             return await _dbcontext.Set<T>().FindAsync(id);
-        } 
+        }
+        public async Task<T?> GetByEmail(string Email)
+        {
+            if (typeof(T) == typeof(Students))
+            {
+                return await _dbcontext.Set<Students>().Where(p => p.St_Email == Email).Include(p => p.Faculty).Include(p => p.FacultyYearSemister).FirstOrDefaultAsync() as T;
+            }
+            if (typeof(T) == typeof(Doctors))
+            {
+                return await _dbcontext.Set<Doctors>().Where(p => p.Dr_Email == Email).FirstOrDefaultAsync() as T;
+            }
+            return await _dbcontext.Set<T>().FindAsync(Email);
+        }
         public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec)
         {
             return await SpecificationEvaluator<T>.GetQuery(_dbcontext.Set<T>(), spec).ToListAsync();

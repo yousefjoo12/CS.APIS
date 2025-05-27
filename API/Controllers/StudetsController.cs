@@ -2,16 +2,19 @@
 using AutoMapper;
 using Core;
 using Core.Entities;
+using Core.Entities.Identity;
 using Core.Repositories.Contract;
+using Core.Services.Contract;
 using Core.Specifications.studetsSpecifications;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project.APIS.Erorrs;
-using System.Globalization;
 using Repository.Data;
+using System.Globalization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace API.Controllers
@@ -21,16 +24,39 @@ namespace API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly StoreContext context;
+        private readonly UserManager<AppUser> _userManager;
 
-        public StudetsController(IUnitOfWork unitOfWork, IMapper mapper ,StoreContext context)
+        public StudetsController(IUnitOfWork unitOfWork, IMapper mapper ,StoreContext context, UserManager<AppUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             this.context = context;
+           _userManager = userManager;
         }
 
+        [HttpGet("GetStudetByEmail")]
+        public async Task<ActionResult<Students>> GetStudetByEmail(string Email)
+        {
+            try
+            {
+                var Studet = await _unitOfWork.Repository<Students>().GetByEmail(Email);
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  
+                if (Studet == null)
+                {
+                    return NotFound(new ApiResponse(404));// 404
+                }
+                var data = _mapper.Map<Students, StudentsDTO>(Studet); 
+                return Ok(data); // 200
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);// 400
+            }
+
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        
         [HttpGet("GetAllStudets")]   //Studets
         public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> GetAllStudets()
         {
@@ -40,8 +66,7 @@ namespace API.Controllers
         }
         [HttpGet("DashBordStudets")]   //Studets
         public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> DashBordStudets(int id)
-        { 
-
+        {  
             var result = (from srs in context.Studets_Rooms_Subject
                           join room in context.Rooms on srs.Room_ID equals room.ID
                           join student in context.Students on srs.St_ID equals student.ID

@@ -27,6 +27,26 @@ namespace API.Controllers
             this.context = context;
         }
 
+        [HttpGet("GetDoctorByEmail")]
+        public async Task<ActionResult<Doctors>> GetDoctorByEmail(string Email)
+        {
+            try
+            {
+                var Doctor = await _unitOfWork.Repository<Doctors>().GetByEmail(Email);
+                if (Doctor == null)
+                {
+                    return NotFound(new ApiResponse(404));// 404
+                }
+                var data = _mapper.Map<Doctors, DoctorsDTO>(Doctor);
+                return Ok(data); // 200
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);// 400
+            }
+
+        }
+
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  
         [HttpGet("GetAllDoctors")]   //Doctors
         public async Task<ActionResult<IReadOnlyList<DoctorsDTO>>> GetAllDoctors()

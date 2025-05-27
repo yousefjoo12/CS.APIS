@@ -11,6 +11,7 @@ namespace Core.Repositories.Contract
     public interface IGenericRepositories<T> where T : BaseEntity
     {
         Task<T?> GetById(int id);
+        Task<T?> GetByEmail(string Email);
         Task<IReadOnlyList<T>> GetAll(); 
         Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec); 
         Task<T?> GetWithspecAsync(ISpecifications<T> spec);
