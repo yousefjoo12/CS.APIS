@@ -63,7 +63,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Dr_Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Dr_NameAr")

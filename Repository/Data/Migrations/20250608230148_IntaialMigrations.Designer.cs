@@ -12,7 +12,7 @@ using Repository.Data;
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250521180116_IntaialMigrations")]
+    [Migration("20250608230148_IntaialMigrations")]
     partial class IntaialMigrations
     {
         /// <inheritdoc />
@@ -66,7 +66,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Dr_Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Dr_NameAr")

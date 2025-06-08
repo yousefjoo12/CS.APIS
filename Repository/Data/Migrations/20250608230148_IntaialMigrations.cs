@@ -21,7 +21,7 @@ namespace Repository.Data.Migrations
                     Dr_NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Dr_NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Dr_Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Dr_Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Dr_Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
