@@ -22,13 +22,12 @@ namespace API.Controllers
         {
             var mappData = new SensorData
             {
-                ID = SensorData.ID,
-                Name = SensorData.Name,
+                ID = SensorData.ID, 
                 Timestamp = DateTime.Now,
             };
             _storeContext.SensorData.Add(mappData);
             await _storeContext.SaveChangesAsync();
-            var Data = _storeContext.SensorData.Where(x=>x.Name == SensorData.Name);
+            var Data = _storeContext.SensorData.Where(x=>x.ID == SensorData.ID);
             return Ok(Data);
 
         }

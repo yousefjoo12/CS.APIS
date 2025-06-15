@@ -24,15 +24,15 @@ namespace Repository
         {
             if (typeof(T) == typeof(Students))
             {
-                return (IReadOnlyList<T>)await _dbcontext.Set<Students>().Include(p => p.FacultyYear).Include(p => p.FacultyYearSemister).ToListAsync();
+                return (IReadOnlyList<T>)await _dbcontext.Set<Students>().Include(p => p.FacultyYearSemister).ToListAsync();
             }
-            if (typeof(T) == typeof(Studets_Rooms_Subject))
+            if (typeof(T) == typeof(Studets_Subject))
             {
-                return (IReadOnlyList<T>)await _dbcontext.Set<Studets_Rooms_Subject>().Include(p => p.Rooms).Include(p => p.Students).ToListAsync();
+                return (IReadOnlyList<T>)await _dbcontext.Set<Studets_Subject>().Include(p => p.Students).ToListAsync();
             }
             if (typeof(T) == typeof(Subjects))
             {
-                return (IReadOnlyList<T>)await _dbcontext.Set<Subjects>().Include(p => p.FacultyYearSemister).Include(p => p.Instructors).Include(p => p.Doctors).ToListAsync();
+                return (IReadOnlyList<T>)await _dbcontext.Set<Subjects>().Include(p => p.FacultyYearSemister).Include(p => p.Doctors).ToListAsync();
             }
             if (typeof(T) == typeof(Lecture_S))
             {
@@ -65,15 +65,15 @@ namespace Repository
         {
             if (typeof(T) == typeof(Students))
             {
-                return await _dbcontext.Set<Students>().Where(p => p.ID == id).Include(p => p.FacultyYear).Include(p => p.FacultyYearSemister).FirstOrDefaultAsync() as T;
+                return await _dbcontext.Set<Students>().Where(p => p.ID == id).Include(p => p.FacultyYearSemister).FirstOrDefaultAsync() as T;
             } 
-            if (typeof(T) == typeof(Studets_Rooms_Subject))
+            if (typeof(T) == typeof(Studets_Subject))
             {
-                return await _dbcontext.Set<Studets_Rooms_Subject>().Where(p => p.ID == id).Include(p => p.Rooms).Include(p => p.Students).FirstOrDefaultAsync() as T;
+                return await _dbcontext.Set<Studets_Subject>().Where(p => p.ID == id).Include(p => p.Students).FirstOrDefaultAsync() as T;
             }
             if (typeof(T) == typeof(Subjects))
             {
-                return await _dbcontext.Set<Subjects>().Where(p => p.ID == id).Include(p => p.FacultyYearSemister).Include(p => p.Instructors).Include(p => p.Doctors).FirstOrDefaultAsync() as T;
+                return await _dbcontext.Set<Subjects>().Where(p => p.ID == id).Include(p => p.FacultyYearSemister).Include(p => p.Doctors).FirstOrDefaultAsync() as T;
             }
             if (typeof(T) == typeof(Lecture_S))
             {
@@ -105,7 +105,7 @@ namespace Repository
         {
             if (typeof(T) == typeof(Students))
             {
-                return await _dbcontext.Set<Students>().Where(p => p.St_Email == Email).Include(p => p.FacultyYear).Include(p => p.FacultyYearSemister).FirstOrDefaultAsync() as T;
+                return await _dbcontext.Set<Students>().Where(p => p.St_Email == Email).Include(p => p.FacultyYearSemister).FirstOrDefaultAsync() as T;
             }
             if (typeof(T) == typeof(Doctors))
             {
@@ -135,6 +135,15 @@ namespace Repository
         {
             //MultilineStringConverter changes
             _dbcontext.Remove(entity);
+        } 
+        public async Task<T?> GetByIdFinger(int id)
+        {
+            if (typeof(T) == typeof(Students))
+            {
+                return await _dbcontext.Set<Students>().Where(p => p.FingerID == id).Include(p => p.FacultyYearSemister).FirstOrDefaultAsync() as T;
+            }
+            return await _dbcontext.Set<T>().FindAsync(id);
+
         }
     }
 }

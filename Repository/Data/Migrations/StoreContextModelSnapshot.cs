@@ -154,34 +154,6 @@ namespace Repository.Data.Migrations
                     b.ToTable("FacultyYearSemister");
                 });
 
-            modelBuilder.Entity("Core.Entities.Instructors", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Ins_Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Ins_NameAr")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Ins_NameEn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Instructors");
-                });
-
             modelBuilder.Entity("Core.Entities.Lecture_S", b =>
                 {
                     b.Property<int>("ID")
@@ -264,9 +236,6 @@ namespace Repository.Data.Migrations
                     b.Property<int>("FacYearSem_ID")
                         .HasColumnType("int");
 
-                    b.Property<int>("FacYear_ID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("FingerID")
                         .HasColumnType("int");
 
@@ -296,12 +265,10 @@ namespace Repository.Data.Migrations
 
                     b.HasIndex("FacYearSem_ID");
 
-                    b.HasIndex("FacYear_ID");
-
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("Core.Entities.Studets_Rooms_Subject", b =>
+            modelBuilder.Entity("Core.Entities.Studets_Subject", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -309,7 +276,7 @@ namespace Repository.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("Room_ID")
+                    b.Property<int?>("RoomsID")
                         .HasColumnType("int");
 
                     b.Property<int>("St_ID")
@@ -320,13 +287,13 @@ namespace Repository.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("Room_ID");
+                    b.HasIndex("RoomsID");
 
                     b.HasIndex("St_ID");
 
                     b.HasIndex("Sub_ID");
 
-                    b.ToTable("Studets_Rooms_Subject");
+                    b.ToTable("Studets_Subject");
                 });
 
             modelBuilder.Entity("Core.Entities.Subjects", b =>
@@ -343,7 +310,7 @@ namespace Repository.Data.Migrations
                     b.Property<int>("FacYearSem_ID")
                         .HasColumnType("int");
 
-                    b.Property<int>("Ins_ID")
+                    b.Property<int>("Room_ID")
                         .HasColumnType("int");
 
                     b.Property<string>("Sub_Code")
@@ -360,7 +327,7 @@ namespace Repository.Data.Migrations
 
                     b.HasIndex("FacYearSem_ID");
 
-                    b.HasIndex("Ins_ID");
+                    b.HasIndex("Room_ID");
 
                     b.ToTable("Subjects");
                 });
@@ -372,10 +339,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
@@ -459,24 +422,14 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.FacultyYear", "FacultyYear")
-                        .WithMany()
-                        .HasForeignKey("FacYear_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FacultyYear");
-
                     b.Navigation("FacultyYearSemister");
                 });
 
-            modelBuilder.Entity("Core.Entities.Studets_Rooms_Subject", b =>
+            modelBuilder.Entity("Core.Entities.Studets_Subject", b =>
                 {
-                    b.HasOne("Core.Entities.Rooms", "Rooms")
+                    b.HasOne("Core.Entities.Rooms", null)
                         .WithMany("StudentRooms")
-                        .HasForeignKey("Room_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoomsID");
 
                     b.HasOne("Core.Entities.Students", "Students")
                         .WithMany("StudentRooms")
@@ -485,12 +438,10 @@ namespace Repository.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Subjects", "Subjects")
-                        .WithMany("StudentRooms")
+                        .WithMany("Studets_Subject")
                         .HasForeignKey("Sub_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Rooms");
 
                     b.Navigation("Students");
 
@@ -511,9 +462,9 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Instructors", "Instructors")
+                    b.HasOne("Core.Entities.Rooms", "Rooms")
                         .WithMany()
-                        .HasForeignKey("Ins_ID")
+                        .HasForeignKey("Room_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -521,7 +472,7 @@ namespace Repository.Data.Migrations
 
                     b.Navigation("FacultyYearSemister");
 
-                    b.Navigation("Instructors");
+                    b.Navigation("Rooms");
                 });
 
             modelBuilder.Entity("Core.Entities.Rooms", b =>
@@ -536,7 +487,7 @@ namespace Repository.Data.Migrations
 
             modelBuilder.Entity("Core.Entities.Subjects", b =>
                 {
-                    b.Navigation("StudentRooms");
+                    b.Navigation("Studets_Subject");
                 });
 #pragma warning restore 612, 618
         }

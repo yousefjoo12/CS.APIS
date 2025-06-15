@@ -26,22 +26,6 @@ namespace Repository.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Instructors",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Ins_Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Ins_NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Ins_NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Instructors", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Rooms",
                 columns: table => new
                 {
@@ -60,7 +44,6 @@ namespace Repository.Data.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -168,7 +151,6 @@ namespace Repository.Data.Migrations
                     St_Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FingerID = table.Column<int>(type: "int", nullable: true),
-                    FacYear_ID = table.Column<int>(type: "int", nullable: false),
                     FacYearSem_ID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -178,12 +160,6 @@ namespace Repository.Data.Migrations
                         name: "FK_Students_FacultyYearSemister_FacYearSem_ID",
                         column: x => x.FacYearSem_ID,
                         principalTable: "FacultyYearSemister",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Students_FacultyYear_FacYear_ID",
-                        column: x => x.FacYear_ID,
-                        principalTable: "FacultyYear",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -197,8 +173,8 @@ namespace Repository.Data.Migrations
                     Sub_Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Sub_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Dr_ID = table.Column<int>(type: "int", nullable: false),
-                    Ins_ID = table.Column<int>(type: "int", nullable: false),
-                    FacYearSem_ID = table.Column<int>(type: "int", nullable: false)
+                    FacYearSem_ID = table.Column<int>(type: "int", nullable: false),
+                    Room_ID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -216,9 +192,9 @@ namespace Repository.Data.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Subjects_Instructors_Ins_ID",
-                        column: x => x.Ins_ID,
-                        principalTable: "Instructors",
+                        name: "FK_Subjects_Rooms_Room_ID",
+                        column: x => x.Room_ID,
+                        principalTable: "Rooms",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -246,32 +222,31 @@ namespace Repository.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Studets_Rooms_Subject",
+                name: "Studets_Subject",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     St_ID = table.Column<int>(type: "int", nullable: false),
                     Sub_ID = table.Column<int>(type: "int", nullable: false),
-                    Room_ID = table.Column<int>(type: "int", nullable: false)
+                    RoomsID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Studets_Rooms_Subject", x => x.ID);
+                    table.PrimaryKey("PK_Studets_Subject", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Studets_Rooms_Subject_Rooms_Room_ID",
-                        column: x => x.Room_ID,
+                        name: "FK_Studets_Subject_Rooms_RoomsID",
+                        column: x => x.RoomsID,
                         principalTable: "Rooms",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_Studets_Rooms_Subject_Students_St_ID",
+                        name: "FK_Studets_Subject_Students_St_ID",
                         column: x => x.St_ID,
                         principalTable: "Students",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Studets_Rooms_Subject_Subjects_Sub_ID",
+                        name: "FK_Studets_Subject_Subjects_Sub_ID",
                         column: x => x.Sub_ID,
                         principalTable: "Subjects",
                         principalColumn: "ID",
@@ -330,28 +305,23 @@ namespace Repository.Data.Migrations
                 column: "FacYearSem_ID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_FacYear_ID",
-                table: "Students",
-                column: "FacYear_ID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Students_FacYearSem_ID",
                 table: "Students",
                 column: "FacYearSem_ID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Studets_Rooms_Subject_Room_ID",
-                table: "Studets_Rooms_Subject",
-                column: "Room_ID");
+                name: "IX_Studets_Subject_RoomsID",
+                table: "Studets_Subject",
+                column: "RoomsID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Studets_Rooms_Subject_St_ID",
-                table: "Studets_Rooms_Subject",
+                name: "IX_Studets_Subject_St_ID",
+                table: "Studets_Subject",
                 column: "St_ID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Studets_Rooms_Subject_Sub_ID",
-                table: "Studets_Rooms_Subject",
+                name: "IX_Studets_Subject_Sub_ID",
+                table: "Studets_Subject",
                 column: "Sub_ID");
 
             migrationBuilder.CreateIndex(
@@ -365,9 +335,9 @@ namespace Repository.Data.Migrations
                 column: "FacYearSem_ID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Subjects_Ins_ID",
+                name: "IX_Subjects_Room_ID",
                 table: "Subjects",
-                column: "Ins_ID");
+                column: "Room_ID");
         }
 
         /// <inheritdoc />
@@ -383,13 +353,10 @@ namespace Repository.Data.Migrations
                 name: "SensorData");
 
             migrationBuilder.DropTable(
-                name: "Studets_Rooms_Subject");
+                name: "Studets_Subject");
 
             migrationBuilder.DropTable(
                 name: "Lecture");
-
-            migrationBuilder.DropTable(
-                name: "Rooms");
 
             migrationBuilder.DropTable(
                 name: "Students");
@@ -404,7 +371,7 @@ namespace Repository.Data.Migrations
                 name: "FacultyYearSemister");
 
             migrationBuilder.DropTable(
-                name: "Instructors");
+                name: "Rooms");
 
             migrationBuilder.DropTable(
                 name: "FacultyYear");

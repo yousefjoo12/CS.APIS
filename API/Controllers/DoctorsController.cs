@@ -57,46 +57,31 @@ namespace API.Controllers
         }
 
         [HttpGet("DashBordDoctors")]   //Doctors
-        public async Task<ActionResult<IReadOnlyList<DoctorsDTO>>> DashBordDoctors(int id)
+        public async Task<ActionResult<IReadOnlyList<DoctorsDTO>>> DashBordDoctors(string Dr_Email)
         {
 
-            var doctorId = id;
-
-            var baseQuery = from d in context.Doctors
-                            where d.ID == doctorId
-                            join s in context.Subjects on d.ID equals s.Dr_ID
-                            join l in context.Lecture on s.ID equals l.Sub_ID
-                            select new
-                            {
-                                d.Dr_NameAr,
-                                s.Sub_Name,
-                                l.LectureDate,
-                                SubjectID = s.ID
-                            };
-
-            var studetsRoomsSubjects = context.Studets_Rooms_Subject.AsNoTracking().ToList();
-            var rooms = context.Rooms.AsNoTracking().ToList();
-
-            var result = (from bq in baseQuery.ToList() // force client evaluation here
-                          join srs in studetsRoomsSubjects on bq.SubjectID equals srs.Sub_ID into srsGroup
-                          from srsLeft in srsGroup.DefaultIfEmpty()
-                          join room in rooms on srsLeft?.Room_ID equals room.ID into roomGroup
-                          from roomLeft in roomGroup.DefaultIfEmpty()
-                          group new { bq, srsLeft, roomLeft } by new
-                          {
-                              bq.Dr_NameAr,
-                              bq.Sub_Name,
-                              Day = bq.LectureDate.DayOfWeek,
-                              RoomNum = roomLeft?.Room_Num
-                          } into g
-                          select new
-                          {
-                              g.Key.Dr_NameAr,
-                              g.Key.Sub_Name,
-                              Day = g.Key.Day.ToString(),
-                              g.Key.RoomNum,
-                              TotalStudents = g.Count(x => x.srsLeft != null && x.srsLeft.St_ID != null)
-                          }).ToList();
+            var result = context.Doctors
+                      .Where(d => d.Dr_Email == Dr_Email)
+                      .Join(context.Subjects, d => d.ID, s => s.Dr_ID, (d, s) => new { d, s })
+                      .Join(context.Rooms, ds => ds.s.Room_ID, r => r.ID, (ds, r) => new { ds.d, ds.s, r })
+                      .Join(context.Lecture, dsr => dsr.s.ID, l => l.Sub_ID, (dsr, l) => new { dsr.d, dsr.s, dsr.r, l })
+                      .Join(context.Studets_Subject, dsrl => dsrl.s.ID, ss => ss.Sub_ID, (dsrl, ss) => new { dsrl.d, dsrl.s, dsrl.r, dsrl.l, ss })
+                      .AsEnumerable()
+                      .GroupBy(x => new
+                      {
+                          x.d.Dr_NameAr,
+                          x.s.Sub_Name,
+                          Day = x.l.LectureDate.DayOfWeek, // هذا لا يمكن ترجمته SQLياً
+                          x.r.Room_Num
+                      })
+                      .Select(g => new
+                      {
+                          Dr_NameAr = g.Key.Dr_NameAr,
+                          Sub_Name = g.Key.Sub_Name,
+                          Day = g.Key.Day.ToString(),  // يمكنك ترجمته للعربية لاحقاً إن أردت
+                          Room_Num = g.Key.Room_Num,
+                          TotalStudents = g.Count()
+                      }).ToList();
 
             return Ok(result);
 
@@ -134,7 +119,7 @@ namespace API.Controllers
                 Dr_NameEn = Doctors.Dr_NameEn,
                 Dr_Email = Doctors.Dr_Email,
                 Dr_Image = Doctors.Dr_Image,
-                Fac_ID = Doctors.Fac_ID, 
+                Fac_ID = Doctors.Fac_ID,
                 Phone = Doctors.Phone,
             };
             if (mappedDoctors.ID != 0)

@@ -19,15 +19,10 @@ namespace Core.Entities
         public string Phone { get; set; } 
         public int? FingerID { get; set; } 
 
-        //**********************************************************  
-        [ForeignKey(nameof(FacultyYear))]
-        public int FacYear_ID { get; set; }
-        public FacultyYear FacultyYear { get; set; }
-        //**********************************************************
         [ForeignKey(nameof(FacultyYearSemister))] 
         public int FacYearSem_ID { get; set; }
         public FacultyYearSemister FacultyYearSemister { get; set; }
         //********************************************************** 
-        public ICollection<Studets_Rooms_Subject> StudentRooms { get; set; }
+        public ICollection<Studets_Subject> StudentRooms { get; set; }
     }
 }

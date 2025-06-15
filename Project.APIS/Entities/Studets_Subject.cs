@@ -8,18 +8,16 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-    public class Studets_Rooms_Subject : BaseEntity
+    public class Studets_Subject : BaseEntity
     {
         [ForeignKey(nameof(Students))] 
         public int St_ID { get; set; }
         public Students Students { get; set; }
+
         [ForeignKey(nameof(Subjects))]
         public int Sub_ID { get; set; }
         public Subjects Subjects { get; set; }
 
-        [ForeignKey(nameof(Rooms))] 
-        public int Room_ID { get; set; } 
-        public Rooms Rooms { get; set; }
 
     }
 }

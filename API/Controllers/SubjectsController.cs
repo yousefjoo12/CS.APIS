@@ -2,12 +2,14 @@
 using AutoMapper;
 using Core;
 using Core.Entities;
-using Core.Repositories.Contract; 
+using Core.Repositories.Contract;
 using Core.Specifications.SubjectsSpecifications;
 using Core.Specifications.SubjectsSpecParamsSpecifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Project.APIS.Erorrs;
+using Repository.Data;
 
 namespace API.Controllers
 {
@@ -15,19 +17,34 @@ namespace API.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly StoreContext _context;
 
-        public SubjectsController(IUnitOfWork unitOfWork,IMapper mapper)
+        public SubjectsController(IUnitOfWork unitOfWork, IMapper mapper, StoreContext context)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _context = context;
         }
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  
         [HttpGet("GetAllSubjects")]   //Subjects
         public async Task<ActionResult<IReadOnlyList<SubjectsDTO>>> GetAllSubjects()
         {
-            var Subjects = await _unitOfWork.Repository<Subjects>().GetAll();
-            var data = _mapper.Map<IReadOnlyList<Subjects>, IReadOnlyList<SubjectsDTO>>(Subjects);
-            return Ok(data); //200
+            var query = _context.Subjects
+                                .Include(s => s.FacultyYearSemister)
+                                .ThenInclude(fys => fys.FacultyYear)
+                                .ThenInclude(fy => fy.Faculty)
+                                .Include(s => s.Doctors)
+                                .Select(s => new
+                                {
+                                    SubCode = s.Sub_Code,
+                                    SubName = s.Sub_Name,
+                                    Doctor = s.Doctors.Dr_NameAr,
+                                    Faculty = s.FacultyYearSemister.FacultyYear.Faculty.Fac_Name,
+                                    Year = s.FacultyYearSemister.FacultyYear.Year,
+                                    Semister = s.FacultyYearSemister.Sem_Name
+                                })
+                                .ToList();
+            return Ok(query); //200
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Subjects>> GetSubject(int id)
@@ -60,7 +77,6 @@ namespace API.Controllers
                 Sub_Code = Subjects.Sub_Code,
                 Sub_Name = Subjects.Sub_Name,
                 Dr_ID = Subjects.Dr_ID,
-                Ins_ID = Subjects.Ins_ID,
                 FacYearSem_ID = Subjects.FacYearSem_ID
             };
             if (mappedSubjects.ID != 0)
@@ -87,14 +103,14 @@ namespace API.Controllers
             var Subject = await _unitOfWork.Repository<Subjects>().GetById(id);
             if (Subject is not null)
             {
-                _unitOfWork.Repository<Subjects>().Delete(Subject); 
-                await _unitOfWork.CompleteAsync(); 
+                _unitOfWork.Repository<Subjects>().Delete(Subject);
+                await _unitOfWork.CompleteAsync();
             }
             else
             {
                 NotFound(new ApiResponse(404));// 404
-            } 
+            }
 
-        } 
-	}
+        }
+    }
 }

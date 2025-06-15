@@ -55,7 +55,7 @@ namespace API.Controllers
 
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         
         [HttpGet("GetAllStudets")]   //Studets
         public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> GetAllStudets()
@@ -65,33 +65,39 @@ namespace API.Controllers
             return Ok(data); //200
         }
         [HttpGet("DashBordStudets")]   //Studets
-        public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> DashBordStudets(int id)
+        public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> DashBordStudets(string Email)
         {  
-            var result = (from srs in context.Studets_Rooms_Subject
-                          join room in context.Rooms on srs.Room_ID equals room.ID
-                          join student in context.Students on srs.St_ID equals student.ID
-                          join subject in context.Subjects on srs.Sub_ID equals subject.ID
-                          join doctor in context.Doctors on subject.Dr_ID equals doctor.ID
-                          join lecture in context.Lecture on subject.ID equals lecture.Sub_ID
-                          where student.ID == id
-                          select new
-                          {
-                              student.St_Code,
-                              student.St_NameAr,
-                              subject.Sub_Name,
-                              room.Room_Num,
-                              doctor.Dr_NameAr,
-                              lecture.Lecture_Name,
-                              Day = lecture.LectureDate.DayOfWeek.ToString()
-                          }).ToList();
+            var query = from s in context.Students
+                        join ss in context.Studets_Subject on s.ID equals ss.St_ID
+                        join sub in context.Subjects on ss.Sub_ID equals sub.ID
+                        join r in context.Rooms on sub.Room_ID equals r.ID
+                        join d in context.Doctors on sub.Dr_ID equals d.ID
+                        join l in context.Lecture on sub.ID equals l.Sub_ID
+                        where s.St_Email == Email
+                        select new
+                        {
+                            s.St_Code,
+                            s.St_NameAr,
+                            Sub_Name = sub.Sub_Name,
+                            Room_Num = r.Room_Num,
+                            Dr_NameAr = d.Dr_NameAr,
+                            Dr_NameEn = d.Dr_NameEn,
+                            Day = l.LectureDate.DayOfWeek.ToString(),  
+                            Date = l.LectureDate.ToString("yyyy-MM-dd"),
+                            StartData = l.LectureDate.ToString("HH:mm"),
+                            EndTime = l.LectureDate.AddMinutes(90).ToString("HH:mm")
+                        };
+
+            var result = query.ToList();
+
             return Ok(result); //200
         }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Students>> GetStudet(int id)
+        [HttpGet("GetStudentFinger")]
+        public async Task<ActionResult<Students>> GetStudetByIdFinger(int id)
         {
             try
             {
-                var Studet = await _unitOfWork.Repository<Students>().GetById(id);
+                var Studet = await _unitOfWork.Repository<Students>().GetByIdFinger(id);
                 if (Studet == null)
                 {
                     return NotFound(new ApiResponse(404));// 404
@@ -118,9 +124,9 @@ namespace API.Controllers
                 St_NameAr = students.St_NameAr,
                 St_NameEn = students.St_NameEn,
                 St_Email = students.St_Email,
+                FingerID = students.FingerID,
                 St_Image = students.St_Image,
                 Phone = students.Phone,
-                FacYear_ID = students.FacYear_ID,
                 FacYearSem_ID = students.FacYearSem_ID,
             };
             if (mappedStudents.ID != 0)

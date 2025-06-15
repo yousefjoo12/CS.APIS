@@ -6,13 +6,12 @@ namespace API.DTOs
     {
         public int ID { get; set; }
         public string St_Code { get; set; }
+        public int FingerID { get; set; } 
         public string St_NameAr { get; set; }
         public string St_NameEn { get; set; }
         public string St_Email { get; set; }
         public string St_Image { get; set; }
         public string Phone { get; set; }
-        public int FacYear_ID { get; set; }
-        public string FacultyYear { get; set; }
         public int FacYearSem_ID { get; set; }
         public string FacultyYearSemister { get; set; } 
     }

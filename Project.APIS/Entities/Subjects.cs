@@ -15,13 +15,14 @@ namespace Core.Entities
         [ForeignKey(nameof(Doctors))] 
         public int Dr_ID { get; set; }
         public Doctors Doctors { get; set; }
-        [ForeignKey(nameof(Instructors))]  
-        public int Ins_ID { get; set; }
-        public Instructors Instructors { get; set; }
         [ForeignKey(nameof(FacultyYearSemister))] 
         public int FacYearSem_ID { get; set; }
         public FacultyYearSemister FacultyYearSemister { get; set; }
-        public ICollection<Studets_Rooms_Subject> StudentRooms { get; set; }
+
+        [ForeignKey(nameof(Rooms))]
+        public int Room_ID { get; set; }
+        public Rooms Rooms { get; set; }
+        public ICollection<Studets_Subject> Studets_Subject { get; set; }
 
     }
 }
