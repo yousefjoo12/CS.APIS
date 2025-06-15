@@ -134,6 +134,7 @@ namespace API.Controllers
                 Dr_NameEn = Doctors.Dr_NameEn,
                 Dr_Email = Doctors.Dr_Email,
                 Dr_Image = Doctors.Dr_Image,
+                Fac_ID = Doctors.Fac_ID, 
                 Phone = Doctors.Phone,
             };
             if (mappedDoctors.ID != 0)

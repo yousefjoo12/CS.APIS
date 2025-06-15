@@ -12,24 +12,6 @@ namespace Repository.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Doctors",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Dr_Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Dr_NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Dr_NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Dr_Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Dr_Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Doctors", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Faculty",
                 columns: table => new
                 {
@@ -84,6 +66,31 @@ namespace Repository.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SensorData", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Doctors",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Dr_Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Dr_NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Dr_NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Dr_Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Dr_Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Fac_ID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Doctors", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Doctors_Faculty_Fac_ID",
+                        column: x => x.Fac_ID,
+                        principalTable: "Faculty",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -166,6 +173,7 @@ namespace Repository.Data.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Sub_Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Sub_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Dr_ID = table.Column<int>(type: "int", nullable: false),
                     Ins_ID = table.Column<int>(type: "int", nullable: false),
@@ -274,6 +282,11 @@ namespace Repository.Data.Migrations
                 name: "IX_Attendance_LectureID",
                 table: "Attendance",
                 column: "LectureID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Doctors_Fac_ID",
+                table: "Doctors",
+                column: "Fac_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FacultyYear_Fac_ID",

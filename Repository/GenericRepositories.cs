@@ -50,6 +50,10 @@ namespace Repository
             {
                 return (IReadOnlyList<T>)await _dbcontext.Set<Attendance_T>().Include(p => p.Lecture).ToListAsync();
             }
+            if (typeof(T) == typeof(Doctors))
+            {
+                return (IReadOnlyList<T>)await _dbcontext.Set<Doctors>().Include(p => p.Faculty).ToListAsync();
+            }
 
             return await _dbcontext.Set<T>().ToListAsync();
         }
@@ -85,7 +89,7 @@ namespace Repository
             }
             if (typeof(T) == typeof(Doctors))
             {
-                return await _dbcontext.Set<Doctors>().Where(p => p.ID == id).FirstOrDefaultAsync() as T;
+                return await _dbcontext.Set<Doctors>().Where(p => p.ID == id).Include(p => p.Faculty).FirstOrDefaultAsync() as T;
             }
             return await _dbcontext.Set<T>().FindAsync(id);
         }
@@ -97,7 +101,7 @@ namespace Repository
             }
             if (typeof(T) == typeof(Doctors))
             {
-                return await _dbcontext.Set<Doctors>().Where(p => p.Dr_Email == Email).FirstOrDefaultAsync() as T;
+                return await _dbcontext.Set<Doctors>().Where(p => p.Dr_Email == Email).Include(p => p.Faculty).FirstOrDefaultAsync() as T;
             }
             return await _dbcontext.Set<T>().FindAsync(Email);
         }

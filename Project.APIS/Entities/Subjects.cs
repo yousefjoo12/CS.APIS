@@ -10,6 +10,7 @@ namespace Core.Entities
 {
     public class Subjects : BaseEntity
     {
+        public string Sub_Code { get; set; }
         public string Sub_Name { get; set; }
         [ForeignKey(nameof(Doctors))] 
         public int Dr_ID { get; set; }

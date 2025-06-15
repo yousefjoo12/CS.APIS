@@ -73,11 +73,15 @@ namespace Repository.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Fac_ID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("Fac_ID");
 
                     b.ToTable("Doctors");
                 });
@@ -320,6 +324,10 @@ namespace Repository.Data.Migrations
                     b.Property<int>("Ins_ID")
                         .HasColumnType("int");
 
+                    b.Property<string>("Sub_Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Sub_Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -364,6 +372,17 @@ namespace Repository.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Lecture");
+                });
+
+            modelBuilder.Entity("Core.Entities.Doctors", b =>
+                {
+                    b.HasOne("Core.Entities.Faculty", "Faculty")
+                        .WithMany()
+                        .HasForeignKey("Fac_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
                 });
 
             modelBuilder.Entity("Core.Entities.FacultyYear", b =>

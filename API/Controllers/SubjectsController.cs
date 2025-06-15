@@ -57,6 +57,7 @@ namespace API.Controllers
             var mappedSubjects = new Subjects
             {
                 ID = Subjects.ID,
+                Sub_Code = Subjects.Sub_Code,
                 Sub_Name = Subjects.Sub_Name,
                 Dr_ID = Subjects.Dr_ID,
                 Ins_ID = Subjects.Ins_ID,
