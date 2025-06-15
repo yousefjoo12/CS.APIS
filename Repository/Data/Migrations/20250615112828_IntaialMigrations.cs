@@ -33,7 +33,7 @@ namespace Repository.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Ins_Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Ins_NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Ins_NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Ins_NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -76,7 +76,7 @@ namespace Repository.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Dr_Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Dr_NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Dr_NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Dr_NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Dr_Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Dr_Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -135,6 +135,27 @@ namespace Repository.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notification",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Massage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FacYearSem_ID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notification", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Notification_FacultyYearSemister_FacYearSem_ID",
+                        column: x => x.FacYearSem_ID,
+                        principalTable: "FacultyYearSemister",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
@@ -142,12 +163,12 @@ namespace Repository.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     St_Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     St_NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    St_NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    St_NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     St_Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    St_Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    St_Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FingerID = table.Column<int>(type: "int", nullable: true),
-                    Fac_ID = table.Column<int>(type: "int", nullable: false),
+                    FacYear_ID = table.Column<int>(type: "int", nullable: false),
                     FacYearSem_ID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -160,9 +181,9 @@ namespace Repository.Data.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Students_Faculty_Fac_ID",
-                        column: x => x.Fac_ID,
-                        principalTable: "Faculty",
+                        name: "FK_Students_FacultyYear_FacYear_ID",
+                        column: x => x.FacYear_ID,
+                        principalTable: "FacultyYear",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -211,7 +232,7 @@ namespace Repository.Data.Migrations
                     Lecture_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Sub_ID = table.Column<int>(type: "int", nullable: false),
                     LectureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Degree = table.Column<int>(type: "int", nullable: false)
+                    Degree = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -304,9 +325,14 @@ namespace Repository.Data.Migrations
                 column: "Sub_ID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_Fac_ID",
+                name: "IX_Notification_FacYearSem_ID",
+                table: "Notification",
+                column: "FacYearSem_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_FacYear_ID",
                 table: "Students",
-                column: "Fac_ID");
+                column: "FacYear_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_FacYearSem_ID",
@@ -349,6 +375,9 @@ namespace Repository.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Attendance");
+
+            migrationBuilder.DropTable(
+                name: "Notification");
 
             migrationBuilder.DropTable(
                 name: "SensorData");

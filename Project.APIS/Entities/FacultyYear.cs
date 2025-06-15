@@ -11,6 +11,7 @@ namespace Core.Entities
     public class FacultyYear : BaseEntity
     {
         public string Year { get; set; }
+
         [ForeignKey(nameof(Faculty))]
         public int Fac_ID { get; set; }
         public Faculty Faculty { get; set; }

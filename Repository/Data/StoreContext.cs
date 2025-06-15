@@ -35,6 +35,7 @@ namespace Repository.Data
         public DbSet<Studets_Rooms_Subject> Studets_Rooms_Subject { get; set; }  
         public DbSet<Subjects> Subjects { get; set; }  
         public DbSet<SensorData> SensorData { get; set; }  
+        public DbSet<Notification> Notification { get; set; }  
 
     }
 }

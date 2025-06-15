@@ -70,7 +70,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Dr_NameEn")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Fac_ID")
@@ -172,7 +171,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Ins_NameEn")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
@@ -192,7 +190,7 @@ namespace Repository.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("Degree")
+                    b.Property<int?>("Degree")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LectureDate")
@@ -210,6 +208,32 @@ namespace Repository.Data.Migrations
                     b.HasIndex("Sub_ID");
 
                     b.ToTable("Lecture");
+                });
+
+            modelBuilder.Entity("Core.Entities.Notification", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("FacYearSem_ID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Massage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("FacYearSem_ID");
+
+                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("Core.Entities.Rooms", b =>
@@ -240,7 +264,7 @@ namespace Repository.Data.Migrations
                     b.Property<int>("FacYearSem_ID")
                         .HasColumnType("int");
 
-                    b.Property<int>("Fac_ID")
+                    b.Property<int>("FacYear_ID")
                         .HasColumnType("int");
 
                     b.Property<int?>("FingerID")
@@ -259,7 +283,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("St_Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("St_NameAr")
@@ -267,14 +290,13 @@ namespace Repository.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("St_NameEn")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
                     b.HasIndex("FacYearSem_ID");
 
-                    b.HasIndex("Fac_ID");
+                    b.HasIndex("FacYear_ID");
 
                     b.ToTable("Students");
                 });
@@ -418,6 +440,17 @@ namespace Repository.Data.Migrations
                     b.Navigation("Subjects");
                 });
 
+            modelBuilder.Entity("Core.Entities.Notification", b =>
+                {
+                    b.HasOne("Core.Entities.FacultyYearSemister", "FacultyYearSemister")
+                        .WithMany()
+                        .HasForeignKey("FacYearSem_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FacultyYearSemister");
+                });
+
             modelBuilder.Entity("Core.Entities.Students", b =>
                 {
                     b.HasOne("Core.Entities.FacultyYearSemister", "FacultyYearSemister")
@@ -426,13 +459,13 @@ namespace Repository.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Faculty", "Faculty")
+                    b.HasOne("Core.Entities.FacultyYear", "FacultyYear")
                         .WithMany()
-                        .HasForeignKey("Fac_ID")
+                        .HasForeignKey("FacYear_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Faculty");
+                    b.Navigation("FacultyYear");
 
                     b.Navigation("FacultyYearSemister");
                 });

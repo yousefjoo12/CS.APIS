@@ -120,7 +120,7 @@ namespace API.Controllers
                 St_Email = students.St_Email,
                 St_Image = students.St_Image,
                 Phone = students.Phone,
-                Fac_ID = students.Fac_ID,
+                FacYear_ID = students.FacYear_ID,
                 FacYearSem_ID = students.FacYearSem_ID,
             };
             if (mappedStudents.ID != 0)

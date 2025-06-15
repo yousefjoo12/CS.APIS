@@ -11,7 +11,7 @@ namespace API.Helpers
         public MappingProfiles()
         {
             CreateMap<Students, StudentsDTO>()
-                .ForMember(d => d.Faculty, o => o.MapFrom(s => s.Faculty.Fac_Name))
+                .ForMember(d => d.FacultyYear, o => o.MapFrom(s => s.FacultyYear.Year))
                 .ForMember(d => d.FacultyYearSemister, o => o.MapFrom(s => s.FacultyYearSemister.Sem_Name))  
                 .ForMember(d => d.St_Image, o => o.MapFrom<StudentsPictureUrlResolver>()).ReverseMap();
 
@@ -19,7 +19,8 @@ namespace API.Helpers
                 .ForMember(d => d.Faculty, o => o.MapFrom(s => s.Faculty.Fac_Name)) 
                 .ForMember(d => d.Dr_Image, o => o.MapFrom<DoctorsPictureUrlResolver>()).ReverseMap();
 
-         
+            CreateMap<Notification, NotificationDTO>()
+                  .ForMember(d => d.FacultyYearSemister, o => o.MapFrom(s => s.FacultyYearSemister.Sem_Name)).ReverseMap();
 
             CreateMap<Attendance_T, AttendanceDTO>()
                  .ForMember(d => d.Lecture, o => o.MapFrom(s => s.Lecture.Lecture_Name)).ReverseMap();

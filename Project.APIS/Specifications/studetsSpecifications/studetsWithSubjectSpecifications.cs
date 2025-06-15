@@ -12,7 +12,7 @@ namespace Core.Specifications.studetsSpecifications
     {
         public studetsWithSubjectSpecifications(studetsSpecParams spec) : base(P =>
              (string.IsNullOrEmpty(spec.Search) || P.St_NameAr.ToLower().Contains(spec.Search.ToLower())) &&
-             (!spec.Fac_ID.HasValue || P.Fac_ID == spec.Fac_ID.Value) &&
+             (!spec.Fac_ID.HasValue || P.FacYear_ID == spec.Fac_ID.Value) &&
              (!spec.FacYearSem_ID.HasValue || P.FacYearSem_ID == spec.FacYearSem_ID.Value)
             )
         {

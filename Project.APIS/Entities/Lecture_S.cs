@@ -16,6 +16,6 @@ namespace Core.Entities
         public int Sub_ID { get; set; }
         public Subjects Subjects { get; set; }
         public DateTime LectureDate { get; set; } 
-        public int Degree { get; set; } 
+        public int? Degree { get; set; } 
     }
 }

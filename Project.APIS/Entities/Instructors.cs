@@ -11,7 +11,7 @@ namespace Core.Entities
     {  
         public string Ins_Code { get; set; }
         public string Ins_NameAr { get; set; }
-        public string Ins_NameEn { get; set; }
+        public string? Ins_NameEn { get; set; }
         public string Phone { get; set; }  
     }
 }

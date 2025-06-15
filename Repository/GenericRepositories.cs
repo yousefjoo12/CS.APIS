@@ -24,7 +24,7 @@ namespace Repository
         {
             if (typeof(T) == typeof(Students))
             {
-                return (IReadOnlyList<T>)await _dbcontext.Set<Students>().Include(p => p.Faculty).Include(p => p.FacultyYearSemister).ToListAsync();
+                return (IReadOnlyList<T>)await _dbcontext.Set<Students>().Include(p => p.FacultyYear).Include(p => p.FacultyYearSemister).ToListAsync();
             }
             if (typeof(T) == typeof(Studets_Rooms_Subject))
             {
@@ -54,6 +54,10 @@ namespace Repository
             {
                 return (IReadOnlyList<T>)await _dbcontext.Set<Doctors>().Include(p => p.Faculty).ToListAsync();
             }
+            if (typeof(T) == typeof(Notification))
+            {
+                return (IReadOnlyList<T>)await _dbcontext.Set<Notification>().Include(p => p.FacultyYearSemister).ToListAsync();
+            }
 
             return await _dbcontext.Set<T>().ToListAsync();
         }
@@ -61,7 +65,7 @@ namespace Repository
         {
             if (typeof(T) == typeof(Students))
             {
-                return await _dbcontext.Set<Students>().Where(p => p.ID == id).Include(p => p.Faculty).Include(p => p.FacultyYearSemister).FirstOrDefaultAsync() as T;
+                return await _dbcontext.Set<Students>().Where(p => p.ID == id).Include(p => p.FacultyYear).Include(p => p.FacultyYearSemister).FirstOrDefaultAsync() as T;
             } 
             if (typeof(T) == typeof(Studets_Rooms_Subject))
             {
@@ -91,13 +95,17 @@ namespace Repository
             {
                 return await _dbcontext.Set<Doctors>().Where(p => p.ID == id).Include(p => p.Faculty).FirstOrDefaultAsync() as T;
             }
+            if (typeof(T) == typeof(Notification))
+            {
+                return await _dbcontext.Set<Notification>().Where(p => p.ID == id).Include(p => p.FacultyYearSemister).FirstOrDefaultAsync() as T;
+            }
             return await _dbcontext.Set<T>().FindAsync(id);
         }
         public async Task<T?> GetByEmail(string Email)
         {
             if (typeof(T) == typeof(Students))
             {
-                return await _dbcontext.Set<Students>().Where(p => p.St_Email == Email).Include(p => p.Faculty).Include(p => p.FacultyYearSemister).FirstOrDefaultAsync() as T;
+                return await _dbcontext.Set<Students>().Where(p => p.St_Email == Email).Include(p => p.FacultyYear).Include(p => p.FacultyYearSemister).FirstOrDefaultAsync() as T;
             }
             if (typeof(T) == typeof(Doctors))
             {
