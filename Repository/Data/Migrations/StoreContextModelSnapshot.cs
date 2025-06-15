@@ -276,9 +276,6 @@ namespace Repository.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int?>("RoomsID")
-                        .HasColumnType("int");
-
                     b.Property<int>("St_ID")
                         .HasColumnType("int");
 
@@ -286,8 +283,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("RoomsID");
 
                     b.HasIndex("St_ID");
 
@@ -427,10 +422,6 @@ namespace Repository.Data.Migrations
 
             modelBuilder.Entity("Core.Entities.Studets_Subject", b =>
                 {
-                    b.HasOne("Core.Entities.Rooms", null)
-                        .WithMany("StudentRooms")
-                        .HasForeignKey("RoomsID");
-
                     b.HasOne("Core.Entities.Students", "Students")
                         .WithMany("StudentRooms")
                         .HasForeignKey("St_ID")
@@ -473,11 +464,6 @@ namespace Repository.Data.Migrations
                     b.Navigation("FacultyYearSemister");
 
                     b.Navigation("Rooms");
-                });
-
-            modelBuilder.Entity("Core.Entities.Rooms", b =>
-                {
-                    b.Navigation("StudentRooms");
                 });
 
             modelBuilder.Entity("Core.Entities.Students", b =>

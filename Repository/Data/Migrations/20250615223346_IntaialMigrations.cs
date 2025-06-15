@@ -228,17 +228,11 @@ namespace Repository.Data.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     St_ID = table.Column<int>(type: "int", nullable: false),
-                    Sub_ID = table.Column<int>(type: "int", nullable: false),
-                    RoomsID = table.Column<int>(type: "int", nullable: true)
+                    Sub_ID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Studets_Subject", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Studets_Subject_Rooms_RoomsID",
-                        column: x => x.RoomsID,
-                        principalTable: "Rooms",
-                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_Studets_Subject_Students_St_ID",
                         column: x => x.St_ID,
@@ -308,11 +302,6 @@ namespace Repository.Data.Migrations
                 name: "IX_Students_FacYearSem_ID",
                 table: "Students",
                 column: "FacYearSem_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Studets_Subject_RoomsID",
-                table: "Studets_Subject",
-                column: "RoomsID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Studets_Subject_St_ID",

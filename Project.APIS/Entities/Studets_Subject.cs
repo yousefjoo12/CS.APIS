@@ -16,8 +16,6 @@ namespace Core.Entities
 
         [ForeignKey(nameof(Subjects))]
         public int Sub_ID { get; set; }
-        public Subjects Subjects { get; set; }
-
-
+        public Subjects Subjects { get; set; } 
     }
 }
