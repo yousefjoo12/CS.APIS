@@ -112,5 +112,18 @@ namespace API.Controllers
             }
 
         }
+        [HttpGet("GetSubjectsCount")] 
+        public async Task<ActionResult<int>> GetSubjectCount()
+        {
+            try
+            {
+                var Subject = _context.Subjects.Count();
+                return Ok(Subject);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse(500, $"An error occurred while retrieving student count: {ex.Message}"));
+            }
+        }
     }
 }

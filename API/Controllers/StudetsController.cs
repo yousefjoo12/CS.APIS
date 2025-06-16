@@ -163,6 +163,19 @@ namespace API.Controllers
             }
 
         }
+        [HttpGet("GetStudentsCount")]
+        public async Task<ActionResult<int>> GetStudentCount()
+        {
+            try
+            {
+                var studentCount = await context.Students.CountAsync();
+                return Ok(studentCount); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse(500, $"An error occurred while retrieving student count: {ex.Message}"));
+            }
 
+        }
     }
 }

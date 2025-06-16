@@ -10,7 +10,7 @@ namespace Core.FingerId
     public class SensorData 
     {
         public int ID { get; set; } 
-        public DateTime Timestamp { get; set; } = DateTime.Now;
+        public DateTime Timestamp { get; set; }
 
     }
 }

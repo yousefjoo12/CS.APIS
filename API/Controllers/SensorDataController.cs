@@ -23,7 +23,7 @@ namespace API.Controllers
             var mappData = new SensorData
             {
                 ID = SensorData.ID, 
-                Timestamp = DateTime.Now,
+                Timestamp = SensorData.Timestamp,
             };
             _storeContext.SensorData.Add(mappData);
             await _storeContext.SaveChangesAsync();
