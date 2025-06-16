@@ -27,8 +27,7 @@ namespace API.Controllers
             };
             _storeContext.SensorData.Add(mappData);
             await _storeContext.SaveChangesAsync();
-            var Data = _storeContext.SensorData.Where(x=>x.ID == SensorData.ID);
-            return Ok(Data);
+            return Ok(mappData);
 
         }
         [HttpGet]
