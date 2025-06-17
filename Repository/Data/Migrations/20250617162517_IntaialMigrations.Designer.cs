@@ -12,7 +12,7 @@ using Repository.Data;
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250615223346_IntaialMigrations")]
+    [Migration("20250617162517_IntaialMigrations")]
     partial class IntaialMigrations
     {
         /// <inheritdoc />
@@ -337,6 +337,10 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("FingerPrintModle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");

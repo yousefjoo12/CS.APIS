@@ -10,6 +10,7 @@ namespace Core.FingerId
     public class SensorData 
     {
         public int ID { get; set; } 
+        public string FingerPrintModle { get; set; } 
         public DateTime Timestamp { get; set; }
 
     }

@@ -24,6 +24,7 @@ namespace API.Controllers
             {
                 ID = SensorData.ID, 
                 Timestamp = SensorData.Timestamp,
+                FingerPrintModle = SensorData.FingerPrintModle,
             };
             _storeContext.SensorData.Add(mappData);
             await _storeContext.SaveChangesAsync();
