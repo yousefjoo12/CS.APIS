@@ -256,6 +256,7 @@ namespace Repository.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LectureID = table.Column<int>(type: "int", nullable: false),
                     St_ID = table.Column<int>(type: "int", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Atten = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

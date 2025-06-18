@@ -13,7 +13,8 @@ namespace Core.Entities
         [ForeignKey(nameof(Lecture))]
         public int LectureID { get; set; } 
         public Lecture_S Lecture { get; set; }
-        public int St_ID { get; set; } 
+        public int St_ID { get; set; }
+        public DateTime Timestamp { get; set; } 
         public bool Atten { get; set; }
     }
 }

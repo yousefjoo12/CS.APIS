@@ -12,7 +12,7 @@ using Repository.Data;
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250617162517_IntaialMigrations")]
+    [Migration("20250618184007_IntaialMigrations")]
     partial class IntaialMigrations
     {
         /// <inheritdoc />
@@ -41,6 +41,9 @@ namespace Repository.Data.Migrations
 
                     b.Property<int>("St_ID")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ID");
 

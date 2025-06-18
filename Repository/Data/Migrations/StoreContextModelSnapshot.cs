@@ -39,6 +39,9 @@ namespace Repository.Data.Migrations
                     b.Property<int>("St_ID")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("ID");
 
                     b.HasIndex("LectureID");
