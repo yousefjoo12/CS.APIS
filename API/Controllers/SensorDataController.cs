@@ -8,114 +8,94 @@ using Repository.Data;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic; // مطلوب لـ List<SensorDataDTO>
+using System.Collections.Generic; 
 
 namespace API.Controllers
 {
-    [ApiController] // إضافة لتفعيل سلوكيات API تلقائية
-    [Route("api/[controller]")] // تحديد مسار الكنترولر الافتراضي
-    public class SensorDataController : BaseApiController // بقيت ترث من BaseApiController كما في الكود الأصلي
+    public class SensorDataController : BaseApiController 
     {
         private readonly StoreContext _storeContext;
-
         public SensorDataController(StoreContext storeContext)
         {
             _storeContext = storeContext;
         }
-
-        // POST api/SensorData (عاد ليقبل ID و Timestamp كما في الكود الأول)
         [HttpPost]
         public async Task<ActionResult<SensorData>> PostData(SensorDataDTO sensorData)
         {
-            // لا يوجد تحقق من الاسم، نعود للطريقة الأصلية
             var mappedData = new SensorData
             {
-                ID = sensorData.ID, // استخدام ID من الـ DTO
-                Timestamp = sensorData.Timestamp, // استخدام Timestamp من الـ DTO
-                FingerPrintModle = sensorData.FingerPrintModle // استخدام Timestamp من الـ DTO
+                ID = sensorData.ID, 
+                Timestamp = sensorData.Timestamp, 
+                FingerPrintModle = sensorData.FingerPrintModle 
             };
 
             _storeContext.SensorData.Add(mappedData);
             await _storeContext.SaveChangesAsync();
 
-            return Ok(mappedData); // إرجاع الكائن بالكامل
+            return Ok(mappedData);
         }
-
-        // GET api/SensorData/{id} (يستخدم FirstOrDefaultAsync ومعالجة NotFound)
-        [HttpGet("{id}")] // تحديد أن الـ ID سيكون جزءًا من المسار
+        [HttpGet("{id}")] 
         public async Task<ActionResult<SensorDataDTO>> GetData(int id)
         {
             var data = await _storeContext.SensorData
                                 .Where(x => x.ID == id)
-                                .OrderByDescending(x => x.Timestamp) // إذا كان هناك أكثر من واحد بنفس الـ ID (غير متوقع إذا كان ID مفتاحًا أساسيًا)
-                                .FirstOrDefaultAsync(); // يجلب أول كائن مطابق أو null
+                                .OrderByDescending(x => x.Timestamp)
+                                .FirstOrDefaultAsync(); 
 
             if (data == null)
-                return NotFound(); // 404 Not Found إذا لم يتم العثور على بيانات
+                return NotFound(); 
 
-            // تحويل الكيان إلى DTO قبل الإرجاع
+            
             var dto = new SensorDataDTO
             {
                 ID = data.ID,
-                Timestamp = data.Timestamp // تعيين Timestamp هنا
+                Timestamp = data.Timestamp 
             };
 
             return Ok(dto);
         }
-
-        // GET api/SensorData/last-id (نقطة نهاية جديدة: للحصول على آخر ID)
         [HttpGet("last-id")]
         public async Task<ActionResult<int>> GetLastId()
         {
             var lastId = await _storeContext.SensorData
                                 .OrderByDescending(x => x.ID)
                                 .Select(x => x.ID)
-                                .FirstOrDefaultAsync(); // يجلب آخر ID أو 0 إذا كان الجدول فارغًا
+                                .FirstOrDefaultAsync(); 
 
             return Ok(lastId);
         }
-
-        // GET api/SensorData (نقطة نهاية جديدة: للحصول على كل البيانات)
         [HttpGet]
         public async Task<ActionResult<List<SensorDataDTO>>> GetAllData()
         {
             var dataList = await _storeContext.SensorData
-                                .OrderByDescending(x => x.Timestamp) // ترتيب حسب الأحدث
-                                .Select(x => new SensorDataDTO // تحويل للـ DTO مباشرة
+                                .OrderByDescending(x => x.Timestamp) 
+                                .Select(x => new SensorDataDTO 
                                 {
                                     ID = x.ID,
-                                    Timestamp = x.Timestamp // استخدام Timestamp هنا
+                                    Timestamp = x.Timestamp 
                                 })
-                                .ToListAsync(); // جلب كل السجلات
+                                .ToListAsync(); 
 
             return Ok(dataList);
         }
-
-        // POST api/SensorData/clear (نقطة نهاية جديدة: لمسح جميع البيانات)
         [HttpPost("clear")]
         public async Task<IActionResult> ClearData()
         {
-            // حذف جميع السجلات من جدول SensorData
             _storeContext.SensorData.RemoveRange(_storeContext.SensorData);
             await _storeContext.SaveChangesAsync();
-            return Ok(); // إرجاع 200 OK
+            return Ok();
         }
-
-        // GET api/SensorData/generate-id (نقطة نهاية جديدة: لتوليد ID مقترح)
         [HttpGet("generate-id")]
         public async Task<ActionResult<int>> GenerateId()
         {
-            // الحصول على آخر ID موجود، أو 0 إذا لا يوجد بيانات
             var lastId = await _storeContext.SensorData
                 .OrderByDescending(x => x.ID)
                 .Select(x => x.ID)
                 .FirstOrDefaultAsync();
 
-            int newId = lastId + 1; // ID الجديد هو آخر ID + 1
+            int newId = lastId + 1; 
             return Ok(newId);
         }
-
-        // GET api/SensorData/count (نقطة نهاية جديدة: لعد عدد السجلات)
         [HttpGet("count")]
         public async Task<ActionResult<int>> GetSensorDataCount() 
         {
