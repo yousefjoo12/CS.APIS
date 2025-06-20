@@ -12,6 +12,7 @@ namespace API.Helpers
         {
             CreateMap<Students, StudentsDTO>()
                 .ForMember(d => d.FacultyYearSemister, o => o.MapFrom(s => s.FacultyYearSemister.Sem_Name)) 
+                .ForMember(d => d.FacultyYear, o => o.MapFrom(s => s.FacultyYear.Year)) 
                 .ForMember(d => d.St_Image, o => o.MapFrom<StudentsPictureUrlResolver>()).ReverseMap();
 
             CreateMap<Doctors, DoctorsDTO>()
