@@ -239,6 +239,12 @@ namespace Repository.Data.Migrations
                     b.Property<int>("FacYearSem_ID")
                         .HasColumnType("int");
 
+                    b.Property<int>("FacYear_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Fac_Id")
+                        .HasColumnType("int");
+
                     b.Property<int?>("FingerID")
                         .HasColumnType("int");
 
@@ -267,6 +273,10 @@ namespace Repository.Data.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("FacYearSem_ID");
+
+                    b.HasIndex("FacYear_ID");
+
+                    b.HasIndex("Fac_Id");
 
                     b.ToTable("Students");
                 });
@@ -337,10 +347,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("FingerPrintModle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
@@ -423,6 +429,22 @@ namespace Repository.Data.Migrations
                         .HasForeignKey("FacYearSem_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Core.Entities.FacultyYear", "FacultyYear")
+                        .WithMany()
+                        .HasForeignKey("FacYear_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Faculty", "Faculty")
+                        .WithMany()
+                        .HasForeignKey("Fac_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
+
+                    b.Navigation("FacultyYear");
 
                     b.Navigation("FacultyYearSemister");
                 });

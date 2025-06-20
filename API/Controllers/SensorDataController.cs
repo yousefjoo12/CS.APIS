@@ -25,8 +25,7 @@ namespace API.Controllers
             var mappedData = new SensorData
             {
                 ID = sensorData.ID, 
-                Timestamp = sensorData.Timestamp, 
-                FingerPrintModle = sensorData.FingerPrintModle 
+                Timestamp = sensorData.Timestamp,  
             };
 
             _storeContext.SensorData.Add(mappedData);
