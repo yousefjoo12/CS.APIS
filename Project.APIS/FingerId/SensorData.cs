@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Core.FingerId
 {
-    public class SensorData 
-    {
-        public int ID { get; set; }  
+    public class SensorData :BaseEntity
+    {  
+        public int FingerID { get; set; }  
         public DateTime Timestamp { get; set; }
 
     }

@@ -1,37 +1,59 @@
 ﻿using API.DTOs;
-using Core.FingerId; // افترضنا أن هذا يحتوي على تعريف SensorData
-using Microsoft.AspNetCore.Http; // قد لا تكون ضرورية إذا كان BaseApiController لا يستخدمها مباشرة
+using Core;
+using Core.FingerId;  
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-// using Project.APIS.Erorrs; // هذا الاستيراد لم يعد موجودًا في الكود الجديد، لذلك أزيل
+using Microsoft.EntityFrameworkCore; 
 using Repository.Data;
 using System;
+using System.Collections.Generic; 
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic; 
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace API.Controllers
 {
     public class SensorDataController : BaseApiController 
     {
         private readonly StoreContext _storeContext;
-        public SensorDataController(StoreContext storeContext)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public SensorDataController(StoreContext storeContext,IUnitOfWork unitOfWork)
         {
             _storeContext = storeContext;
+            _unitOfWork = unitOfWork;
         }
         [HttpPost]
         public async Task<ActionResult<SensorData>> PostData(SensorDataDTO sensorData)
         {
             var mappedData = new SensorData
             {
-                ID = sensorData.ID, 
-                Timestamp = sensorData.Timestamp,  
+                ID = sensorData.ID,
+                FingerID = sensorData.FingerID, 
+                Timestamp = sensorData.Timestamp 
             };
 
             _storeContext.SensorData.Add(mappedData);
             await _storeContext.SaveChangesAsync();
 
             return Ok(mappedData);
+        }
+        [HttpGet("GetAllByFingerID")]
+        public async Task<ActionResult<SensorDataDTOCustm>> GetAllByFingerID(int id)
+        {
+            var data = _storeContext.SensorData.Where(x => x.FingerID == id);
+            var result = new List<SensorDataDTOCustm>();
+
+            foreach (var item in data)
+            {
+                var mappedData = new SensorDataDTOCustm
+                {
+                    ID = item.ID,
+                    FingerID = item.FingerID 
+                };
+                result.Add(mappedData);
+            }
+
+            return Ok(result);
         }
         [HttpGet("{id}")] 
         public async Task<ActionResult<SensorDataDTO>> GetData(int id)
@@ -83,18 +105,7 @@ namespace API.Controllers
             _storeContext.SensorData.RemoveRange(_storeContext.SensorData);
             await _storeContext.SaveChangesAsync();
             return Ok();
-        }
-        [HttpGet("generate-id")]
-        public async Task<ActionResult<int>> GenerateId()
-        {
-            var lastId = await _storeContext.SensorData
-                .OrderByDescending(x => x.ID)
-                .Select(x => x.ID)
-                .FirstOrDefaultAsync();
-
-            int newId = lastId + 1; 
-            return Ok(newId);
-        }
+        } 
         [HttpGet("count")]
         public async Task<ActionResult<int>> GetSensorDataCount() 
         {
