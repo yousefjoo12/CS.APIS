@@ -27,10 +27,9 @@ namespace API.Controllers
             _context = context;
         }
         [HttpGet("GetAllLecture")]   //Lecture
-        public async Task<ActionResult<IReadOnlyList<LectureDTO>>> GetAllSubjects(int Faculty_ID)
+        public async Task<ActionResult<IReadOnlyList<LectureDTO>>> GetAllSubjects()
         {
-            var result = await _context.Lecture
-                         .Where(l => l.Subjects.Doctors.Faculty.ID == Faculty_ID)
+            var result = await _context.Lecture 
                          .Select(l => new
                          {
                              l.Lecture_Name,
