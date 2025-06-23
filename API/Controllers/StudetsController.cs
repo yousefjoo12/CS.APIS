@@ -9,6 +9,7 @@ using Core.Specifications.studetsSpecifications;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,12 +27,12 @@ namespace API.Controllers
         private readonly StoreContext context;
         private readonly UserManager<AppUser> _userManager;
 
-        public StudetsController(IUnitOfWork unitOfWork, IMapper mapper ,StoreContext context, UserManager<AppUser> userManager)
+        public StudetsController(IUnitOfWork unitOfWork, IMapper mapper, StoreContext context, UserManager<AppUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             this.context = context;
-           _userManager = userManager;
+            _userManager = userManager;
         }
 
         [HttpGet("GetStudetByEmail")]
@@ -45,7 +46,7 @@ namespace API.Controllers
                 {
                     return NotFound(new ApiResponse(404));// 404
                 }
-                var data = _mapper.Map<Students, StudentsDTO>(Studet); 
+                var data = _mapper.Map<Students, StudentsDTO>(Studet);
                 return Ok(data); // 200
             }
             catch (Exception ex)
@@ -56,17 +57,38 @@ namespace API.Controllers
         }
 
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        
+
         [HttpGet("GetAllStudets")]   //Studets
         public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> GetAllStudets()
         {
-            var Studets = await _unitOfWork.Repository<Students>().GetAll();
-            var data = _mapper.Map<IReadOnlyList<Students>, IReadOnlyList<StudentsDTO>>(Studets);
-            return Ok(data); //200
+            var query = context.Students
+            .Include(s => s.FacultyYearSemister)
+            .ThenInclude(fys => fys.FacultyYear)
+            .ThenInclude(fy => fy.Faculty)
+            .Select(s => new
+            {
+                s.FacultyYearSemister.Sem_Code,
+                s.FacultyYearSemister.FacultyYear.Year,
+                s.FacultyYearSemister.FacultyYear.Faculty.Fac_Name,
+                s.FacultyYearSemister.Sem_Name,
+                s.St_Code,
+                s.St_NameAr,
+                s.ID,
+                s.St_NameEn,
+                s.St_Email,
+                s.St_Image,
+                s.Phone,
+                s.FingerID,
+                s.FacYearSem_ID,
+                s.FacultyYearSemister.FacultyYear.Faculty.Fac_Code
+            });
+
+            return Ok(query); //200
+
         }
         [HttpGet("DashBordStudets")]   //Studets
         public async Task<ActionResult<IReadOnlyList<StudentsDTO>>> DashBordStudets(string Email)
-        {  
+        {
             var query = from s in context.Students
                         join ss in context.Studets_Subject on s.ID equals ss.St_ID
                         join sub in context.Subjects on ss.Sub_ID equals sub.ID
@@ -82,7 +104,7 @@ namespace API.Controllers
                             Room_Num = r.Room_Num,
                             Dr_NameAr = d.Dr_NameAr,
                             Dr_NameEn = d.Dr_NameEn,
-                            Day = l.LectureDate.DayOfWeek.ToString(),  
+                            Day = l.LectureDate.DayOfWeek.ToString(),
                             Date = l.LectureDate.ToString("yyyy-MM-dd"),
                             StartData = l.LectureDate.ToString("HH:mm"),
                             EndTime = l.LectureDate.AddMinutes(90).ToString("HH:mm")
@@ -112,7 +134,7 @@ namespace API.Controllers
 
         }
 
-        [HttpPost("Add_OR_UpdateStudent")] 
+        [HttpPost("Add_OR_UpdateStudent")]
         public async Task<ActionResult<Students>> AddStudet(StudentsDTO students)
         {
             //var mappedStudents = _mapper.Map<StudentsDTO, Students>(students);  
@@ -146,20 +168,20 @@ namespace API.Controllers
             }
 
 
-        } 
+        }
         [HttpDelete("DeleteStudent")]
         public async Task DeleteStudents(int id)
-        { 
+        {
             var Studet = await _unitOfWork.Repository<Students>().GetById(id);
             if (Studet is not null)
             {
-            _unitOfWork.Repository<Students>().Delete(Studet);
-            await _unitOfWork.CompleteAsync();
-                 
+                _unitOfWork.Repository<Students>().Delete(Studet);
+                await _unitOfWork.CompleteAsync();
+
             }
             else
             {
-              NotFound(new ApiResponse(404));// 404
+                NotFound(new ApiResponse(404));// 404
             }
 
         }
@@ -169,7 +191,7 @@ namespace API.Controllers
             try
             {
                 var studentCount = await context.Students.CountAsync();
-                return Ok(studentCount); 
+                return Ok(studentCount);
             }
             catch (Exception ex)
             {
