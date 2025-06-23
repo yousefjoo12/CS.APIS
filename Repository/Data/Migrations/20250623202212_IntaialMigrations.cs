@@ -206,8 +206,9 @@ namespace Repository.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Lecture_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Sub_ID = table.Column<int>(type: "int", nullable: false),
-                    LectureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Degree = table.Column<int>(type: "int", nullable: true)
+                    day = table.Column<int>(type: "int", nullable: false),
+                    FromTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    ToTime = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {

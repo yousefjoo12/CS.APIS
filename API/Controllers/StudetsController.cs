@@ -103,11 +103,9 @@ namespace API.Controllers
                             Sub_Name = sub.Sub_Name,
                             Room_Num = r.Room_Num,
                             Dr_NameAr = d.Dr_NameAr,
-                            Dr_NameEn = d.Dr_NameEn,
-                            Day = l.LectureDate.DayOfWeek.ToString(),
-                            Date = l.LectureDate.ToString("yyyy-MM-dd"),
-                            StartData = l.LectureDate.ToString("HH:mm"),
-                            EndTime = l.LectureDate.AddMinutes(90).ToString("HH:mm")
+                            Day = l.day,
+                            StartData = l.FromTime,
+                            EndTime = l.ToTime
                         };
 
             var result = query.ToList();

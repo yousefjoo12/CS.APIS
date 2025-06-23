@@ -27,23 +27,24 @@ namespace API.Controllers
             _context = context;
         }
         [HttpGet("GetAllLecture")]   //Lecture
-        public async Task<ActionResult<IReadOnlyList<LectureDTO>>> GetAllSubjects()
+        public async Task<ActionResult<IReadOnlyList<LectureDTO>>> GetAllLecture()
         {
-            var result = await _context.Lecture 
-                         .Select(l => new
-                         {
-                             l.Lecture_Name,
-                             l.Subjects.Sub_Name,
-                             l.Subjects.Doctors.Dr_NameAr,
-                             l.Subjects.Doctors.Dr_NameEn,
-                             l.Subjects.Doctors.Faculty.Fac_Name,
-                             DayName = l.LectureDate.DayOfWeek.ToString(),
-                             Date = l.LectureDate.ToString("yyyy-MM-dd"),
-                             StartTime = l.LectureDate.ToString("HH:mm"),
-                             EndTime = l.LectureDate.AddMinutes(90).ToString("HH:mm"),
-                             l.Subjects.Rooms.Room_Num
-                         }).ToListAsync();
-            return Ok(result); //200
+            var lectures = from l in _context.Lecture
+                           join sub in _context.Subjects on l.Sub_ID equals sub.ID
+                           join d in _context.Doctors on sub.Dr_ID equals d.ID
+                           join f in _context.Faculty on d.Fac_ID equals f.ID
+                           where f.ID == 1
+                           select new
+                           {
+                               l.Lecture_Name,
+                               sub.Sub_Name,
+                               d.Dr_NameAr,
+                               f.Fac_Name,
+                               l.day,
+                               l.FromTime,
+                               l.ToTime
+                           };
+            return Ok(lectures); //200
         }
         [HttpPost("Add_OR_UpdateLecture")]
         public async Task<ActionResult<Lecture_S>> AddSubject(LectureDTO Lecture_S)
@@ -53,8 +54,9 @@ namespace API.Controllers
                 ID = Lecture_S.ID,
                 Lecture_Name = Lecture_S.Lecture_Name,
                 Sub_ID = Lecture_S.Sub_ID,
-                LectureDate = Lecture_S.LectureDate,
-                Degree = Lecture_S.Degree
+                day = Lecture_S.day,
+                FromTime = Lecture_S.FromTime,
+                ToTime = Lecture_S.ToTime
             };
             var GetLecture = await _unitOfWork.Repository<Lecture_S>().GetById(Lecture_S.ID);
             if (GetLecture != null)

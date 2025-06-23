@@ -71,14 +71,14 @@ namespace API.Controllers
                       {
                           x.d.Dr_NameAr,
                           x.s.Sub_Name,
-                          Day = x.l.LectureDate.DayOfWeek, // هذا لا يمكن ترجمته SQLياً
+                          Day = x.l.day, 
                           x.r.Room_Num
                       })
                       .Select(g => new
                       {
                           Dr_NameAr = g.Key.Dr_NameAr,
                           Sub_Name = g.Key.Sub_Name,
-                          Day = g.Key.Day.ToString(),  // يمكنك ترجمته للعربية لاحقاً إن أردت
+                          Day = g.Key.Day.ToString(),  
                           Room_Num = g.Key.Room_Num,
                           TotalStudents = g.Count()
                       }).ToList();

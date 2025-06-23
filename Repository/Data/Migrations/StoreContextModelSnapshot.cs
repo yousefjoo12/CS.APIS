@@ -165,17 +165,20 @@ namespace Repository.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int?>("Degree")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LectureDate")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("FromTime")
+                        .HasColumnType("time");
 
                     b.Property<string>("Lecture_Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Sub_ID")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("ToTime")
+                        .HasColumnType("time");
+
+                    b.Property<int>("day")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
