@@ -43,7 +43,7 @@ namespace Repository.Data.Migrations
                 columns: table => new
                 {
                     FingerID = table.Column<int>(type: "int", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -150,8 +150,6 @@ namespace Repository.Data.Migrations
                     St_Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FingerID = table.Column<int>(type: "int", nullable: true),
-                    Fac_Id = table.Column<int>(type: "int", nullable: false),
-                    FacYear_ID = table.Column<int>(type: "int", nullable: false),
                     FacYearSem_ID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -161,18 +159,6 @@ namespace Repository.Data.Migrations
                         name: "FK_Students_FacultyYearSemister_FacYearSem_ID",
                         column: x => x.FacYearSem_ID,
                         principalTable: "FacultyYearSemister",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Students_FacultyYear_FacYear_ID",
-                        column: x => x.FacYear_ID,
-                        principalTable: "FacultyYear",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Students_Faculty_Fac_Id",
-                        column: x => x.Fac_Id,
-                        principalTable: "Faculty",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -311,16 +297,6 @@ namespace Repository.Data.Migrations
                 name: "IX_Notification_FacYearSem_ID",
                 table: "Notification",
                 column: "FacYearSem_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Students_Fac_Id",
-                table: "Students",
-                column: "Fac_Id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Students_FacYear_ID",
-                table: "Students",
-                column: "FacYear_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_FacYearSem_ID",

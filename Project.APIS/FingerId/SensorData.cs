@@ -14,8 +14,8 @@ namespace Core.FingerId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int FingerID { get; set; }  
-        public DateTime Timestamp { get; set; }
+        public int FingerID { get; set; } 
+        public DateTime? Timestamp { get; set; }
 
     }
 }

@@ -27,16 +27,16 @@ VALUES
 -- إدخال بيانات في جدول Students
  INSERT INTO Students  
 VALUES 
-    ('S001', N'أحمد علي', 'Ahmed Ali', 'Ahmed_Ali.com', 'image1.jpg', '0123456789', NULL, 1, 1, 1),
-    ('S002', N'سارة محمد', 'Sara Mohamed', 'Sara_Mohamed.com', 'image2.jpg', '0987654321', NULL,  1, 1, 1),
-    ('S003', N'محمد سمير', 'Mohamed Samir', 'Mohamed_Samir.com', 'image3.jpg', '0111222333', NULL,  1, 1, 1),
-    ('S004', N'ليلى حسن', 'Laila Hassan', 'Laila_Hassan.com', 'image4.jpg', '0223344556', NULL,  1, 1, 1),
-    ('S005', N'كريم يوسف', 'Karim Youssef', 'Karim_Youssef.com', 'image5.jpg', '0334455667', NULL, 1, 1, 1),
-    ('S006', N'هدى عبد الله', 'Huda Abdullah', 'Huda_Abdullah.com', 'image6.jpg', '0445566778', NULL, 1, 1, 1),
-    ('S007', N'مازن إبراهيم', 'Mazen Ibrahim', 'Mazen_Ibrahim.com', 'image7.jpg', '0556677889', NULL, 1, 1, 1),
-    ('S008', N'ياسمين صلاح', 'Yasmin Salah', 'Yasmin_Salah.com', 'image8.jpg', '0667788990', NULL,  1, 1, 1),
-    ('S009', N'نور الدين محمود', 'Nour El Din Mahmoud', 'Nour_Mahmoud.com', 'image9.jpg', '0778899001', NULL, 1, 1, 1),
-    ('S010', N'رنا خالد', 'Rana Khaled', 'Rana_Khaled.com', 'image10.jpg', '0889900112', NULL, 1, 1, 1);
+    ('S001', N'أحمد علي', 'Ahmed Ali', 'Ahmed_Ali.com', 'image1.jpg', '0123456789', NULL,  1),
+    ('S002', N'سارة محمد', 'Sara Mohamed', 'Sara_Mohamed.com', 'image2.jpg', '0987654321', NULL,   1),
+    ('S003', N'محمد سمير', 'Mohamed Samir', 'Mohamed_Samir.com', 'image3.jpg', '0111222333', NULL,   1),
+    ('S004', N'ليلى حسن', 'Laila Hassan', 'Laila_Hassan.com', 'image4.jpg', '0223344556', NULL,   1),
+    ('S005', N'كريم يوسف', 'Karim Youssef', 'Karim_Youssef.com', 'image5.jpg', '0334455667', NULL,  1),
+    ('S006', N'هدى عبد الله', 'Huda Abdullah', 'Huda_Abdullah.com', 'image6.jpg', '0445566778', NULL,  1),
+    ('S007', N'مازن إبراهيم', 'Mazen Ibrahim', 'Mazen_Ibrahim.com', 'image7.jpg', '0556677889', NULL,  1),
+    ('S008', N'ياسمين صلاح', 'Yasmin Salah', 'Yasmin_Salah.com', 'image8.jpg', '0667788990', NULL,   1),
+    ('S009', N'نور الدين محمود', 'Nour El Din Mahmoud', 'Nour_Mahmoud.com', 'image9.jpg', '0778899001', NULL,  1),
+    ('S010', N'رنا خالد', 'Rana Khaled', 'Rana_Khaled.com', 'image10.jpg', '0889900112', NULL,  1);
 
 
 -- إدخال بيانات في جدول Doctors
