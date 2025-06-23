@@ -42,13 +42,12 @@ namespace Repository.Data.Migrations
                 name: "SensorData",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FingerID = table.Column<int>(type: "int", nullable: false),
                     Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SensorData", x => x.ID);
+                    table.PrimaryKey("PK_SensorData", x => x.FingerID);
                 });
 
             migrationBuilder.CreateTable(

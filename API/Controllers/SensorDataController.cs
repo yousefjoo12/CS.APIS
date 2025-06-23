@@ -27,7 +27,6 @@ namespace API.Controllers
         {
             var mappedData = new SensorData
             {
-                ID = sensorData.ID,
                 FingerID = sensorData.FingerID, 
                 Timestamp = sensorData.Timestamp 
             };
@@ -47,7 +46,6 @@ namespace API.Controllers
             {
                 var mappedData = new SensorDataDTOCustm
                 {
-                    ID = item.ID,
                     FingerID = item.FingerID 
                 };
                 result.Add(mappedData);
@@ -59,7 +57,7 @@ namespace API.Controllers
         public async Task<ActionResult<SensorDataDTO>> GetData(int id)
         {
             var data = await _storeContext.SensorData
-                                .Where(x => x.ID == id)
+                                .Where(x => x.FingerID == id)
                                 .OrderByDescending(x => x.Timestamp)
                                 .FirstOrDefaultAsync(); 
 
@@ -69,7 +67,7 @@ namespace API.Controllers
             
             var dto = new SensorDataDTO
             {
-                ID = data.ID,
+                FingerID = data.FingerID,
                 Timestamp = data.Timestamp 
             };
 
@@ -79,8 +77,8 @@ namespace API.Controllers
         public async Task<ActionResult<int>> GetLastId()
         {
             var lastId = await _storeContext.SensorData
-                                .OrderByDescending(x => x.ID)
-                                .Select(x => x.ID)
+                                .OrderByDescending(x => x.FingerID)
+                                .Select(x => x.FingerID)
                                 .FirstOrDefaultAsync(); 
 
             return Ok(lastId);
@@ -92,7 +90,7 @@ namespace API.Controllers
                                 .OrderByDescending(x => x.Timestamp) 
                                 .Select(x => new SensorDataDTO 
                                 {
-                                    ID = x.ID,
+                                    FingerID = x.FingerID,
                                     Timestamp = x.Timestamp 
                                 })
                                 .ToListAsync(); 

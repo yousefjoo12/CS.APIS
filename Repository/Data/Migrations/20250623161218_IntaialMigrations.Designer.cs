@@ -12,8 +12,8 @@ using Repository.Data;
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250621170050_SecondMigrations")]
-    partial class SecondMigrations
+    [Migration("20250623161218_IntaialMigrations")]
+    partial class IntaialMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -345,19 +345,13 @@ namespace Repository.Data.Migrations
 
             modelBuilder.Entity("Core.FingerId.SensorData", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
                     b.Property<int>("FingerID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ID");
+                    b.HasKey("FingerID");
 
                     b.ToTable("SensorData");
                 });

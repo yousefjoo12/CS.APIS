@@ -342,19 +342,13 @@ namespace Repository.Data.Migrations
 
             modelBuilder.Entity("Core.FingerId.SensorData", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
                     b.Property<int>("FingerID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ID");
+                    b.HasKey("FingerID");
 
                     b.ToTable("SensorData");
                 });
