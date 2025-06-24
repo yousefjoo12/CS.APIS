@@ -34,21 +34,44 @@ namespace API.Controllers
         [HttpPost("AddNotifications")]
         public async Task<ActionResult<Notification>> AddNotifications(NotificationDTO Notification)
         {
-            var mappedNotification = new Notification
+            Console.WriteLine($"🟢 Received DTO - Title: {Notification?.Title}, Massage: {Notification?.Massage}, FacYearSem_ID: {Notification?.FacYearSem_ID}");
+
+            try
             {
-                ID = Notification.ID,
-                Title = Notification.Title,
-                Massage = Notification.Massage,
-                FacYearSem_ID = Notification.FacYearSem_ID,
-            };
+                var semester = await _unitOfWork.Repository<FacultyYearSemister>().GetById(Notification.FacYearSem_ID);
+                if (semester is null)
+                {
+                    Console.WriteLine("❌ Semester not found");
+                    return BadRequest(new ApiResponse(400, "Semester not found"));
+                }
 
-            mappedNotification.ID = 0;
-            var data = await _unitOfWork.Repository<Notification>().AddAsync(mappedNotification);
-            if (data is null) return BadRequest(new ApiResponse(400));
-            await _unitOfWork.CompleteAsync();
-            return Ok(data);
+                var mappedNotification = new Notification
+                {
+                    Title = Notification.Title,
+                    Massage = Notification.Massage,
+                    FacYearSem_ID = Notification.FacYearSem_ID,
+                };
 
+                // 🧪 نختبر السطر هنا:
+                var data = await _unitOfWork.Repository<Notification>().AddAsync(mappedNotification);
 
+                if (data is null)
+                {
+                    Console.WriteLine("❌ AddAsync returned null");
+                    return BadRequest(new ApiResponse(400, "Failed to add notification"));
+                }
+
+                await _unitOfWork.CompleteAsync();
+                Console.WriteLine("✅ Notification added successfully");
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"🔥 Exception occurred: {ex.Message}");
+                return StatusCode(500, new ApiResponse(500, "Internal Server Error"));
+            }
+        
 
         }
         [HttpDelete("DeleteRoom")]

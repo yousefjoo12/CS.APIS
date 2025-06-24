@@ -34,11 +34,24 @@ namespace API.Helpers
              .ForMember(d => d.Students, o => o.MapFrom(s => s.Students.St_NameAr)).ReverseMap();
 
             CreateMap<Subjects, SubjectsDTO>()
-             .ForMember(d => d.Doctors, o => o.MapFrom(s => s.Doctors.Dr_NameAr))
-             .ForMember(d => d.FacultyYearSemister, o => o.MapFrom(s => s.FacultyYearSemister.Sem_Name)).ReverseMap(); 
-            CreateMap<Lecture_S, LectureDTO>() 
-             .ForMember(d => d.Subjects, o => o.MapFrom(s => s.Subjects.Sub_Name)).ReverseMap(); 
-             
-        }
+    .ForMember(d => d.Doctors, o => o.MapFrom(s => s.Doctors.Dr_NameAr))
+    .ForMember(d => d.FacultyYearSemister, o => o.MapFrom(s => s.FacultyYearSemister.Sem_Name))
+    .ForMember(d => d.Room_ID, o => o.MapFrom(s => s.Room_ID))
+    .ReverseMap();
+
+
+
+            CreateMap<Lecture_S, LectureDTO>()
+                .ForMember(dest => dest.Subjects, opt => opt.MapFrom(src => src.Subjects.Sub_Name))
+                .ForMember(dest => dest.Day, opt => opt.MapFrom(src => src.Day.ToString()))
+                .ForMember(dest => dest.FromTime, opt => opt.MapFrom(src => src.FromTime.ToString(@"hh\:mm")))
+                .ForMember(dest => dest.ToTime, opt => opt.MapFrom(src => src.ToTime.ToString(@"hh\:mm")))
+                .ReverseMap()
+                .ForMember(dest => dest.Day, opt => opt.MapFrom(src => Enum.Parse<Days>(src.Day)))
+                .ForMember(dest => dest.FromTime, opt => opt.MapFrom(src => TimeSpan.Parse(src.FromTime)))
+                .ForMember(dest => dest.ToTime, opt => opt.MapFrom(src => TimeSpan.Parse(src.ToTime)));
+        
+
+    }
     }
 }
