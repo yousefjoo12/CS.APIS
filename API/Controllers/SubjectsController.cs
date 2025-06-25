@@ -25,29 +25,27 @@ namespace API.Controllers
             _mapper = mapper;
             _context = context;
         }
-
-        [HttpGet("GetAllSubjects")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  
+        [HttpGet("GetAllSubjects")]   //Subjects
         public async Task<ActionResult<IReadOnlyList<SubjectsDTO>>> GetAllSubjects()
         {
             var query = _context.Subjects
-                .Include(s => s.FacultyYearSemister)
-                    .ThenInclude(fys => fys.FacultyYear)
-                        .ThenInclude(fy => fy.Faculty)
-                .Include(s => s.Doctors)
-                .Select(s => new
-                {
-                    SubCode = s.Sub_Code,
-                    SubName = s.Sub_Name,
-                    Doctor = s.Doctors.Dr_NameAr,
-                    Faculty = s.FacultyYearSemister.FacultyYear.Faculty.Fac_Name,
-                    Year = s.FacultyYearSemister.FacultyYear.Year,
-                    Semister = s.FacultyYearSemister.Sem_Name
-                })
-                .ToList();
-
-            return Ok(query);
+                                .Include(s => s.FacultyYearSemister)
+                                .ThenInclude(fys => fys.FacultyYear)
+                                .ThenInclude(fy => fy.Faculty)
+                                .Include(s => s.Doctors)
+                                .Select(s => new
+                                {
+                                    SubCode = s.Sub_Code,
+                                    SubName = s.Sub_Name,
+                                    Doctor = s.Doctors.Dr_NameAr,
+                                    Faculty = s.FacultyYearSemister.FacultyYear.Faculty.Fac_Name,
+                                    Year = s.FacultyYearSemister.FacultyYear.Year,
+                                    Semister = s.FacultyYearSemister.Sem_Name
+                                })
+                                .ToList();
+            return Ok(query); //200
         }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<Subjects>> GetSubject(int id)
         {
@@ -56,39 +54,22 @@ namespace API.Controllers
                 var Subject = await _unitOfWork.Repository<Subjects>().GetById(id);
                 if (Subject == null)
                 {
-                    return NotFound(new ApiResponse(404));
+                    return NotFound(new ApiResponse(404));// 404
                 }
                 var data = _mapper.Map<Subjects, SubjectsDTO>(Subject);
-                return Ok(data);
+                return Ok(data); // 200
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message);// 400
             }
+
         }
 
         [HttpPost("Add_OR_UpdateSubject")]
-        public async Task<ActionResult<Subjects>> AddSubject([FromBody] SubjectsDTO Subjects)
+        public async Task<ActionResult<Subjects>> AddSubject(SubjectsDTO Subjects)
         {
-            if (!ModelState.IsValid)
-            {
-                var allErrors = ModelState
-                    .Where(x => x.Value.Errors.Count > 0)
-                    .Select(x => new
-                    {
-                        Field = x.Key,
-                        Errors = x.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                    });
-
-                return BadRequest(new
-                {
-                    statusCode = 400,
-                    message = "Validation Failed",
-                    errors = allErrors
-                });
-            }
-
-            Console.WriteLine($"📥 Incoming Subject: {Subjects.Sub_Name} / Dr_ID: {Subjects.Dr_ID} / Sem_ID: {Subjects.FacYearSem_ID} / Room_ID: {Subjects.Room_ID}");
+            //var mappedSubjects = _mapper.Map<SubjectsDTO, Subjects>(Subjects);  
 
             var mappedSubjects = new Subjects
             {
@@ -96,42 +77,26 @@ namespace API.Controllers
                 Sub_Code = Subjects.Sub_Code,
                 Sub_Name = Subjects.Sub_Name,
                 Dr_ID = Subjects.Dr_ID,
-                FacYearSem_ID = Subjects.FacYearSem_ID,
-                Room_ID = Subjects.Room_ID 
+                FacYearSem_ID = Subjects.FacYearSem_ID
             };
-
-            try
+            if (mappedSubjects.ID != 0)
             {
-                if (mappedSubjects.ID != 0)
-                {
-                    var data = await _unitOfWork.Repository<Subjects>().UpdateAsync(mappedSubjects);
-                    if (data is null) return BadRequest(new ApiResponse(400));
-                    await _unitOfWork.CompleteAsync();
-                    return Ok(data);
-                }
-                else
-                {
-                    mappedSubjects.ID = 0;
-                    var data = await _unitOfWork.Repository<Subjects>().AddAsync(mappedSubjects);
-                    if (data is null) return BadRequest(new ApiResponse(400));
-                    await _unitOfWork.CompleteAsync();
-                    return Ok(data);
-                }
+                var data = await _unitOfWork.Repository<Subjects>().UpdateAsync(mappedSubjects);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
             }
-            catch (Exception ex)
+            else
             {
-                var innerMessage = ex.InnerException?.Message ?? ex.Message;
-                Console.WriteLine("❌ Save Failed: " + innerMessage);
-
-                return StatusCode(500, new
-                {
-                    statusCode = 500,
-                    message = "An error occurred while saving the entity changes. See the inner exception for details.",
-                    details = innerMessage
-                });
+                mappedSubjects.ID = 0;
+                var data = await _unitOfWork.Repository<Subjects>().AddAsync(mappedSubjects);
+                if (data is null) return BadRequest(new ApiResponse(400));
+                await _unitOfWork.CompleteAsync();
+                return Ok(data);
             }
+
+
         }
-
         [HttpDelete("DeleteSubject")]
         public async Task DeleteSubjects(int id)
         {
@@ -143,11 +108,11 @@ namespace API.Controllers
             }
             else
             {
-                NotFound(new ApiResponse(404));
+                NotFound(new ApiResponse(404));// 404
             }
-        }
 
-        [HttpGet("GetSubjectsCount")]
+        }
+        [HttpGet("GetSubjectsCount")] 
         public async Task<ActionResult<int>> GetSubjectCount()
         {
             try
@@ -157,8 +122,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new ApiResponse(500, $"An error occurred while retrieving subject count: {ex.Message}"));
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse(500, $"An error occurred while retrieving student count: {ex.Message}"));
             }
         }
     }
