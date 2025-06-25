@@ -83,6 +83,5 @@ namespace API.Controllers
 
             return Ok(orderedResult); //200
         }
-
     }
 }
