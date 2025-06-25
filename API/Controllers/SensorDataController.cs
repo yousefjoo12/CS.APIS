@@ -23,12 +23,12 @@ namespace API.Controllers
             _unitOfWork = unitOfWork;
         }
         [HttpPost]
-        public async Task<ActionResult<SensorData>> PostData(SensorDataDTO sensorData)
+        [HttpGet("EnRoll")] 
+        public async Task<ActionResult<SensorData>> EnRoll(int ID)
         {
             var mappedData = new SensorData
             {
-                FingerID = sensorData.FingerID, 
-                Timestamp = sensorData.Timestamp 
+                FingerID = ID
             };
 
             _storeContext.SensorData.Add(mappedData);
@@ -36,44 +36,7 @@ namespace API.Controllers
 
             return Ok(mappedData);
         }
-        [HttpGet("GetAllByFingerID")]
-        public async Task<ActionResult<SensorDataDTOCustm>> GetAllByFingerID(int id)
-        {
-            var data = _storeContext.SensorData.Where(x => x.FingerID == id);
-            var result = new List<SensorDataDTOCustm>();
-
-            foreach (var item in data)
-            {
-                var mappedData = new SensorDataDTOCustm
-                {
-                    FingerID = item.FingerID 
-                };
-                result.Add(mappedData);
-            }
-
-            return Ok(result);
-        }
-        [HttpGet("{id}")] 
-        public async Task<ActionResult<SensorDataDTO>> GetData(int id)
-        {
-            var data = await _storeContext.SensorData
-                                .Where(x => x.FingerID == id)
-                                .OrderByDescending(x => x.Timestamp)
-                                .FirstOrDefaultAsync(); 
-
-            if (data == null)
-                return NotFound(); 
-
-            
-            var dto = new SensorDataDTO
-            {
-                FingerID = data.FingerID,
-                Timestamp = data.Timestamp 
-            };
-
-            return Ok(dto);
-        }
-        [HttpGet("last-id")]
+        [HttpGet("Last-id")]
         public async Task<ActionResult<int>> GetLastId()
         {
             var lastId = await _storeContext.SensorData
@@ -97,18 +60,12 @@ namespace API.Controllers
 
             return Ok(dataList);
         }
-        [HttpPost("clear")]
+        [HttpPost("Clear")]
         public async Task<IActionResult> ClearData()
         {
             _storeContext.SensorData.RemoveRange(_storeContext.SensorData);
             await _storeContext.SaveChangesAsync();
             return Ok();
         } 
-        [HttpGet("count")]
-        public async Task<ActionResult<int>> GetSensorDataCount() 
-        {
-            var count = await _storeContext.SensorData.CountAsync();
-            return Ok(count);
-        }
     }
 }

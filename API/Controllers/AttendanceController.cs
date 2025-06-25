@@ -83,5 +83,36 @@ namespace API.Controllers
 
             return Ok(orderedResult); //200
         }
+
+        [HttpGet("AttendanceStudentFinger")]
+        public async Task<ActionResult<Attendance_T>> Attendance(int Finger_ID,int Lecture_Id, DateTime NowDate)
+        { 
+            try
+            {
+                var Studet = await _unitOfWork.Repository<Students>().GetByIdFinger(Finger_ID);
+                if (Studet == null)
+                {
+                    return NotFound(new ApiResponse(404));// 404
+                }
+                var St_ID = Studet.ID;
+                var mappedAttendance = new Attendance_T
+                {
+                    ID = 0,
+                    LectureID = Lecture_Id,
+                    St_ID = St_ID,
+                    Timestamp = NowDate,
+                    Atten =  true, 
+                };
+                var data = await _unitOfWork.Repository<Attendance_T>().AddAsync(mappedAttendance);
+                await _unitOfWork.CompleteAsync(); 
+                return Ok(data); // 200
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);// 400
+            }
+
+        }
+
     }
 }
