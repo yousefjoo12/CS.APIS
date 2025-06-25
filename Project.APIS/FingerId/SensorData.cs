@@ -17,5 +17,7 @@ namespace Core.FingerId
         public int FingerID { get; set; } 
         public DateTime? Timestamp { get; set; }
 
+
+
     }
 }
