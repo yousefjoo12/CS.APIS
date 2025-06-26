@@ -112,7 +112,7 @@ namespace API.Controllers
                         Timestamp = Data,
                         Atten = true,
                     };
-                    var AttendanceBefor = _context.Attendance.Where(x => x.LectureID == mappedAttendance.LectureID && x.St_ID == mappedAttendance.St_ID && x.);
+                    var AttendanceBefor = _context.Attendance.Where(x => x.LectureID == mappedAttendance.LectureID && x.St_ID == mappedAttendance.St_ID );
 
                     if (AttendanceBefor is not null)
                     {
