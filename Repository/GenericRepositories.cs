@@ -32,7 +32,7 @@ namespace Repository
             }
             if (typeof(T) == typeof(Subjects))
             {
-                return (IReadOnlyList<T>)await _dbcontext.Set<Subjects>().Include(p => p.FacultyYearSemister).Include(p => p.Doctors).ToListAsync();
+                return (IReadOnlyList<T>)await _dbcontext.Set<Subjects>().Include(p => p.FacultyYearSemister).Include(p => p.Doctors).Include(p => p.Rooms).ToListAsync();
             }
             if (typeof(T) == typeof(Lecture_S))
             {
@@ -73,7 +73,7 @@ namespace Repository
             }
             if (typeof(T) == typeof(Subjects))
             {
-                return await _dbcontext.Set<Subjects>().Where(p => p.ID == id).Include(p => p.FacultyYearSemister).Include(p => p.Doctors).FirstOrDefaultAsync() as T;
+                return await _dbcontext.Set<Subjects>().Where(p => p.ID == id).Include(p => p.FacultyYearSemister).Include(p => p.Doctors).Include(p => p.Rooms).FirstOrDefaultAsync() as T;
             }
             if (typeof(T) == typeof(Lecture_S))
             {

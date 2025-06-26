@@ -11,5 +11,7 @@ namespace API.DTOs
         public string Doctors { get; set; }
         public int FacYearSem_ID { get; set; }
         public string FacultyYearSemister { get; set; }
+        public int Room_ID { get; set; }
+        public Rooms Rooms { get; set; }
     }
 }

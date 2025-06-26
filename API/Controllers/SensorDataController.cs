@@ -36,6 +36,15 @@ namespace API.Controllers
 
             return Ok(mappedData);
         }
+        [HttpGet("GetById")]
+        public async Task<ActionResult<int>> GetById()
+        {
+            var lastId = await _storeContext.SensorData
+                                .Select(x => x.ID)
+                                .FirstOrDefaultAsync();
+
+            return Ok(lastId);
+        }
         [HttpGet("Last-id")]
         public async Task<ActionResult<int>> GetLastId()
         {
@@ -54,7 +63,7 @@ namespace API.Controllers
             return Ok();
         }
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IReadOnlyList<SensorData>>> GetAllStudets()
+        public async Task<ActionResult<IReadOnlyList<SensorData>>> GetAll()
         {
             var query = _storeContext.SensorData.Select(x => x.ID);
             return Ok(query); //200

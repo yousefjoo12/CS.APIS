@@ -27,25 +27,31 @@ namespace API.Controllers
         }
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  
         [HttpGet("GetAllSubjects")]   //Subjects
-        public async Task<ActionResult<IReadOnlyList<SubjectsDTO>>> GetAllSubjects()
+        public async Task<ActionResult<IReadOnlyList<object>>> GetAllSubjects()
         {
-            var query = _context.Subjects
-                                .Include(s => s.FacultyYearSemister)
-                                .ThenInclude(fys => fys.FacultyYear)
-                                .ThenInclude(fy => fy.Faculty)
-                                .Include(s => s.Doctors)
-                                .Select(s => new
-                                {
-                                    SubCode = s.Sub_Code,
-                                    SubName = s.Sub_Name,
-                                    Doctor = s.Doctors.Dr_NameAr,
-                                    Faculty = s.FacultyYearSemister.FacultyYear.Faculty.Fac_Name,
-                                    Year = s.FacultyYearSemister.FacultyYear.Year,
-                                    Semister = s.FacultyYearSemister.Sem_Name
-                                })
-                                .ToList();
-            return Ok(query); //200
+            var query = await _context.Subjects
+                .Include(s => s.FacultyYearSemister)
+                    .ThenInclude(fys => fys.FacultyYear)
+                        .ThenInclude(fy => fy.Faculty)
+                .Include(s => s.Doctors)
+                .Select(s => new
+                {
+                    id = s.ID,
+                    subCode = s.Sub_Code,
+                    subName = s.Sub_Name,
+                    doctor = s.Doctors.Dr_NameAr,
+                    faculty = s.FacultyYearSemister.FacultyYear.Faculty.Fac_Name,
+                    year = s.FacultyYearSemister.FacultyYear.Year,
+                    semister = s.FacultyYearSemister.Sem_Name,
+                    facYearSem_ID = s.FacYearSem_ID,
+                    room_ID = s.Room_ID,
+                    dr_ID = s.Dr_ID
+                })
+                .ToListAsync();
+
+            return Ok(query);
         }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Subjects>> GetSubject(int id)
         {
@@ -67,33 +73,36 @@ namespace API.Controllers
         }
 
         [HttpPost("Add_OR_UpdateSubject")]
-        public async Task<ActionResult<Subjects>> AddSubject(SubjectsDTO Subjects)
+        public async Task<ActionResult<Subjects>> AddSubject([FromBody] SubjectsDTO dto)
         {
-            //var mappedSubjects = _mapper.Map<SubjectsDTO, Subjects>(Subjects);  
+            if (!ModelState.IsValid)
+                return BadRequest(new ValidationProblemDetails(ModelState));
 
-            var mappedSubjects = new Subjects
+            var subject = new Subjects
             {
-                ID = Subjects.ID,
-                Sub_Code = Subjects.Sub_Code,
-                Sub_Name = Subjects.Sub_Name,
-                Dr_ID = Subjects.Dr_ID,
-                FacYearSem_ID = Subjects.FacYearSem_ID
+                ID = dto.ID,
+                Sub_Code = dto.Sub_Code,
+                Sub_Name = dto.Sub_Name,
+                Dr_ID = dto.Dr_ID,
+                FacYearSem_ID = dto.FacYearSem_ID,
+                Room_ID = dto.Room_ID
             };
-            if (mappedSubjects.ID != 0)
+
+            if (dto.ID != 0)
             {
-                var data = await _unitOfWork.Repository<Subjects>().UpdateAsync(mappedSubjects);
-                if (data is null) return BadRequest(new ApiResponse(400));
+                var updated = await _unitOfWork.Repository<Subjects>().UpdateAsync(subject);
+                if (updated is null) return BadRequest(new ApiResponse(400));
                 await _unitOfWork.CompleteAsync();
-                return Ok(data);
+                return Ok(updated);
             }
             else
             {
-                mappedSubjects.ID = 0;
-                var data = await _unitOfWork.Repository<Subjects>().AddAsync(mappedSubjects);
-                if (data is null) return BadRequest(new ApiResponse(400));
+                var added = await _unitOfWork.Repository<Subjects>().AddAsync(subject);
+                if (added is null) return BadRequest(new ApiResponse(400));
                 await _unitOfWork.CompleteAsync();
-                return Ok(data);
+                return Ok(added);
             }
+
 
 
         }
@@ -112,7 +121,7 @@ namespace API.Controllers
             }
 
         }
-        [HttpGet("GetSubjectsCount")] 
+        [HttpGet("GetSubjectsCount")]
         public async Task<ActionResult<int>> GetSubjectCount()
         {
             try

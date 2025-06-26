@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using API.DTOs;
+using Core.Entities;
 using Core.FingerId;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -36,6 +37,7 @@ namespace Repository.Data
         public DbSet<Subjects> Subjects { get; set; }  
         public DbSet<SensorData> SensorData { get; set; }  
         public DbSet<Notification> Notification { get; set; }
+        public DbSet<LectureResults> LectureResults { get; set; }
         public class SensorDataConfiguration : IEntityTypeConfiguration<SensorData>
         {
             public void Configure(EntityTypeBuilder<SensorData> builder)
@@ -45,6 +47,13 @@ namespace Repository.Data
                     .ValueGeneratedNever();
             }
         }
-
+        public class LectureResultsConfiguration : IEntityTypeConfiguration<LectureResults>
+        {
+            public void Configure(EntityTypeBuilder<LectureResults> builder)
+            {
+                builder.Property(b => b.ID) 
+                    .ValueGeneratedNever();
+            }
+        }
     }
 }
