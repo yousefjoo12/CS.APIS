@@ -127,7 +127,7 @@ namespace API.Controllers
                 AND @CurrentTime BETWEEN l.FromTime AND l.ToTime", parameters)
                .Select(x => x.ID )
                .ToListAsync();
-            var firstLectureId = Query.First();
+            var firstLectureId = Query.FirstOrDefault();
             var mappedAttendance = new Attendance_T
             {
                 ID = 0,
