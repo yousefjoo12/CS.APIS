@@ -22,8 +22,7 @@ namespace API.Controllers
             _storeContext = storeContext;
             _unitOfWork = unitOfWork;
         }
-        [HttpPost]
-        [HttpGet("EnRoll")] 
+        [HttpPost("EnRoll")] 
         public async Task<ActionResult<SensorData>> EnRoll(int ID)
         {
             var mappedData = new SensorData
@@ -45,27 +44,21 @@ namespace API.Controllers
                                 .FirstOrDefaultAsync(); 
 
             return Ok(lastId);
-        }
-        [HttpGet]
-        public async Task<ActionResult<List<SensorDataDTO>>> GetAllData()
-        {
-            var dataList = await _storeContext.SensorData
-                                .OrderByDescending(x => x.Timestamp) 
-                                .Select(x => new SensorDataDTO 
-                                {
-                                    FingerID = x.FingerID,
-                                    Timestamp = x.Timestamp 
-                                })
-                                .ToListAsync(); 
-
-            return Ok(dataList);
-        }
+        } 
         [HttpPost("Clear")]
         public async Task<IActionResult> ClearData()
         {
             _storeContext.SensorData.RemoveRange(_storeContext.SensorData);
             await _storeContext.SaveChangesAsync();
             return Ok();
-        } 
+        }
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<IReadOnlyList<SensorData>>> GetAllStudets()
+        {
+            var query = _storeContext.SensorData.Select(x => x.FingerID);
+            return Ok(query); //200
+
+        }
+
     }
 }
