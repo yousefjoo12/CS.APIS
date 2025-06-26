@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 namespace Core.FingerId
 {
     public class SensorData  : BaseEntity
-    {  
+    {
+        public int ID { get; set; }
         public string? Tamplate { get; set; }
       
     }

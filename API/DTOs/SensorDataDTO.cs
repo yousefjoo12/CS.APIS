@@ -6,7 +6,7 @@ namespace API.DTOs
     { 
         public int FingerID { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public DateTime? Timestamp { get; set; }
+        public string? Tamplate { get; set; }
 
     }
 }

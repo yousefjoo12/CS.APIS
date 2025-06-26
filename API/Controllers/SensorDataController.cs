@@ -22,12 +22,13 @@ namespace API.Controllers
             _storeContext = storeContext;
             _unitOfWork = unitOfWork;
         }
-        [HttpPost("EnRoll")] 
-        public async Task<ActionResult<SensorData>> EnRoll(int ID)
+        [HttpPost("EnRoll")]
+        public async Task<ActionResult<SensorData>> EnRoll([FromBody] SensorDataDTO model)
         {
             var mappedData = new SensorData
             {
-                ID = ID
+                ID = model.FingerID,
+                Tamplate = model.Tamplate
             };
 
             _storeContext.SensorData.Add(mappedData);
