@@ -10,14 +10,10 @@ using System.Threading.Tasks;
 
 namespace Core.FingerId
 {
-    public class SensorData  
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int FingerID { get; set; } 
-        public DateTime? Timestamp { get; set; }
-
-
-
+    public class SensorData  : BaseEntity
+    {  
+        public string? Tamplate { get; set; }
+      
     }
+
 }

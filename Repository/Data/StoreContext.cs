@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Core.Entities;
+using Core.FingerId;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Core.Entities;
-using Core.FingerId;
 
 namespace Repository.Data
 {
@@ -34,7 +35,16 @@ namespace Repository.Data
         public DbSet<Studets_Subject> Studets_Subject { get; set; }  
         public DbSet<Subjects> Subjects { get; set; }  
         public DbSet<SensorData> SensorData { get; set; }  
-        public DbSet<Notification> Notification { get; set; }  
+        public DbSet<Notification> Notification { get; set; }
+        public class SensorDataConfiguration : IEntityTypeConfiguration<SensorData>
+        {
+            public void Configure(EntityTypeBuilder<SensorData> builder)
+            {
+                builder.Property(b => b.ID)
+                    .HasColumnName("FingerID")
+                    .ValueGeneratedNever();
+            }
+        }
 
     }
 }

@@ -27,7 +27,7 @@ namespace API.Controllers
         {
             var mappedData = new SensorData
             {
-                FingerID = ID
+                ID = ID
             };
 
             _storeContext.SensorData.Add(mappedData);
@@ -39,8 +39,8 @@ namespace API.Controllers
         public async Task<ActionResult<int>> GetLastId()
         {
             var lastId = await _storeContext.SensorData
-                                .OrderByDescending(x => x.FingerID)
-                                .Select(x => x.FingerID)
+                                .OrderByDescending(x => x.ID)
+                                .Select(x => x.ID)
                                 .FirstOrDefaultAsync(); 
 
             return Ok(lastId);
@@ -55,7 +55,7 @@ namespace API.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IReadOnlyList<SensorData>>> GetAllStudets()
         {
-            var query = _storeContext.SensorData.Select(x => x.FingerID);
+            var query = _storeContext.SensorData.Select(x => x.ID);
             return Ok(query); //200
 
         }
