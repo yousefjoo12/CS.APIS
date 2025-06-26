@@ -1,11 +1,11 @@
 ﻿-- إدخال بيانات في جدول Faculty
 INSERT INTO Faculty 
-VALUES 
+VALUES  
     ('CS', 'Computer Science'),
     ('ENG', 'Engineering');
 
 -- إدخال بيانات في جدول FacultyYear
-INSERT INTO FacultyYear  
+INSERT INTO FacultyYear    
 VALUES
     ('2025',1),
     ('2026',1),
@@ -143,3 +143,5 @@ VALUES
 (2, 1, '2025-06-01 00:00:00.0000000', 1),
 (3, 1, '2025-05-26 00:00:00.0000000', 1),
 (3, 1, '2025-06-02 00:00:00.0000000', 1);
+
+ 
