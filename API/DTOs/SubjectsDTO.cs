@@ -8,10 +8,9 @@ namespace API.DTOs
         public string Sub_Code { get; set; } 
         public string Sub_Name { get; set; }
         public int Dr_ID { get; set; }
-        public string Doctors { get; set; }
         public int FacYearSem_ID { get; set; }
-        public string FacultyYearSemister { get; set; }
+        public string? FacultyYearSemister { get; set; }
+        public string? Doctors { get; set; }
         public int Room_ID { get; set; }
-        public Rooms Rooms { get; set; }
     }
 }
