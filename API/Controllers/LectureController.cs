@@ -2,15 +2,12 @@
 using AutoMapper;
 using Core;
 using Core.Entities;
+using Core.Enums;
 using Core.Repositories.Contract;
-using Core.Specifications.SubjectsSpecifications;
-using Core.Specifications.SubjectsSpecParamsSpecifications;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project.APIS.Erorrs;
 using Repository.Data;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Controllers
 {
@@ -26,7 +23,8 @@ namespace API.Controllers
             _mapper = mapper;
             _context = context;
         }
-        [HttpGet("GetAllLecture")]   //Lecture
+
+        [HttpGet("GetAllLecture")]
         public async Task<ActionResult<IReadOnlyList<LectureDTO>>> GetAllLecture()
         {
             var lectures = from l in _context.Lecture
@@ -34,62 +32,76 @@ namespace API.Controllers
                            join d in _context.Doctors on sub.Dr_ID equals d.ID
                            join f in _context.Faculty on d.Fac_ID equals f.ID
                            where f.ID == 1
-                           select new
+                           select new LectureDTO
                            {
-                               l.Lecture_Name,
-                               sub.Sub_Name,
-                               d.Dr_NameAr,
-                               f.Fac_Name,
-                               l.day,
-                               l.FromTime,
-                               l.ToTime
+                               Id = l.ID,
+                               Sub_ID = sub.ID,
+                               Subjects = sub.Sub_Name,
+                               Day = (int)l.day,
+                               FromTime = l.FromTime.ToString(@"hh\:mm\:ss"),
+                               ToTime = l.ToTime.ToString(@"hh\:mm\:ss")
                            };
-            return Ok(lectures); //200
+
+            return Ok(await lectures.ToListAsync());
         }
+
         [HttpPost("Add_OR_UpdateLecture")]
-        public async Task<ActionResult<Lecture_S>> AddSubject(LectureDTO Lecture_S)
+        public async Task<ActionResult<Lecture_S>> AddSubject(LectureDTO dto)
         {
-            var mappedLecture = new Lecture_S
+            try
             {
-                ID = Lecture_S.ID,
-                Lecture_Name = Lecture_S.Lecture_Name,
-                Sub_ID = Lecture_S.Sub_ID,
-                day = Lecture_S.day,
-                FromTime = Lecture_S.FromTime,
-                ToTime = Lecture_S.ToTime
-            };
-            var GetLecture = await _unitOfWork.Repository<Lecture_S>().GetById(Lecture_S.ID);
-            if (GetLecture != null)
-            {
-                var data = await _unitOfWork.Repository<Lecture_S>().UpdateAsync(mappedLecture);
-                if (data is null) return BadRequest(new ApiResponse(400));
-                await _unitOfWork.CompleteAsync();
-                return Ok(data);
-            }
-            else
-            {
-                mappedLecture.ID = 0;
-                var data = await _unitOfWork.Repository<Lecture_S>().AddAsync(mappedLecture);
-                if (data is null) return BadRequest(new ApiResponse(400));
-                await _unitOfWork.CompleteAsync();
-                return Ok(data);
-            }
+                if (dto.Sub_ID == 0)
+                    return BadRequest(new ApiResponse(400, "Subject ID cannot be 0"));
 
+                var lectureEntity = new Lecture_S
+                {
+                    ID = dto.Id,
+                    Sub_ID = dto.Sub_ID,
+                    day = (Days)dto.Day,
+                    FromTime = TimeSpan.Parse(dto.FromTime),
+                    ToTime = TimeSpan.Parse(dto.ToTime)
+                };
+
+                if (dto.Id != 0)
+                {
+                    var existing = await _unitOfWork.Repository<Lecture_S>().GetById(dto.Id);
+                    if (existing == null) return NotFound(new ApiResponse(404, "Lecture not found"));
+
+                    // Manual update
+                    existing.Sub_ID = lectureEntity.Sub_ID;
+                    existing.day = lectureEntity.day;
+                    existing.FromTime = lectureEntity.FromTime;
+                    existing.ToTime = lectureEntity.ToTime;
+
+                    await _unitOfWork.CompleteAsync();
+                    return Ok(existing);
+                }
+                else
+                {
+                    var added = await _unitOfWork.Repository<Lecture_S>().AddAsync(lectureEntity);
+                    await _unitOfWork.CompleteAsync();
+                    return Ok(added);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "Failed to save lecture",
+                    error = ex.InnerException?.Message ?? ex.Message
+                });
+            }
         }
-        [HttpDelete("DeleteLecture")]
-        public async Task DeleteLecture_S(int id)
-        {
-            var Subject = await _unitOfWork.Repository<Lecture_S>().GetById(id);
-            if (Subject is not null)
-            {
-                _unitOfWork.Repository<Lecture_S>().Delete(Subject);
-                await _unitOfWork.CompleteAsync();
-            }
-            else
-            {
-                NotFound(new ApiResponse(404));// 404
-            }
 
+        [HttpDelete("DeleteLecture")]
+        public async Task<IActionResult> DeleteLecture_S(int id)
+        {
+            var lecture = await _unitOfWork.Repository<Lecture_S>().GetById(id);
+            if (lecture == null) return NotFound(new ApiResponse(404));
+
+            _unitOfWork.Repository<Lecture_S>().Delete(lecture);
+            await _unitOfWork.CompleteAsync();
+            return Ok();
         }
     }
 }
