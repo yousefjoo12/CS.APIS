@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Project.APIS.Erorrs;
 using Repository.Data;
 using System.Globalization;
+using System.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace API.Controllers
@@ -168,19 +169,37 @@ namespace API.Controllers
 
         }
         [HttpPost("AddAllSubjectForOneStudents")]
-        public async Task<IActionResult> AddAllSubjectForOneStudents()
+        public async Task<IActionResult> AddAllSubjectForOneStudents(int semesterId)
         {
-            var studentIds = await context.Students.Select(x => x.ID).ToListAsync();
-            var subjectIds = await context.Subjects.Select(x => x.ID).ToListAsync();
+            
+            var studentIds = await context.Students
+                .Where(x => x.FacYearSem_ID == semesterId)
+                .Select(x => x.ID)
+                .ToListAsync();
 
+            if (!studentIds.Any())
+            {
+                return BadRequest(new { Message = "No students found for the specified semester." });
+            }
+             
+            var subjectIds = await context.Subjects
+                .Where(x => x.FacYearSem_ID == semesterId)  
+                .Select(x => x.ID)
+                .ToListAsync();
+
+            if (!subjectIds.Any())
+            {
+                return BadRequest(new { Message = "No subjects found for the specified semester." });
+            }
+
+            // 3. جلب العلاقات الموجودة مسبقًا (فقط للطلاب والمواد المحددة)
             var existingMappings = await context.Studets_Subject
+                .Where(x => studentIds.Contains(x.St_ID) && subjectIds.Contains(x.Sub_ID))
                 .Select(x => new { x.St_ID, x.Sub_ID })
                 .ToListAsync();
 
-            var existingSet = new HashSet<(int, int)>(
-                existingMappings.Select(x => (x.St_ID, x.Sub_ID))
-            );
-
+            var existingSet = new HashSet<(int, int)>(existingMappings.Select(x => (x.St_ID, x.Sub_ID)));
+             
             var allMappings = new List<Studets_Subject>();
 
             foreach (var studentId in studentIds)
@@ -197,13 +216,13 @@ namespace API.Controllers
                     }
                 }
             }
-
+             
             await _unitOfWork.Repository<Studets_Subject>().AddRangeAsync(allMappings);
             await _unitOfWork.CompleteAsync();
 
             return Ok(new
             {
-                Message = $"Added {allMappings.Count} new student-subject mappings."
+                Message = $"Added {allMappings.Count} new student-subject mappings for semester {semesterId}."
             });
         }
 
