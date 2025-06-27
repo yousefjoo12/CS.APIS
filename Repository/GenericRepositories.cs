@@ -157,6 +157,9 @@ namespace Repository
             return rowsAffected;
         }
 
-        
+        public async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            await _dbcontext.Set<T>().AddRangeAsync(entities);
+        }
     }
 }

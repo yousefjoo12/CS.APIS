@@ -30,9 +30,7 @@ namespace API.Helpers
             CreateMap<FacultyYearSemister, FacultyYearSemisterDTO>()
                  .ForMember(d => d.FacultyYear, o => o.MapFrom(s => s.FacultyYear.Year)).ReverseMap();
 
-            CreateMap<Studets_Subject, Studets_RoomsDTO>() 
-             .ForMember(d => d.Students, o => o.MapFrom(s => s.Students.St_NameAr)).ReverseMap();
-
+           
             CreateMap<Subjects, SubjectsDTO>()
              .ForMember(d => d.Doctors, o => o.MapFrom(s => s.Doctors.Dr_NameAr))
              .ForMember(d => d.FacultyYearSemister, o => o.MapFrom(s => s.FacultyYearSemister.Sem_Name)).ReverseMap(); 

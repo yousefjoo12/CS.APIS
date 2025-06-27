@@ -21,6 +21,6 @@ namespace Core.Repositories.Contract
         Task<T>UpdateAsync(T entity);
         void Delete(T entity);
         Task<int> UpdateFingerAsync(int lectureId, int studentId, DateTime date);
-
+        Task AddRangeAsync(IEnumerable<T> entities);
     }
 }

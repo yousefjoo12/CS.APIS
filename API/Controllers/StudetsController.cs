@@ -167,6 +167,48 @@ namespace API.Controllers
 
 
         }
+        [HttpPost("AddAllSubjectForOneStudents")]
+        public async Task<IActionResult> AddAllSubjectForOneStudents()
+        {
+            var studentIds = await context.Students.Select(x => x.ID).ToListAsync();
+            var subjectIds = await context.Subjects.Select(x => x.ID).ToListAsync();
+
+            var existingMappings = await context.Studets_Subject
+                .Select(x => new { x.St_ID, x.Sub_ID })
+                .ToListAsync();
+
+            var existingSet = new HashSet<(int, int)>(
+                existingMappings.Select(x => (x.St_ID, x.Sub_ID))
+            );
+
+            var allMappings = new List<Studets_Subject>();
+
+            foreach (var studentId in studentIds)
+            {
+                foreach (var subjectId in subjectIds)
+                {
+                    if (!existingSet.Contains((studentId, subjectId)))
+                    {
+                        allMappings.Add(new Studets_Subject
+                        {
+                            St_ID = studentId,
+                            Sub_ID = subjectId
+                        });
+                    }
+                }
+            }
+
+            await _unitOfWork.Repository<Studets_Subject>().AddRangeAsync(allMappings);
+            await _unitOfWork.CompleteAsync();
+
+            return Ok(new
+            {
+                Message = $"Added {allMappings.Count} new student-subject mappings."
+            });
+        }
+
+
+
         [HttpDelete("DeleteStudent")]
         public async Task DeleteStudents(int id)
         {
