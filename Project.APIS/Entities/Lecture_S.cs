@@ -11,7 +11,7 @@ namespace Core.Entities
 { 
     public class Lecture_S : BaseEntity
     {
-        public string Lecture_Name { get; set; }
+        public string? Lecture_Name { get; set; }
 
         [ForeignKey(nameof(Subjects))] 
         public int Sub_ID { get; set; }

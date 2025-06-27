@@ -27,8 +27,7 @@ namespace API.Controllers
         {
             var mappedData = new SensorData
             {
-                ID = model.FingerID,
-                Tamplate = model.Tamplate
+                ID = model.FingerID, 
             };
 
             _storeContext.SensorData.Add(mappedData);

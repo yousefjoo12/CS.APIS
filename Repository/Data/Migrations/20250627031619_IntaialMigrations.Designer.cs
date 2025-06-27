@@ -12,8 +12,8 @@ using Repository.Data;
 namespace Repository.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250626014038_SecondMigrations")]
-    partial class SecondMigrations
+    [Migration("20250627031619_IntaialMigrations")]
+    partial class IntaialMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,16 @@ namespace Repository.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("API.DTOs.LectureResults", b =>
+                {
+                    b.Property<int>("ID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("LectureResults");
+                });
 
             modelBuilder.Entity("Core.Entities.Attendance_T", b =>
                 {
@@ -172,7 +182,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("time");
 
                     b.Property<string>("Lecture_Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Sub_ID")
@@ -341,9 +350,6 @@ namespace Repository.Data.Migrations
                     b.Property<int>("ID")
                         .HasColumnType("int")
                         .HasColumnName("FingerID");
-
-                    b.Property<string>("Tamplate")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 

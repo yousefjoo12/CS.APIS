@@ -22,6 +22,16 @@ namespace Repository.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("API.DTOs.LectureResults", b =>
+                {
+                    b.Property<int>("ID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("LectureResults");
+                });
+
             modelBuilder.Entity("Core.Entities.Attendance_T", b =>
                 {
                     b.Property<int>("ID")
@@ -169,7 +179,6 @@ namespace Repository.Data.Migrations
                         .HasColumnType("time");
 
                     b.Property<string>("Lecture_Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Sub_ID")
@@ -338,9 +347,6 @@ namespace Repository.Data.Migrations
                     b.Property<int>("ID")
                         .HasColumnType("int")
                         .HasColumnName("FingerID");
-
-                    b.Property<string>("Tamplate")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
