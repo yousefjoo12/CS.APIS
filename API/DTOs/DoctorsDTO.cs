@@ -9,7 +9,7 @@ namespace API.DTOs
         public string Dr_NameAr { get; set; }
         public string Dr_NameEn { get; set; }
         public string Dr_Email { get; set; }
-        public string Dr_Image { get; set; }
+        public string? Dr_Image { get; set; }
         public string Phone { get; set; }
         public int Fac_ID { get; set; }
         public string Faculty { get; set; } 

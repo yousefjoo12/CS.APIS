@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using Core;
+using Core.Entities;
 using Core.FingerId;  
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore; 
@@ -22,27 +23,27 @@ namespace API.Controllers
             _storeContext = storeContext;
             _unitOfWork = unitOfWork;
         }
-        [HttpPost("EnRoll")]
-        public async Task<ActionResult<SensorData>> EnRoll([FromBody] SensorDataDTO model)
+       
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<IReadOnlyList<SensorData>>> GetAll()
         {
-            var mappedData = new SensorData
-            {
-                ID = model.FingerID, 
-            };
+            var data = await _unitOfWork.Repository<SensorData>().GetAll();
+            return Ok(data); //200
 
-            _storeContext.SensorData.Add(mappedData);
-            await _storeContext.SaveChangesAsync();
-
-            return Ok(mappedData);
         }
-        [HttpGet("GetById")]
-        public async Task<ActionResult<int>> GetById()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SensorData>> GetById(int id)
         {
-            var lastId = await _storeContext.SensorData
-                                .Select(x => x.ID)
-                                .FirstOrDefaultAsync();
+            var data = await _unitOfWork.Repository<SensorData>().GetById(id);
 
-            return Ok(lastId);
+            return Ok(data);
+        }
+        [HttpPost("EnRoll")]
+        public async Task<ActionResult<SensorData>> EnRoll([FromBody] SensorData model)
+        { 
+            var data = await _unitOfWork.Repository<SensorData>().AddAsync(model); 
+            await _storeContext.SaveChangesAsync(); 
+            return Ok(data);
         }
         [HttpGet("Last-id")]
         public async Task<ActionResult<int>> GetLastId()
@@ -61,13 +62,7 @@ namespace API.Controllers
             await _storeContext.SaveChangesAsync();
             return Ok();
         }
-        [HttpGet("GetAll")]
-        public async Task<ActionResult<IReadOnlyList<SensorData>>> GetAll()
-        {
-            var query = _storeContext.SensorData.Select(x => x.ID);
-            return Ok(query); //200
-
-        }
+      
 
     }
 }
