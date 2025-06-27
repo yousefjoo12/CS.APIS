@@ -1,7 +1,9 @@
 ﻿-- إدخال بيانات في جدول Faculty
 INSERT INTO Faculty 
 VALUES  
-    ('CS', 'Computer Science')
+    ('CS', 'Computer Science'),
+    ('CS', 'engs');
+
 
 -- إدخال بيانات في جدول FacultyYear
 INSERT INTO FacultyYear    
