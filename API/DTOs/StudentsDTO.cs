@@ -13,6 +13,6 @@ namespace API.DTOs
         public string? St_Image { get; set; }
         public string Phone { get; set; } 
         public int FacYearSem_ID { get; set; }
-        public string FacultyYearSemister { get; set; } 
+        public string? FacultyYearSemister { get; set; } 
     }
 }
