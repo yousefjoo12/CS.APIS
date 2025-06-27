@@ -101,7 +101,7 @@ namespace API.Controllers
                     .FromSqlInterpolated($@"EXEC GetLecturesForStudent @FingerID = {fingerId}, @Day = {dayOfWeek}, @Time = {time}")
                     .ToListAsync();
                 var firstLecture = lectures.FirstOrDefault();
-          
+
                 if (firstLecture != null)
                 {
                     var mappedAttendance = new Attendance_T
@@ -112,20 +112,16 @@ namespace API.Controllers
                         Timestamp = Data,
                         Atten = true,
                     };
-                    var AttendanceBefor = _context.Attendance.Where(x => x.LectureID == mappedAttendance.LectureID && x.St_ID == mappedAttendance.St_ID );
+                    var AttendanceBefor = _context.Attendance.Where(x => x.LectureID == mappedAttendance.LectureID && x.St_ID == mappedAttendance.St_ID);
 
-                    if (AttendanceBefor is not null)
-                    {
-                        var data = await _unitOfWork.Repository<Attendance_T>().AddAsync(mappedAttendance);
-                        await _unitOfWork.CompleteAsync();
-                        return Ok(data);
-                    }
-                    else
-                    {
-                        var data = await _unitOfWork.Repository<Attendance_T>().AddAsync(mappedAttendance);
-                        await _unitOfWork.CompleteAsync();
-                        return Ok(data);
-                    }
+
+                    var UpdateFinger = await _unitOfWork.Repository<Attendance_T>().UpdateFingerAsync(mappedAttendance.LectureID, Studet.ID, Data);
+                    await _unitOfWork.CompleteAsync();
+                    var data = await _unitOfWork.Repository<Attendance_T>().AddAsync(mappedAttendance);
+                    await _unitOfWork.CompleteAsync();
+                    return Ok(data);
+
+
                 }
                 else
                 {

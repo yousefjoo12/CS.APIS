@@ -19,6 +19,8 @@ namespace Core.Repositories.Contract
         Task<T> AddAsync(T entity);
         //Task AddAsync(T entity);
         Task<T>UpdateAsync(T entity);
-        void Delete(T entity); 
+        void Delete(T entity);
+        Task<int> UpdateFingerAsync(int lectureId, int studentId, DateTime date);
+
     }
 }

@@ -145,5 +145,18 @@ namespace Repository
             return await _dbcontext.Set<T>().FindAsync(id);
 
         }
+        public async Task<int> UpdateFingerAsync(int lectureId, int studentId, DateTime date)
+        {
+            var rowsAffected = await _dbcontext.Database.ExecuteSqlRawAsync(@"
+        DELETE FROM Attendance  
+        WHERE LectureID = {0} 
+          AND St_ID = {1} 
+          AND Timestamp < {2}",
+                lectureId, studentId, date);
+
+            return rowsAffected;
+        }
+
+        
     }
 }
