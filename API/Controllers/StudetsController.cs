@@ -163,6 +163,7 @@ namespace API.Controllers
                 var data = await _unitOfWork.Repository<Students>().AddAsync(mappedStudents);
                 if (data is null) return BadRequest(new ApiResponse(400));
                 await _unitOfWork.CompleteAsync();
+                await AddAllSubjectForOneStudents(mappedStudents.FacYearSem_ID);
                 return Ok(data);
             }
 
@@ -171,7 +172,7 @@ namespace API.Controllers
         [HttpPost("AddAllSubjectForOneStudents")]
         public async Task<IActionResult> AddAllSubjectForOneStudents(int semesterId)
         {
-            
+
             var studentIds = await context.Students
                 .Where(x => x.FacYearSem_ID == semesterId)
                 .Select(x => x.ID)
@@ -181,9 +182,9 @@ namespace API.Controllers
             {
                 return BadRequest(new { Message = "No students found for the specified semester." });
             }
-             
+
             var subjectIds = await context.Subjects
-                .Where(x => x.FacYearSem_ID == semesterId)  
+                .Where(x => x.FacYearSem_ID == semesterId)
                 .Select(x => x.ID)
                 .ToListAsync();
 
@@ -199,7 +200,7 @@ namespace API.Controllers
                 .ToListAsync();
 
             var existingSet = new HashSet<(int, int)>(existingMappings.Select(x => (x.St_ID, x.Sub_ID)));
-             
+
             var allMappings = new List<Studets_Subject>();
 
             foreach (var studentId in studentIds)
@@ -216,7 +217,7 @@ namespace API.Controllers
                     }
                 }
             }
-             
+
             await _unitOfWork.Repository<Studets_Subject>().AddRangeAsync(allMappings);
             await _unitOfWork.CompleteAsync();
 
