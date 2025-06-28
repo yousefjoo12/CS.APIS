@@ -40,9 +40,11 @@ namespace API.Controllers
         }
         [HttpPost("EnRoll")]
         public async Task<ActionResult<SensorData>> EnRoll([FromBody] SensorData model)
-        { 
-            var data = await _unitOfWork.Repository<SensorData>().AddAsync(model); 
-            await _storeContext.SaveChangesAsync(); 
+        {
+            model.ID =+ 1;
+            // ضع نقطة التوقف هنا
+            var data = await _unitOfWork.Repository<SensorData>().AddAsync(model);
+            await _storeContext.SaveChangesAsync();
             return Ok(data);
         }
         [HttpGet("Last-id")]
