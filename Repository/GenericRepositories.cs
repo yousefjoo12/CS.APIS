@@ -22,18 +22,26 @@ namespace Repository
         }
         public async Task<IReadOnlyList<T>> GetAll()
         {
-            //if (typeof(T) == typeof(Students))
-            //{
-            //    return (IReadOnlyList<T>)await _dbcontext.Set<Students>().Include(p => p.FacultyYearSemister).ToListAsync();
-            //} 
+            if (typeof(T) == typeof(School))
+            {
+                return (IReadOnlyList<T>)await _dbcontext.Set<School>().ToListAsync();
+            }
+            if (typeof(T) == typeof(School_Details))
+            {
+                return (IReadOnlyList<T>)await _dbcontext.Set<School_Details>().Include(p => p.School).ToListAsync();
+            }
             return await _dbcontext.Set<T>().ToListAsync();
         }
         public async Task<T?> GetById(int id)
         {
-            //if (typeof(T) == typeof(Students))
-            //{
-            //    return await _dbcontext.Set<Students>().Where(p => p.ID == id).Include(p => p.FacultyYearSemister).FirstOrDefaultAsync() as T;
-            //}  
+            if (typeof(T) == typeof(School))
+            {
+                return await _dbcontext.Set<School>().Where(p => p.ID == id).FirstOrDefaultAsync() as T;
+            }
+            if (typeof(T) == typeof(School_Details))
+            {
+                return await _dbcontext.Set<School_Details>().Where(p => p.ID == id).Include(p => p.School).FirstOrDefaultAsync() as T;
+            }
             return await _dbcontext.Set<T>().FindAsync(id);
         }
        

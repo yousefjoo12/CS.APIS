@@ -26,7 +26,6 @@ namespace API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            // Add DbContexts
             builder.Services.AddDbContext<StoreContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -36,16 +35,12 @@ namespace API
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
             });
-
-            // Add application services and identity
             builder.Services.AddApplicationServices();
 
             builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
             {
-                // Optional identity configuration
-            }).AddEntityFrameworkStores<AppIdentityDbContext>();
+           }).AddEntityFrameworkStores<AppIdentityDbContext>();
 
-            // Add JWT authentication
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters()
@@ -63,7 +58,6 @@ namespace API
                 };
             });
 
-            // ✅ Add CORS policy for React frontend
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", policy =>
@@ -75,8 +69,6 @@ namespace API
             });
 
             var app = builder.Build();
-
-            // Update database at runtime
             using var scope = app.Services.CreateScope();
             var services = scope.ServiceProvider;
             var dbContext = services.GetRequiredService<StoreContext>();
@@ -96,33 +88,18 @@ namespace API
                 logger.LogError(ex, "An error occurred during database migration.");
             }
 
-            // Custom middleware for exception handling
             app.UseMiddleware<ExcptionMiddleWare>();
-
-            // Swagger in development
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
-            // Handle error status pages
             app.UseStatusCodePagesWithReExecute("/Errors/{0}");
-
-            // Redirect HTTP to HTTPS
             app.UseHttpsRedirection();
-
-            // ✅ Apply CORS
             app.UseCors("AllowAll");
-
-            // Auth
             app.UseAuthentication();
             app.UseAuthorization();
-
-            // Serve static files
             app.UseStaticFiles();
-
-            // Map endpoints
             app.MapControllers();
 
             app.Run();

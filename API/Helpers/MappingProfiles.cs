@@ -10,10 +10,15 @@ namespace API.Helpers
     {
         public MappingProfiles()
         {
-            //CreateMap<Students, StudentsDTO>()
-            //    .ForMember(d => d.FacultyYearSemister, o => o.MapFrom(s => s.FacultyYearSemister.Sem_Name))  
-            //    .ForMember(d => d.St_Image, o => o.MapFrom<StudentsPictureUrlResolver>()).ReverseMap(); 
-             
+            CreateMap<School, SchoolDTO>() 
+                .ForMember(d => d.ImageCover, o => o.MapFrom<SchoolPictureUrlResolver>()).ReverseMap();
+
+
+            CreateMap<School_Details, School_DetailsDTO>()
+              .ForMember(d => d.School, o => o.MapFrom(s => s.School.SchoolName))
+              .ForMember(d => d.ImageCover, o => o.MapFrom<School_DetailsPictureUrlResolver>())
+              .ForMember(d => d.Images, o => o.MapFrom<School_DetailsPictureUrlResolver>()).ReverseMap();
+
         }
     }
 }
